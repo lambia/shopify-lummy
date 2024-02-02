@@ -1,0 +1,262 @@
+<!--ToDo -->
+<!--Aggiungere tasto per eliminare grafica e resettare tutto -->
+<!--Gestire file clear(esempio clicchi su sfoglia e non carichi nulla) -->
+<!--Gestire quantità <= 0 altrimenti € negativo -->
+<!--Gestire limiti dimensioni file es. 20mb -->
+<!--Abilitare drag'n'drop -->
+<!--Migliorare CSS che fa cacare -->
+<!--Aggiungere qualche catch per casi limite vari -->
+
+<!--
+<div>
+	<label class="form__label" for="Chiave">ChiaveEtichetta</label>
+	<input placeholder="ChiaveEtichetta" type="text" id="Chiave" form="{{product_form_id}}" name="properties[Chiave]" />
+</div>
+-->
+
+<form id="configuratore">
+	<table class="stacca1" id="formTable">
+		<tr>
+			<td class="firstCell"><label for="conf_file">Seleziona un file</label></td>
+			<td class="lastCell"><input id="fileUploadInput" type="file" name="conf_file"
+					aria-label="Seleziona un file"></td>
+		</tr>
+		<tr>
+			<td class="firstCell"><label for="conf_preview">Anteprima</label></td>
+			<td class="lastCell"><img id="preview" id="previewWrapper" src=""></td>
+		</tr>
+		<tr>
+			<td class="firstCell"><label for="conf_name">Nome grafica</label></td>
+			<td class="lastCell"><input type="text" name="conf_nome" placeholder="Nome grafica"
+					aria-label="Nome grafica"></td>
+		</tr>
+		<tr>
+			<td class="firstCell"><label for="conf_larghezza">Larghezza (mm)</label></td>
+			<td class="lastCell"><input type="number" id="conf_larghezza" name="conf_larghezza" disabled=""
+					placeholder="Larghezza (mm)" aria-label="Larghezza (mm)">
+			</td>
+		</tr>
+		<tr>
+			<td class="firstCell"><label for="conf_altezza">Altezza (mm)</label></td>
+			<td class="lastCell"><input type="number" id="conf_altezza" name="conf_altezza" disabled=""
+					placeholder="Altezza (mm)" aria-label="Altezza (mm)">
+			</td>
+		</tr>
+		<tr>
+			<td class="firstCell"><label for="conf_quantita">Quantità</label></td>
+			<td class="lastCell"><input type="number" id="conf_quantita" name="conf_quantita" placeholder="Quantità"
+					aria-label="Quantità" value="1" min="1">
+			</td>
+		</tr>
+		<tr>
+			<td class="firstCell"><label for="conf_quantita">Note</label></td>
+			<td class="lastCell"><textarea name="conf_note" rows="5" cols="50" placeholder="Note"
+					aria-label="Note"></textarea></td>
+		</tr>
+		<!-- Dati calcolati -->
+		<tr>
+			<td class="firstCell">Metri lineari necessari</td>
+			<td class="lastCell" id="metri_necessari">0 m</td>
+		</tr>
+		<tr>
+			<td class="firstCell">Costo al metro</td>
+			<td class="lastCell">30 €/m</td>
+		</tr>
+		<tr>
+			<td class="firstCell">Totale</td>
+			<td class="lastCell"><b id="totale_preventivo">0 €</b></td>
+		</tr>
+	</table>
+
+	<div id="bottoniera">
+		<button class="stacca3 button button--primary">Conferma</button>
+	</div>
+</form>
+
+<script>
+	//Variabili d'appoggio DOM
+	const dom__altezza = document.getElementById("conf_altezza");
+	const dom__larghezza = document.getElementById("conf_larghezza");
+	const dom__preview = document.getElementById('preview');
+	const dom__file = document.getElementById('fileUploadInput');
+	const dom__quantita = document.getElementById('conf_quantita');
+	const dom__metri_necessari = document.getElementById("metri_necessari");
+	const dom__totale_preventivo = document.getElementById("totale_preventivo");
+
+	//Costanti
+	const larghezza_rullo = 550;
+	const offset = 0; //al momento considerato solo a destra e sotto
+	const costo_metro = 30;
+
+	//Globali
+	var width_mm = 0;
+	var height_mm = 0;
+
+	//Imposto gli event listener che avviano il tutto
+	dom__file.addEventListener("change", function () {
+		dom__preview.classList.add("invisibile");
+		readFile(this.files[0]);
+	}, false);
+
+	dom__quantita.addEventListener("change", function () {
+		calcola_nesting(width_mm, height_mm, dom__quantita.value);
+	});
+
+	//Funzione per leggere file caricato e inserirlo in DOM
+	function readFile(file) {
+		//Preparo lettura file
+		const reader = new FileReader();
+		reader.onload = async (event) => {
+			let imgPath = event.target.result;
+			dom__preview.setAttribute('src', imgPath);
+			getImgSize(imgPath);
+		}
+		//Leggo i file
+		reader.readAsDataURL(file);
+	}
+
+	//Funzione per inserire l'immagine in pagina
+	function getImgSize(imgSrc) {
+		//Preparo la creazione dell'image
+		let newImg = new Image();
+		newImg.onload = function () {
+			useImgSize(newImg.height, newImg.width)
+		}
+		//Carico l'image
+		newImg.src = imgSrc;
+	}
+
+	//Funzione per recuperare larghezza in pixel e mm da un'immagine del DOM
+	function useImgSize(width, height) {
+		//calcolo in mm (30 invece di 300)
+		width_mm = Math.round((width * 2.54) / 30);
+		height_mm = Math.round((height * 2.54) / 30);
+		//imposto UI
+		dom__larghezza.value = width_mm;
+		dom__altezza.value = height_mm;
+		dom__preview.classList.remove("invisibile");
+
+		calcola_nesting(width_mm, height_mm, dom__quantita.value);
+	}
+
+	//Funzione per la scelta del nesting e il calcolo metri lineare
+	function calcola_nesting(larghezza_grafica, altezza_grafica, numero_copie) {
+
+		//Preparo i risultati
+		let altezza_affiancati = 0;
+		let altezza_ruotati = 0;
+		let metri = 0;
+		let costo = 0;
+
+		//Uso floor per considerare solo un numero INTERO di item/riga.
+		//Es. grafica da 20 su rullo 50 => 2,5/riga => 2/riga, su 2 righe
+		const quanti_su_riga_affiancati = Math.floor(larghezza_rullo / (larghezza_grafica + offset));
+		const quanti_su_riga_ruotati = Math.floor(larghezza_rullo / (altezza_grafica + offset));
+
+		//Calcolo Affiancati
+		if (quanti_su_riga_affiancati >= 1) {
+			let quante_righe = Math.ceil(numero_copie / quanti_su_riga_affiancati); //ceil per calcolare la riga intera anche se poco usata (es. 11/2)
+			altezza_affiancati = altezza_grafica * quante_righe;
+		}
+
+		//Calcolo Ruotati 90°
+		if (quanti_su_riga_ruotati >= 1) {
+			let quante_righe = Math.ceil(numero_copie / quanti_su_riga_ruotati); //ceil per calcolare la riga intera anche se poco usata (es. 11/2)
+			altezza_ruotati = larghezza_grafica * quante_righe;
+		}
+
+		//Calcolo finale
+		if (altezza_affiancati < altezza_ruotati) {
+			metri = (altezza_affiancati / 1000);
+		} else {
+			metri = (altezza_ruotati / 1000);
+		}
+
+		//Arrotondamento manuale
+		metri = Math.round(metri * 100) / 100;
+		costo = Math.round((metri * costo_metro) * 100) / 100;
+
+		//Imposto risultati nel DOM
+		dom__metri_necessari.innerText = metri + " m";
+		dom__totale_preventivo.innerText = costo + " €";
+		console.log("Preventivo aggiornato. Metri: ", metri);
+	}
+</script>
+<style>
+	img#preview {
+		width: 5rem;
+	}
+
+	.invisibile {
+		display: none;
+	}
+
+	.firstCell {
+		padding-right: 1rem;
+	}
+
+	.input {
+		border: solid 1px #CCC;
+		width: 100%;
+	}
+
+	.stacca1 {
+		margin-top: 0.5rem;
+	}
+
+	.stacca2 {
+		margin-top: 1rem;
+	}
+
+	.stacca3 {
+		margin-top: 2rem;
+	}
+
+	#configuratore {
+		width: 90%;
+		margin: 0 auto;
+	}
+
+	#formTable {
+		width: 100%;
+	}
+
+	table,
+	td {
+		border: solid 1px #DDD;
+		border-collapse: collapse;
+		padding: 1rem;
+	}
+
+	.firstCell {
+		padding-right: 1rem;
+		width: 25rem;
+	}
+
+	.lastCell {
+		width: calc(100% - 25rem);
+	}
+
+	input,
+	textarea {
+		width: 100%;
+		border: solid 1px #CCC;
+		padding: 0.7rem;
+		border-radius: 0.7rem;
+	}
+
+	input:active,
+	input:focus-within,
+	input:focus-visible,
+	textarea:active,
+	textarea:focus-within,
+	textarea:focus-visible {
+		outline: none;
+		box-shadow: none;
+		border: solid 1px rgb(227, 51, 35);
+	}
+
+	#bottoniera {
+		text-align: center;
+	}
+</style>
