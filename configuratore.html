@@ -47,8 +47,8 @@
 		<tr>
 			<td class="firstCell">Metri lineari necessari</td>
 			<td class="lastCell">
-				<input type="text" form="{{product_form_id}}" id="metri_necessari" name="properties[metri necessari]"
-					value="0 m">
+				<input disabled type="text" form="{{product_form_id}}" id="metri_necessari"
+					name="properties[metri necessari]" value="0 m">
 			</td>
 		</tr>
 		<tr>
@@ -58,29 +58,14 @@
 		<tr>
 			<td class="firstCell">Totale</td>
 			<td class="lastCell">
-				<input type="text" form="{{product_form_id}}" id="totale_preventivo" name="properties[costo]"
+				<input disabled type="text" form="{{product_form_id}}" id="totale_preventivo" name="properties[costo]"
 					value="0 €">
 			</td>
 		</tr>
 	</table>
-
-	<div id="bottoniera">
-		<button class="stacca3 button button--primary">Conferma</button>
-	</div>
 </form>
 
 <script>
-	/*********************** ToDo ***********************
-	- Rifare tutto da zero con la calma necessaria (=codice pulito e ottimizzato)
-	- Aggiungere tasto per eliminare grafica e resettare tutto
-	- Gestire file clear(esempio clicchi su sfoglia e non carichi nulla)
-	- Gestire quantità <= 0 altrimenti € negativo
-	- Gestire limiti dimensioni file es. 20mb
-	- Abilitare drag'n'drop
-	- Jimmy deve aggiungere CSS perchè è inguardabile
-	- Aggiungere qualche catch per i var casi limite
-	*/
-
 	//Variabili d'appoggio DOM
 	const dom__altezza = document.getElementById("conf_altezza");
 	const dom__larghezza = document.getElementById("conf_larghezza");
@@ -261,9 +246,5 @@
 		outline: none;
 		box-shadow: none;
 		border: solid 1px rgb(227, 51, 35);
-	}
-
-	#bottoniera {
-		text-align: center;
 	}
 </style>
