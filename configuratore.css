@@ -1,0 +1,76 @@
+img#conf_preview {
+    width: 5rem;
+}
+
+.invisibile {
+    display: none;
+}
+
+.firstCell {
+    padding-right: 1rem;
+}
+
+.input {
+    border: solid 1px #CCC;
+    width: 100%;
+}
+
+.stacca1 {
+    margin-top: 0.5rem;
+}
+
+.stacca2 {
+    margin-top: 1rem;
+}
+
+.stacca3 {
+    margin-top: 2rem;
+}
+
+#configuratore {
+    width: 90%;
+    margin: 0 auto;
+}
+
+#formTable {
+    width: 100%;
+}
+
+table,
+td {
+    border: solid 1px #DDD;
+    border-collapse: collapse;
+    padding: 1rem;
+}
+
+.firstCell {
+    padding-right: 1rem;
+    width: 25rem;
+}
+
+.lastCell {
+    width: calc(100% - 25rem);
+}
+
+input,
+textarea {
+    width: 100%;
+    border: solid 1px #CCC;
+    padding: 0.7rem;
+    border-radius: 0.7rem;
+}
+
+input:active,
+input:focus-within,
+input:focus-visible,
+textarea:active,
+textarea:focus-within,
+textarea:focus-visible {
+    outline: none;
+    box-shadow: none;
+    border: solid 1px rgb(227, 51, 35);
+}
+
+#bottoniera {
+    text-align: center;
+}
