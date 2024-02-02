@@ -13,50 +13,52 @@
 	<input placeholder="ChiaveEtichetta" type="text" id="Chiave" form="{{product_form_id}}" name="properties[Chiave]" />
 </div>
 -->
-
 <form id="configuratore">
 	<table class="stacca1" id="formTable">
 		<tr>
 			<td class="firstCell"><label for="conf_file">Seleziona un file</label></td>
-			<td class="lastCell"><input id="fileUploadInput" type="file" name="conf_file"
+			<td class="lastCell"><input type="file" form="{{product_form_id}}" id="conf_file" name="properties[grafica]"
 					aria-label="Seleziona un file"></td>
 		</tr>
 		<tr>
 			<td class="firstCell"><label for="conf_preview">Anteprima</label></td>
-			<td class="lastCell"><img id="preview" id="previewWrapper" src=""></td>
+			<td class="lastCell"><img id="conf_preview" src=""></td>
 		</tr>
 		<tr>
 			<td class="firstCell"><label for="conf_name">Nome grafica</label></td>
-			<td class="lastCell"><input type="text" name="conf_nome" placeholder="Nome grafica"
-					aria-label="Nome grafica"></td>
+			<td class="lastCell"><input type="text" form="{{product_form_id}}" id="conf_name" name="properties[nome]"
+					placeholder="Nome grafica" aria-label="Nome grafica"></td>
 		</tr>
 		<tr>
 			<td class="firstCell"><label for="conf_larghezza">Larghezza (mm)</label></td>
-			<td class="lastCell"><input type="number" id="conf_larghezza" name="conf_larghezza" disabled=""
-					placeholder="Larghezza (mm)" aria-label="Larghezza (mm)">
+			<td class="lastCell"><input type="number" form="{{product_form_id}}" id="conf_larghezza"
+					name="properties[larghezza]" disabled="" placeholder="Larghezza (mm)" aria-label="Larghezza (mm)">
 			</td>
 		</tr>
 		<tr>
 			<td class="firstCell"><label for="conf_altezza">Altezza (mm)</label></td>
-			<td class="lastCell"><input type="number" id="conf_altezza" name="conf_altezza" disabled=""
-					placeholder="Altezza (mm)" aria-label="Altezza (mm)">
+			<td class="lastCell"><input type="number" form="{{product_form_id}}" id="conf_altezza"
+					name="properties[altezza]" disabled="" placeholder="Altezza (mm)" aria-label="Altezza (mm)">
 			</td>
 		</tr>
 		<tr>
 			<td class="firstCell"><label for="conf_quantita">Quantità</label></td>
-			<td class="lastCell"><input type="number" id="conf_quantita" name="conf_quantita" placeholder="Quantità"
-					aria-label="Quantità" value="1" min="1">
+			<td class="lastCell"><input type="number" form="{{product_form_id}}" id="conf_quantita"
+					name="properties[quantita]" placeholder="Quantità" aria-label="Quantità" value="1" min="1">
 			</td>
 		</tr>
 		<tr>
-			<td class="firstCell"><label for="conf_quantita">Note</label></td>
-			<td class="lastCell"><textarea name="conf_note" rows="5" cols="50" placeholder="Note"
+			<td class="firstCell"><label for="conf_note">Note</label></td>
+			<td class="lastCell"><textarea name="properties[note]" rows="5" cols="50" placeholder="Note"
 					aria-label="Note"></textarea></td>
 		</tr>
 		<!-- Dati calcolati -->
 		<tr>
 			<td class="firstCell">Metri lineari necessari</td>
-			<td class="lastCell" id="metri_necessari">0 m</td>
+			<td class="lastCell" id="metri_necessari">
+				<input type="text" form="{{product_form_id}}" id="metri_necessari" name="properties[metri necessari]"
+					value="0 m">
+			</td>
 		</tr>
 		<tr>
 			<td class="firstCell">Costo al metro</td>
@@ -64,7 +66,10 @@
 		</tr>
 		<tr>
 			<td class="firstCell">Totale</td>
-			<td class="lastCell"><b id="totale_preventivo">0 €</b></td>
+			<td class="lastCell">
+				<input type="text" form="{{product_form_id}}" id="totale_preventivo" name="properties[costo]"
+					value="0 €">
+			</td>
 		</tr>
 	</table>
 
@@ -77,8 +82,8 @@
 	//Variabili d'appoggio DOM
 	const dom__altezza = document.getElementById("conf_altezza");
 	const dom__larghezza = document.getElementById("conf_larghezza");
-	const dom__preview = document.getElementById('preview');
-	const dom__file = document.getElementById('fileUploadInput');
+	const dom__preview = document.getElementById('conf_preview');
+	const dom__file = document.getElementById('conf_file');
 	const dom__quantita = document.getElementById('conf_quantita');
 	const dom__metri_necessari = document.getElementById("metri_necessari");
 	const dom__totale_preventivo = document.getElementById("totale_preventivo");
@@ -177,8 +182,8 @@
 		costo = Math.round((metri * costo_metro) * 100) / 100;
 
 		//Imposto risultati nel DOM
-		dom__metri_necessari.innerText = metri + " m";
-		dom__totale_preventivo.innerText = costo + " €";
+		dom__metri_necessari.value = metri + " m";
+		dom__totale_preventivo.value = costo + " €";
 		console.log("Preventivo aggiornato. Metri: ", metri);
 	}
 </script>
