@@ -224,130 +224,129 @@
                   {% comment %} ************************************** {% endcomment %}
                   {% comment %} ******* INIZIO LUMMY LINE-ITEM ******* {% endcomment %}
                   {% comment %} ************************************** {% endcomment %}
-                  <form id="configuratore">
-                    <table class="stacca1" id="formTable">
-                      <tr>
-                        <td><label for="conf_file">Seleziona un file</label></td>
-                        <td>
-                          <input
-                            type="file"
-                            form="{{product_form_id}}"
-                            id="conf_file"
-                            name="properties[grafica]"
-                            aria-label="Seleziona un file"
-                          >
-                        </td>
-                      </tr>
-                      <tr>
-                        <td><label for="conf_preview">Anteprima</label></td>
-                        <td>
-                          <img
-                            id="conf_preview"
-                            src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/3f/Placeholder_view_vector.svg/619px-Placeholder_view_vector.svg.png"
-                          >
-                        </td>
-                      </tr>
-                      <tr>
-                        <td><label for="conf_name">Nome grafica</label></td>
-                        <td>
-                          <input
-                            type="text"
-                            form="{{product_form_id}}"
-                            id="conf_name"
-                            name="properties[nome]"
-                            placeholder="Nome grafica"
-                            aria-label="Nome grafica"
-                          >
-                        </td>
-                      </tr>
-                      <tr>
-                        <td><label for="conf_larghezza">Larghezza (mm)</label></td>
-                        <td>
-                          <input
-                            type="number"
-                            form="{{product_form_id}}"
-                            id="conf_larghezza"
-                            name="properties[larghezza]"
-                            disabled=""
-                            placeholder="Larghezza (mm)"
-                            aria-label="Larghezza (mm)"
-                          >
-                        </td>
-                      </tr>
-                      <tr>
-                        <td><label for="conf_altezza">Altezza (mm)</label></td>
-                        <td>
-                          <input
-                            type="number"
-                            form="{{product_form_id}}"
-                            id="conf_altezza"
-                            name="properties[altezza]"
-                            disabled=""
-                            placeholder="Altezza (mm)"
-                            aria-label="Altezza (mm)"
-                          >
-                        </td>
-                      </tr>
-                      <tr>
-                        <td><label for="conf_quantita">Quantità</label></td>
-                        <td>
-                          <input
-                            type="number"
-                            form="{{product_form_id}}"
-                            id="conf_quantita"
-                            name="properties[quantita]"
-                            placeholder="Quantità"
-                            aria-label="Quantità"
-                            value="1"
-                            min="1"
-                          >
-                        </td>
-                      </tr>
-                      <tr>
-                        <td><label for="conf_note">Note</label></td>
-                        <td>
-                          <textarea
-                            name="properties[note]"
-                            rows="5"
-                            cols="50"
-                            placeholder="Note"
-                            aria-label="Note"
-                          ></textarea>
-                        </td>
-                      </tr>
-                      <!-- Dati calcolati -->
-                      <tr>
-                        <td>Metri lineari necessari</td>
-                        <td>
-                          <input
-                            disabled
-                            type="text"
-                            form="{{product_form_id}}"
-                            id="metri_necessari"
-                            name="properties[metri necessari]"
-                            value="0 m"
-                          >
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>Costo al metro</td>
-                        <td>30 €/m</td>
-                      </tr>
-                      <tr>
-                        <td>Totale</td>
-                        <td>
-                          <input
-                            disabled
-                            type="text"
-                            form="{{product_form_id}}"
-                            id="totale_preventivo"
-                            name="properties[costo]"
-                            value="0 €"
-                          >
-                        </td>
-                      </tr>
-                    </table>
-                  </form>
+                  <table class="stacca1" id="formTable">
+                    <tr>
+                      <td><label for="conf_file">Seleziona un file</label></td>
+                      <td>
+                        <input
+                          type="file"
+                          form="{{product_form_id}}"
+                          id="conf_file"
+                          name="properties[grafica]"
+                          aria-label="Seleziona un file"
+                        >
+                      </td>
+                    </tr>
+                    <tr>
+                      <td><label for="conf_preview">Anteprima</label></td>
+                      <td>
+                        <img
+                          id="conf_preview"
+                          src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/3f/Placeholder_view_vector.svg/619px-Placeholder_view_vector.svg.png"
+                        >
+                      </td>
+                    </tr>
+                    <tr>
+                      <td><label for="conf_name">Nome grafica</label></td>
+                      <td>
+                        <input
+                          type="text"
+                          form="{{product_form_id}}"
+                          id="conf_name"
+                          name="properties[nome]"
+                          placeholder="Nome grafica"
+                          aria-label="Nome grafica"
+                        >
+                      </td>
+                    </tr>
+                    <tr>
+                      <td><label for="conf_larghezza">Larghezza (mm)</label></td>
+                      <td>
+                        <input
+                          type="number"
+                          form="{{product_form_id}}"
+                          id="conf_larghezza"
+                          name="properties[larghezza]"
+                          readonly
+                          placeholder="Larghezza (mm)"
+                          aria-label="Larghezza (mm)"
+                        >
+                      </td>
+                    </tr>
+                    <tr>
+                      <td><label for="conf_altezza">Altezza (mm)</label></td>
+                      <td>
+                        <input
+                          type="number"
+                          form="{{product_form_id}}"
+                          id="conf_altezza"
+                          name="properties[altezza]"
+                          readonly
+                          placeholder="Altezza (mm)"
+                          aria-label="Altezza (mm)"
+                        >
+                      </td>
+                    </tr>
+                    <tr>
+                      <td><label for="conf_quantita">Quantità</label></td>
+                      <td>
+                        <input
+                          type="number"
+                          form="{{product_form_id}}"
+                          id="conf_quantita"
+                          name="properties[quantita]"
+                          placeholder="Quantità"
+                          aria-label="Quantità"
+                          value="1"
+                          min="1"
+                        >
+                      </td>
+                    </tr>
+                    <tr>
+                      <td><label for="conf_note">Note</label></td>
+                      <td>
+                        <textarea
+                          name="properties[notestampa]"
+                          form="{{product_form_id}}"
+                          rows="5"
+                          cols="50"
+                          placeholder="Note"
+                          aria-label="Note"
+                        ></textarea>
+                      </td>
+                    </tr>
+                    <!-- Dati calcolati -->
+                    <tr>
+                      <td>Metri lineari necessari</td>
+                      <td>
+                        <input
+                          type="text"
+                          form="{{product_form_id}}"
+                          id="metri_necessari"
+                          name="properties[metri necessari]"
+                          readonly
+                          value="0 m"
+                        >
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>Costo al metro</td>
+                      <td>30 €/m</td>
+                    </tr>
+                    <tr>
+                      <td>Totale</td>
+                      <td>
+                        <input
+                          type="text"
+                          form="{{product_form_id}}"
+                          id="totale_preventivo"
+                          name="properties[costo]"
+                          readonly
+                          value="0 €"
+                        >
+                      </td>
+                    </tr>
+                  </table>
 
                   <script>
                     //Variabili d'appoggio DOM
@@ -376,7 +375,7 @@
                     	readFile(this.files[0]);
                     }, false);
 
-                    dom__quantita.addEventListener("change", function () {
+                    dom__quantita.addEventListener("input", function () {
                     	calcola_nesting(width_mm, height_mm, dom__quantita.value);
                     });
 
@@ -460,7 +459,7 @@
 
                     	//Calcolo la quantità di shopify necessaria
                     	pezzi = Math.round(costo / price_increments);
-                    	document.querySelector(".quantity input").value = pezzi; //bisogna farlo qui
+                  		document.querySelector(".quantity__input").value = pezzi; //bisogna farlo qui
 
                     	//Debugger
                     	console.log("Preventivo aggiornato");
@@ -550,203 +549,25 @@
                     | item_count_for_variant: product.selected_or_first_available_variant.id
                   -%}
                   {% # theme-check-enable %}
+                  {% comment %} ******** LUMMY LABEL NECESSARIA PER TRIGGERARE IL POPUP DI CARRELLO ******** {% endcomment %}
                   <label class="quantity__label form__label" for="Quantity-{{ section.id }}">
-                    {{ 'products.product.quantity.label' | t }}
                     <span class="quantity__rules-cart no-js-hidden{% if cart_qty == 0 %} hidden{% endif %}">
                       {%- render 'loading-spinner' -%}
-                      <span
-                        >(
-                        {{- 'products.product.quantity.in_cart_html' | t: quantity: cart_qty -}}
-                        )</span
-                      >
                     </span>
                   </label>
-                  <div class="price-per-item__container">
-                    <quantity-input class="quantity" data-url="{{ product.url }}" data-section="{{ section.id }}">
-                      <button class="quantity__button no-js-hidden" name="minus" type="button">
-                        <span class="visually-hidden">
-                          {{- 'products.product.quantity.decrease' | t: product: product.title | escape -}}
-                        </span>
-                        {% render 'icon-minus' %}
-                      </button>
-                      <input
-                        class="quantity__input"
-                        type="number"
-                        name="quantity"
-                        id="Quantity-{{ section.id }}"
-                        data-cart-quantity="{{ cart_qty }}"
-                        data-min="{{ product.selected_or_first_available_variant.quantity_rule.min }}"
-                        min="{{ product.selected_or_first_available_variant.quantity_rule.min }}"
-                        {% if product.selected_or_first_available_variant.quantity_rule.max != null %}
-                          data-max="{{ product.selected_or_first_available_variant.quantity_rule.max }}"
-                          max="{{ product.selected_or_first_available_variant.quantity_rule.max }}"
-                        {% endif %}
-                        step="{{ product.selected_or_first_available_variant.quantity_rule.increment }}"
-                        value="{{ product.selected_or_first_available_variant.quantity_rule.min }}"
-                        form="{{ product_form_id }}"
-                      >
-                      <button class="quantity__button no-js-hidden" name="plus" type="button">
-                        <span class="visually-hidden">
-                          {{- 'products.product.quantity.increase' | t: product: product.title | escape -}}
-                        </span>
-                        {% render 'icon-plus' %}
-                      </button>
-                    </quantity-input>
-                    {%- liquid
-                      assign volume_pricing_array = product.selected_or_first_available_variant.quantity_price_breaks | sort: 'quantity' | reverse
-                      assign current_qty_for_volume_pricing = cart_qty | plus: product.selected_or_first_available_variant.quantity_rule.min
-                      if cart_qty > 0
-                        assign current_qty_for_volume_pricing = cart_qty | plus: product.selected_or_first_available_variant.quantity_rule.increment
-                      endif
-                    -%}
-                    {%- if product.quantity_price_breaks_configured? -%}
-                      <price-per-item
-                        class="no-js-hidden"
-                        id="Price-Per-Item-{{ section.id }}"
-                        data-section-id="{{ section.id }}"
-                        data-variant-id="{{ product.selected_or_first_available_variant.id }}"
-                      >
-                        {%- if product.selected_or_first_available_variant.quantity_price_breaks.size > 0 -%}
-                          {%- assign variant_price_compare = product.selected_or_first_available_variant.compare_at_price -%}
-                          <div class="price-per-item">
-                            {%- if variant_price_compare -%}
-                              <dl class="price-per-item--current">
-                                <dt class="visually-hidden">
-                                  {{ 'products.product.price.regular_price' | t }}
-                                </dt>
-                                <dd>
-                                  <s class="variant-item__old-price">
-                                    {{ variant_price_compare | money_with_currency }}
-                                  </s>
-                                </dd>
-                              </dl>
-                            {%- endif -%}
-                            {%- if current_qty_for_volume_pricing < volume_pricing_array.last.minimum_quantity -%}
-                              {%- assign variant_price = product.selected_or_first_available_variant.price
-                                | money_with_currency
-                              -%}
-                              <span class="price-per-item--current">
-                                {{- 'products.product.volume_pricing.price_at_each' | t: price: variant_price -}}
-                              </span>
-                            {%- else -%}
-                              {%- for price_break in volume_pricing_array -%}
-                                {%- if current_qty_for_volume_pricing >= price_break.minimum_quantity -%}
-                                  {%- assign price_break_price = price_break.price | money_with_currency -%}
-                                  <span class="price-per-item--current">
-                                    {{-
-                                      'products.product.volume_pricing.price_at_each'
-                                      | t: price: price_break_price
-                                    -}}
-                                  </span>
-                                  {%- break -%}
-                                {%- endif -%}
-                              {%- endfor -%}
-                            {%- endif -%}
-                          </div>
-                        {%- else -%}
-                          {%- assign variant_price = product.selected_or_first_available_variant.price
-                            | money_with_currency
-                          -%}
-                          {%- assign variant_price_compare = product.selected_or_first_available_variant.compare_at_price -%}
-                          <div class="price-per-item">
-                            {%- if variant_price_compare -%}
-                              <dl class="price-per-item--current">
-                                <dt class="visually-hidden">
-                                  {{ 'products.product.price.regular_price' | t }}
-                                </dt>
-                                <dd>
-                                  <s class="variant-item__old-price">
-                                    {{ variant_price_compare | money_with_currency }}
-                                  </s>
-                                </dd>
-                                <dt class="visually-hidden">
-                                  {{ 'products.product.price.sale_price' | t }}
-                                </dt>
-                                <dd>
-                                  <span class="price-per-item--current">
-                                    {{- 'products.product.volume_pricing.price_at_each' | t: price: variant_price -}}
-                                  </span>
-                                </dd>
-                              </dl>
-                            {%- else -%}
-                              <span class="price-per-item--current">
-                                {{- 'products.product.volume_pricing.price_at_each' | t: price: variant_price -}}
-                              </span>
-                            {%- endif -%}
-                          </div>
-                        {%- endif -%}
-                      </price-per-item>
-                    {%- endif -%}
-                  </div>
-                  <div class="quantity__rules caption no-js-hidden" id="Quantity-Rules-{{ section.id }}">
-                    {%- if product.selected_or_first_available_variant.quantity_rule.increment > 1 -%}
-                      <span class="divider">
-                        {{-
-                          'products.product.quantity.multiples_of'
-                          | t: quantity: product.selected_or_first_available_variant.quantity_rule.increment
-                        -}}
-                      </span>
-                    {%- endif -%}
-                    {%- if product.selected_or_first_available_variant.quantity_rule.min > 1 -%}
-                      <span class="divider">
-                        {{-
-                          'products.product.quantity.minimum_of'
-                          | t: quantity: product.selected_or_first_available_variant.quantity_rule.min
-                        -}}
-                      </span>
-                    {%- endif -%}
-                    {%- if product.selected_or_first_available_variant.quantity_rule.max != null -%}
-                      <span class="divider">
-                        {{-
-                          'products.product.quantity.maximum_of'
-                          | t: quantity: product.selected_or_first_available_variant.quantity_rule.max
-                        -}}
-                      </span>
-                    {%- endif -%}
-                  </div>
-                  {%- if product.quantity_price_breaks_configured? -%}
-                    <volume-pricing class="parent-display no-js-hidden" id="Volume-{{ section.id }}">
-                      {%- if product.selected_or_first_available_variant.quantity_price_breaks.size > 0 -%}
-                        <span class="caption-large">{{ 'products.product.volume_pricing.title' | t }}</span>
-                        <ul class="list-unstyled no-js-hidden">
-                          <li>
-                            <span>{{ product.selected_or_first_available_variant.quantity_rule.min }}+</span>
-                            {%- assign price = product.selected_or_first_available_variant.price
-                              | money_with_currency
-                            -%}
-                            <span data-text="{{ 'products.product.volume_pricing.price_at_each' | t: price: variant_price }}">
-                              {{- 'sections.quick_order_list.each' | t: money: price -}}
-                            </span>
-                          </li>
-                          {%- for price_break in product.selected_or_first_available_variant.quantity_price_breaks -%}
-                            {%- assign price_break_price = price_break.price | money_with_currency -%}
-                            <li class="{%- if forloop.index >= 3 -%}show-more-item hidden{%- endif -%}">
-                              <span>
-                                {{- price_break.minimum_quantity -}}
-                                <span aria-hidden="true">+</span></span
-                              >
-                              <span data-text="{{ 'products.product.volume_pricing.price_at_each' | t: price: price_break_price }}">
-                                {{- 'sections.quick_order_list.each' | t: money: price_break_price -}}
-                              </span>
-                            </li>
-                          {%- endfor -%}
-                        </ul>
-                        {%- if product.selected_or_first_available_variant.quantity_price_breaks.size >= 3 -%}
-                          <show-more-button>
-                            <button
-                              class="button-show-more link underlined-link"
-                              id="Show-More-{{ section.id }}"
-                              type="button"
-                            >
-                              <span class="label-show-more label-text"
-                                ><span aria-hidden="true">+ </span>{{ 'products.facets.show_more' | t }}
-                              </span>
-                            </button>
-                          </show-more-button>
-                        {%- endif -%}
-                      {%- endif -%}
-                    </volume-pricing>
-                  {%- endif -%}
+                  {% comment %} ******** LUMMY QUANTITA CARRELLO ******** {% endcomment %}
+                  <input
+                    class="quantity__input"
+                    type="number"
+                    name="quantity"
+                    id="Quantity-{{ section.id }}"
+                    data-min="10"
+                    min="1"
+                    step="1"
+                    value="1"
+                    form="{{ product_form_id }}"
+                    style="display: none"
+                  >
                 </div>
               {%- when 'popup' -%}
                 <modal-opener
