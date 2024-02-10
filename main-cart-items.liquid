@@ -1,3 +1,4 @@
+{%- assign prodottoSenzaQuantity = 8577508802828 -%}
 {{ 'component-cart.css' | asset_url | stylesheet_tag }}
 {{ 'component-cart-items.css' | asset_url | stylesheet_tag }}
 {{ 'component-totals.css' | asset_url | stylesheet_tag }}
@@ -230,7 +231,7 @@
                           <label class="visually-hidden" for="Quantity-{{ item.index | plus: 1 }}">
                             {{ 'products.product.quantity.label' | t }}
                           </label>
-                          {% if item.product.id != 8577508802828 %}
+                          {% if item.product.id != prodottoSenzaQuantity %}
                             <div class="quantity-popover-container{% if has_qty_rules or has_vol_pricing %} quantity-popover-container--hover{% endif %}">
                               {%- if has_qty_rules or has_vol_pricing -%}
                                 <button
