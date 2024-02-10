@@ -1,4 +1,5 @@
 {%- assign prodottoSenzaQuantity = 8577508802828 -%}
+
 {{ 'component-cart.css' | asset_url | stylesheet_tag }}
 {{ 'component-cart-items.css' | asset_url | stylesheet_tag }}
 {{ 'component-totals.css' | asset_url | stylesheet_tag }}
@@ -82,10 +83,10 @@
                 {%- for item in cart.items -%}
                   <tr class="cart-item" id="CartItem-{{ item.index | plus: 1 }}">
                     <td class="cart-item__media">
-                      {% if item.image %}
+                      {% if item.image  %}
                         {% comment %} Leave empty space due to a:empty CSS display: none rule {% endcomment %}
-                        <a href="{{ item.url }}" class="cart-item__link" aria-hidden="true" tabindex="-1"> </a>
                         <div class="cart-item__image-container gradient global-media-settings">
+                        <a href="{{ item.url }}" class="cart-item__link" aria-hidden="true" tabindex="-1"> </a>
                           <img
                             src="{{ item.image | image_url: width: 300 }}"
                             class="cart-item__image"
@@ -93,6 +94,16 @@
                             loading="lazy"
                             width="150"
                             height="{{ 150 | divided_by: item.image.aspect_ratio | ceil }}"
+                          >
+                        </div>
+                      {% elsif item.product.id == prodottoSenzaQuantity %}
+                        {% comment %} Leave empty space due to a:empty CSS display: none rule {% endcomment %}
+                        <div class="cart-item__image-container gradient global-media-settings">
+                        <a href="{{ item.url }}" class="cart-item__link" aria-hidden="true" tabindex="-1"> </a>
+                          <img
+                            src="{{ item.properties.grafica }}"
+                            class="cart-item__image"
+                            loading="lazy"
                           >
                         </div>
                       {% endif %}
