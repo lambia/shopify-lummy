@@ -115,26 +115,27 @@
                       {%- endif -%}
 
                       <a href="{{ item.url }}" class="cart-item__name h4 break">{{ item.product.title | escape }}</a>
-
-                      {%- if item.original_price != item.final_price -%}
-                        <div class="cart-item__discounted-prices">
-                          <span class="visually-hidden">
-                            {{ 'products.product.price.regular_price' | t }}
-                          </span>
-                          <s class="cart-item__old-price product-option">
-                            {{- item.original_price | money -}}
-                          </s>
-                          <span class="visually-hidden">
-                            {{ 'products.product.price.sale_price' | t }}
-                          </span>
-                          <strong class="cart-item__final-price product-option">
-                            {{ item.final_price | money }}
-                          </strong>
-                        </div>
-                      {%- else -%}
-                        <div class="product-option">
-                          {{ item.original_price | money }}
-                        </div>
+                      {%- if item.product.id != prodottoSenzaQuantity -%}
+                        {%- if item.original_price != item.final_price -%}
+                            <div class="cart-item__discounted-prices">
+                            <span class="visually-hidden">
+                                {{ 'products.product.price.regular_price' | t }}
+                            </span>
+                            <s class="cart-item__old-price product-option">
+                                {{- item.original_price | money -}}
+                            </s>
+                            <span class="visually-hidden">
+                                {{ 'products.product.price.sale_price' | t }}
+                            </span>
+                            <strong class="cart-item__final-price product-option">
+                                {{ item.final_price | money }}
+                            </strong>
+                            </div>
+                        {%- else -%}
+                            <div class="product-option">
+                            {{ item.original_price | money }}
+                            </div>
+                        {%- endif -%}
                       {%- endif -%}
 
                       {%- if item.product.has_only_default_variant == false
@@ -154,7 +155,7 @@
                           {%- for property in item.properties -%}
                             {%- assign property_first_char = property.first | slice: 0 -%}
                             {%- if property.last != blank and property_first_char != '_' -%}
-                                {% if property.first == 'grafica' or property.first == 'larghezza' or property.first == 'altezza' or property_first_char == 'metri necessari' or property.first == 'costo' or property.first == 'note'  %}
+                                {% if property.first == 'grafica' or property.first == 'larghezza' or property.first == 'altezza' or property_first_char == 'metri necessari' or property.first == 'costo' or property.first == 'note' or property.first == 'quantita'  %}
                                     {% continue %}
                                 {% else %}
                                     <div class="product-option">
@@ -246,7 +247,18 @@
                           <label class="visually-hidden" for="Quantity-{{ item.index | plus: 1 }}">
                             {{ 'products.product.quantity.label' | t }}
                           </label>
-                          {% if item.product.id != prodottoSenzaQuantity %}
+                          {% if item.product.id == prodottoSenzaQuantity %}
+                            <div class="quantity-popover-container">
+                              <quantity-input class="quantity cart-quantity">
+                                <input
+                                  class="quantity__input"
+                                  type="number"
+                                  value="{{ item.properties.quantita }}"
+                                  disabled
+                                >
+                              </quantity-input>
+                            </div>
+                          {% else %}
                             <div class="quantity-popover-container{% if has_qty_rules or has_vol_pricing %} quantity-popover-container--hover{% endif %}">
                               {%- if has_qty_rules or has_vol_pricing -%}
                                 <button
