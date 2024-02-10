@@ -7,57 +7,59 @@
 <form id="configuratore">
 	<table class="stacca1" id="formTable">
 		<tr>
-			<td class="firstCell"><label for="conf_file">Seleziona un file</label></td>
-			<td class="lastCell"><input type="file" form="{{product_form_id}}" id="conf_file" name="properties[grafica]"
+			<td><label for="conf_file">Seleziona un file</label></td>
+			<td><input type="file" form="{{product_form_id}}" id="conf_file" name="properties[grafica]"
 					aria-label="Seleziona un file"></td>
 		</tr>
 		<tr>
-			<td class="firstCell"><label for="conf_preview">Anteprima</label></td>
-			<td class="lastCell"><img id="conf_preview" src=""></td>
+			<td><label for="conf_preview">Anteprima</label></td>
+			<td><img id="conf_preview"
+					src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/3f/Placeholder_view_vector.svg/619px-Placeholder_view_vector.svg.png">
+			</td>
 		</tr>
 		<tr>
-			<td class="firstCell"><label for="conf_name">Nome grafica</label></td>
-			<td class="lastCell"><input type="text" form="{{product_form_id}}" id="conf_name" name="properties[nome]"
+			<td><label for="conf_name">Nome grafica</label></td>
+			<td><input type="text" form="{{product_form_id}}" id="conf_name" name="properties[nome]"
 					placeholder="Nome grafica" aria-label="Nome grafica"></td>
 		</tr>
 		<tr>
-			<td class="firstCell"><label for="conf_larghezza">Larghezza (mm)</label></td>
-			<td class="lastCell"><input type="number" form="{{product_form_id}}" id="conf_larghezza"
-					name="properties[larghezza]" disabled="" placeholder="Larghezza (mm)" aria-label="Larghezza (mm)">
+			<td><label for="conf_larghezza">Larghezza (mm)</label></td>
+			<td><input type="number" form="{{product_form_id}}" id="conf_larghezza" name="properties[larghezza]"
+					disabled="" placeholder="Larghezza (mm)" aria-label="Larghezza (mm)">
 			</td>
 		</tr>
 		<tr>
-			<td class="firstCell"><label for="conf_altezza">Altezza (mm)</label></td>
-			<td class="lastCell"><input type="number" form="{{product_form_id}}" id="conf_altezza"
-					name="properties[altezza]" disabled="" placeholder="Altezza (mm)" aria-label="Altezza (mm)">
+			<td><label for="conf_altezza">Altezza (mm)</label></td>
+			<td><input type="number" form="{{product_form_id}}" id="conf_altezza" name="properties[altezza]" disabled=""
+					placeholder="Altezza (mm)" aria-label="Altezza (mm)">
 			</td>
 		</tr>
 		<tr>
-			<td class="firstCell"><label for="conf_quantita">Quantità</label></td>
-			<td class="lastCell"><input type="number" form="{{product_form_id}}" id="conf_quantita"
-					name="properties[quantita]" placeholder="Quantità" aria-label="Quantità" value="1" min="1">
+			<td><label for="conf_quantita">Quantità</label></td>
+			<td><input type="number" form="{{product_form_id}}" id="conf_quantita" name="properties[quantita]"
+					placeholder="Quantità" aria-label="Quantità" value="1" min="1">
 			</td>
 		</tr>
 		<tr>
-			<td class="firstCell"><label for="conf_note">Note</label></td>
-			<td class="lastCell"><textarea name="properties[note]" rows="5" cols="50" placeholder="Note"
-					aria-label="Note"></textarea></td>
+			<td><label for="conf_note">Note</label></td>
+			<td><textarea name="properties[note]" rows="5" cols="50" placeholder="Note" aria-label="Note"></textarea>
+			</td>
 		</tr>
 		<!-- Dati calcolati -->
 		<tr>
-			<td class="firstCell">Metri lineari necessari</td>
-			<td class="lastCell">
+			<td>Metri lineari necessari</td>
+			<td>
 				<input disabled type="text" form="{{product_form_id}}" id="metri_necessari"
 					name="properties[metri necessari]" value="0 m">
 			</td>
 		</tr>
 		<tr>
-			<td class="firstCell">Costo al metro</td>
-			<td class="lastCell">30 €/m</td>
+			<td>Costo al metro</td>
+			<td>30 €/m</td>
 		</tr>
 		<tr>
-			<td class="firstCell">Totale</td>
-			<td class="lastCell">
+			<td>Totale</td>
+			<td>
 				<input disabled type="text" form="{{product_form_id}}" id="totale_preventivo" name="properties[costo]"
 					value="0 €">
 			</td>
@@ -76,9 +78,11 @@
 	const dom__totale_preventivo = document.getElementById("totale_preventivo");
 
 	//Costanti
+	const placeholder_img = "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3f/Placeholder_view_vector.svg/619px-Placeholder_view_vector.svg.png";
 	const larghezza_rullo = 550;
 	const offset = 0; //al momento considerato solo a destra e sotto
 	const costo_metro = 30;
+	const price_increments = 0.3;
 
 	//Globali
 	var width_mm = 0;
@@ -171,7 +175,16 @@
 		//Imposto risultati nel DOM
 		dom__metri_necessari.value = metri + " m";
 		dom__totale_preventivo.value = costo + " €";
-		console.log("Preventivo aggiornato. Metri: ", metri);
+
+		//Calcolo la quantità di shopify necessaria
+		pezzi = Math.round(costo / price_increments);
+		document.querySelector(".quantity input").value = pezzi; //bisogna farlo qui
+
+		//Debugger
+		console.log("Preventivo aggiornato");
+		console.log("Metri necessari: ", metri);
+		console.log("Costo: ", costo);
+		console.log("Pezzi per shopify: ", pezzi);
 	}
 </script>
 <style>
@@ -181,10 +194,6 @@
 
 	.invisibile {
 		display: none;
-	}
-
-	.firstCell {
-		padding-right: 1rem;
 	}
 
 	.input {
@@ -220,14 +229,17 @@
 		padding: 1rem;
 	}
 
-	.firstCell {
-		padding-right: 1rem;
-		width: 25rem;
+	#configuratore td {
+		width: 50%;
+		font-size: 1.1rem;
 	}
 
-	.lastCell {
-		width: calc(100% - 25rem);
+	#configuratore td input,
+	#configuratore td textarea,
+	#configuratore td select {
+		font-size: 1.1rem;
 	}
+
 
 	input,
 	textarea {
