@@ -345,7 +345,6 @@
                     //Imposto gli event listener che avviano il tutto
                     dom__file.addEventListener("change", function () {
                       reset();
-                    	dom__preview.classList.add("invisibile");
                     	readFile(this.files[0]);
                     }, false);
 
@@ -354,6 +353,7 @@
                     });
 
                     function reset() {
+                      console.log("Lummy.configuratore: Resetto il form");
                       dom__preview.setAttribute('src', placeholder_img);
                       dom__altezza.value = "";
                       dom__larghezza.value = "";
@@ -395,7 +395,6 @@
                     	//imposto UI
                     	dom__larghezza.value = width_mm;
                     	dom__altezza.value = height_mm;
-                    	dom__preview.classList.remove("invisibile");
 
                     	calcola_nesting(width_mm, height_mm, dom__quantita.value);
                     }
@@ -456,13 +455,10 @@
                   </script>
                   <style>
                                        img#conf_preview {
-                                       	width: 5rem;
+                                       	  /* width: 5rem; testato su iOS */
+                                          max-width: 100%;
+                                          max-height: 8rem;
                                        }
-
-                                       .invisibile {
-                                       	display: none;
-                                       }
-
                                        .input {
                                        	border: solid 1px #CCC;
                                        	width: 100%;
