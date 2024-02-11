@@ -328,6 +328,8 @@
                     const dom__quantita = document.getElementById('conf_quantita');
                     const dom__metri_necessari = document.getElementById("metri_necessari");
                     const dom__totale_preventivo = document.getElementById("totale_preventivo");
+                    const shopify_dom__quantity = ".quantity__input";
+                    const shopify_dom__addToCart = ".product-form__buttons button";
 
                     //Costanti
                     const placeholder_img = "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3f/Placeholder_view_vector.svg/619px-Placeholder_view_vector.svg.png";
@@ -342,6 +344,7 @@
 
                     //Imposto gli event listener che avviano il tutto
                     dom__file.addEventListener("change", function () {
+                      reset();
                     	dom__preview.classList.add("invisibile");
                     	readFile(this.files[0]);
                     }, false);
@@ -349,6 +352,16 @@
                     dom__quantita.addEventListener("input", function () {
                     	calcola_nesting(width_mm, height_mm, dom__quantita.value);
                     });
+
+                    function reset() {
+                      dom__preview.setAttribute('src', placeholder_img);
+                      dom__altezza.value = "";
+                      dom__larghezza.value = "";
+                      dom__metri_necessari.value = "";
+                      dom__totale_preventivo.value = "";
+                  		document.querySelector(shopify_dom__quantity).value = 0;
+                      document.querySelector(shopify_dom__addToCart).disabled = true;
+                    }
 
                     //Funzione per leggere file caricato e inserirlo in DOM
                     function readFile(file) {
@@ -430,13 +443,15 @@
 
                     	//Calcolo la quantità di shopify necessaria
                     	pezzi = Math.round(costo / price_increments);
-                  		document.querySelector(".quantity__input").value = pezzi; //bisogna farlo qui
+                  		document.querySelector(shopify_dom__quantity).value = pezzi; //bisogna farlo qui
 
                     	//Debugger
                     	console.log("Preventivo aggiornato");
                     	console.log("Metri necessari: ", metri);
                     	console.log("Costo: ", costo);
                     	console.log("Pezzi per shopify: ", pezzi);
+
+                      document.querySelector(shopify_dom__addToCart).disabled = false; //bisogna farlo qui
                     }
                   </script>
                   <style>
@@ -532,8 +547,8 @@
                     type="number"
                     name="quantity"
                     id="Quantity-{{ section.id }}"
-                    data-min="10"
-                    min="1"
+                    data-min="0"
+                    min="0"
                     step="1"
                     value="1"
                     form="{{ product_form_id }}"
