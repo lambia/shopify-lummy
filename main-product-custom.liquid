@@ -195,7 +195,13 @@
                   {% comment %} ************************************** {% endcomment %}
                   {% comment %} ******* INIZIO LUMMY LINE-ITEM ******* {% endcomment %}
                   {% comment %} ************************************** {% endcomment %}
-                  <table class="stacca1" id="formTable">
+                  <div id="conf_preview_wrapper">
+                    <img
+                      id="conf_preview"
+                      src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/3f/Placeholder_view_vector.svg/619px-Placeholder_view_vector.svg.png"
+                    >
+                  </div>
+                  <table id="formTable">
                     <tr>
                       <td><label for="conf_file">Seleziona un file</label></td>
                       <td>
@@ -206,15 +212,6 @@
                           name="properties[grafica]"
                           aria-label="Seleziona un file"
                           value="" autocomplete="off"
-                        >
-                      </td>
-                    </tr>
-                    <tr>
-                      <td><label for="conf_preview">Anteprima</label></td>
-                      <td>
-                        <img
-                          id="conf_preview"
-                          src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/3f/Placeholder_view_vector.svg/619px-Placeholder_view_vector.svg.png"
                         >
                       </td>
                     </tr>
@@ -466,10 +463,21 @@
                     }
                   </script>
                   <style>
+                                      div#conf_preview_wrapper {
+                                        width: 100%;
+                                        height: auto;
+                                        max-width: 100%;
+                                        max-height: 50vh;
+                                        overflow-y: auto;
+                                      }
+
                                        img#conf_preview {
                                        	  /* width: 5rem; testato su iOS */
+                                          width: 100%;
+                                          height: auto;
                                           max-width: 100%;
-                                          max-height: 8rem;
+                                          max-height: auto;
+                                          display: block;
                                        }
                                        .input {
                                        	border: solid 1px #CCC;
