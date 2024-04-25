@@ -205,6 +205,7 @@
                           id="conf_file"
                           name="properties[grafica]"
                           aria-label="Seleziona un file"
+                          value="" autocomplete="off"
                         >
                       </td>
                     </tr>
@@ -227,6 +228,7 @@
                           name="properties[nome]"
                           placeholder="Nome grafica"
                           aria-label="Nome grafica"
+                          value="" autocomplete="off"
                         >
                       </td>
                     </tr>
@@ -241,6 +243,7 @@
                           readonly
                           placeholder="Larghezza (mm)"
                           aria-label="Larghezza (mm)"
+                          value="" autocomplete="off"
                         >
                       </td>
                     </tr>
@@ -255,6 +258,7 @@
                           readonly
                           placeholder="Altezza (mm)"
                           aria-label="Altezza (mm)"
+                          value="" autocomplete="off"
                         >
                       </td>
                     </tr>
@@ -270,6 +274,7 @@
                           aria-label="Quantità"
                           value="1"
                           min="1"
+                          autocomplete="off"
                         >
                       </td>
                     </tr>
@@ -283,6 +288,7 @@
                           cols="50"
                           placeholder="Note"
                           aria-label="Note"
+                          autocomplete="off"
                         ></textarea>
                       </td>
                     </tr>
@@ -297,6 +303,7 @@
                           name="properties[metri necessari]"
                           readonly
                           value="0 m"
+                          autocomplete="off"
                         >
                       </td>
                     </tr>
@@ -314,6 +321,7 @@
                           name="properties[costo]"
                           readonly
                           value="0 €"
+                          autocomplete="off"
                         >
                       </td>
                     </tr>
@@ -342,7 +350,9 @@
                     var width_mm = 0;
                     var height_mm = 0;
 
-                    reset();
+                    //Resetto eventuali valori in cache per il form
+                    //dom__file.value = "";
+                    //reset();
 
                     //Imposto gli event listener che avviano il tutto
                     dom__file.addEventListener("change", function () {
