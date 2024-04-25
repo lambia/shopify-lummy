@@ -1,3 +1,7 @@
+{%- assign prodottoSenzaQuantity = 8577508802828 -%}
+{% comment %} Lummy Custom quantity {% endcomment %}
+{% comment %} Prodotto custom:8577508802828 Prodotto test mail:8511906152716 {% endcomment %}
+
 {% capture email_title %}
   {% if has_pending_payment %}
     Grazie per il tuo ordine!
@@ -226,9 +230,13 @@
     <td class="order-list__item__cell">
       <table>
         <td>
-          {% if line.image %}
-            <img src="{{ line | img_url: 'compact_cropped' }}" align="left" width="60" height="60" class="order-list__product-image"/>
-          {% endif %}
+			{% comment %} Immagine prodotto custom {% endcomment %}
+			{% if line.product.id == prodottoSenzaQuantity %}
+				<img src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/3f/Placeholder_view_vector.svg/619px-Placeholder_view_vector.svg.png" align="left" width="60" height="auto" class="order-list__product-image"/>
+			{% comment %} Immagine prodotti standard {% endcomment %}
+			{% elsif line.image %}
+				<img src="{{ line | img_url: 'compact_cropped' }}" align="left" width="60" height="60" class="order-list__product-image"/>
+			{% endif %}
         </td>
         <td class="order-list__product-description-cell">
           {% if line.product.title %}
@@ -244,8 +252,15 @@
           {% else %}
             {% assign line_display = line.quantity  %}
           {% endif %}
-
-          <span class="order-list__item-title">{{ line_title }}&nbsp;&times;&nbsp;{{ line_display }}</span><br/>
+          
+          {% comment %} Lummy Custom quantity {% endcomment %}
+          {% if line.product.id == prodottoSenzaQuantity %}
+          	<span class="order-list__item-title">{{ line_title }}</span><br/>
+          {% comment %} Else Default {% endcomment %}
+          {% else %}
+          	<span class="order-list__item-title">{{ line_title }}&nbsp;&times;&nbsp;{{ line_display }}</span><br/>
+          {% comment %} Fine Lummy Custom quantity {% endcomment %}
+          {% endif %}
 
           {% if line.variant.title != 'Default Title' %}
             <span class="order-list__item-variant">{{ line.variant.title }}</span><br/>
@@ -795,4 +810,3 @@
     </table>
   </body>
 </html>
-
