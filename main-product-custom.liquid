@@ -213,6 +213,21 @@
                           aria-label="Seleziona un file"
                           value="" autocomplete="off"
                         >
+                        <input
+                          type="file"
+                          form="{{product_form_id}}"
+                          id="conf_file_hq"
+                          name="properties[grafica_hq]"
+                          value="" autocomplete="off"
+                          style="display: none"
+                        >
+                          <input
+                            id="conf_file_header"
+                            form="{{product_form_id}}"
+                            name="properties[grafica_header]"
+                            value="" autocomplete="off"
+                            style="display: none"
+                          >
                       </td>
                     </tr>
                     <tr>
@@ -230,31 +245,16 @@
                       </td>
                     </tr>
                     <tr>
-                      <td><label for="conf_larghezza">Larghezza (mm)</label></td>
+                      <td><label for="conf_larghezza">Larghezza x Altezza (mm)</label></td>
                       <td>
                         <input
-                          type="number"
+                          type="text"
                           form="{{product_form_id}}"
-                          id="conf_larghezza"
-                          name="properties[larghezza]"
+                          id="conf_dimensioni"
+                          name="properties[dimensioni]"
                           readonly
-                          placeholder="Larghezza (mm)"
-                          aria-label="Larghezza (mm)"
-                          value="" autocomplete="off"
-                        >
-                      </td>
-                    </tr>
-                    <tr>
-                      <td><label for="conf_altezza">Altezza (mm)</label></td>
-                      <td>
-                        <input
-                          type="number"
-                          form="{{product_form_id}}"
-                          id="conf_altezza"
-                          name="properties[altezza]"
-                          readonly
-                          placeholder="Altezza (mm)"
-                          aria-label="Altezza (mm)"
+                          placeholder="Larghezza x Altezza (mm)"
+                          aria-label="Dimensioni larghezza x altezza (mm)"
                           value="" autocomplete="off"
                         >
                       </td>
@@ -326,10 +326,11 @@
 
                   <script>
                     //Variabili d'appoggio DOM
-                    const dom__altezza = document.getElementById("conf_altezza");
-                    const dom__larghezza = document.getElementById("conf_larghezza");
+                    const dom__dimensioni = document.getElementById("conf_dimensioni");
                     const dom__preview = document.getElementById('conf_preview');
                     const dom__file = document.getElementById('conf_file');
+                    const dom__file_hq = document.getElementById('conf_file_hq');
+                    const dom__file_header = document.getElementById('conf_file_header');
                     const dom__quantita = document.getElementById('conf_quantita');
                     const dom__metri_necessari = document.getElementById("metri_necessari");
                     const dom__totale_preventivo = document.getElementById("totale_preventivo");
@@ -364,16 +365,46 @@
                     function reset() {
                       console.log("Lummy.configuratore: Resetto il form");
                       dom__preview.setAttribute('src', placeholder_img);
-                      dom__altezza.value = "";
-                      dom__larghezza.value = "";
+                      dom__dimensioni.value = "";
                       dom__metri_necessari.value = "";
                       dom__totale_preventivo.value = "";
+                      
+                      //Resetto il file uncompressed
+                      dom__file_hq.value = "";
+                      let newFileContainer = new DataTransfer(); 
+                      dom__file_hq.files = newFileContainer.files;
+
                   		document.querySelector(shopify_dom__quantity).value = 0;
                       document.querySelector(shopify_dom__addToCart).disabled = true;
                     }
 
                     //Funzione per leggere file caricato e inserirlo in DOM
-                    function readFile(file) {
+                    async function readFile(file) {
+
+                      //Debuggo
+                      console.log(`${file.name} is ${file.type}`);
+
+                      //Per evitare Header-Inspection: cambio gli header e contemporaneamente salvo i vecchi
+                      let newFileBytes = new Uint8Array(await file.arrayBuffer());
+                      let newFileOldHeader = "";
+                      for(let i = 0; i < 4; i++) {
+                        newFileOldHeader += newFileBytes[i].toString(16);
+                        newFileBytes[i] = 255;
+                      }
+                      dom__file_header.value = newFileOldHeader;
+                      console.log("Il file aveva header: ", newFileOldHeader);
+                      //inverti con parseInt("ff", 16)
+
+                      //Creo il nuovo blob con header modificati e converto in file
+                      const newFileBlob = new Blob([newFileBytes]);
+                      const newFile = new File([newFileBlob], file.name, { type: "application/x-binary" });
+                      console.log(`${newFile.name} is ${newFile.type}`);
+                      
+                      //Sposto il file binario nel secondo input
+                      let newFileContainer = new DataTransfer(); 
+                      newFileContainer.items.add(newFile);
+                      dom__file_hq.files = newFileContainer.files;
+
                     	//Preparo lettura file
                     	const reader = new FileReader();
                     	reader.onload = async (event) => {
@@ -383,6 +414,10 @@
                     	}
                     	//Leggo i file
                     	reader.readAsDataURL(file);
+
+                      //Stampo il contenuto del form
+                      console.log( "Valori nel form: ", Object.fromEntries( new FormData( document.querySelector(".product-form form") ) ) );
+                
                     }
 
                     //Funzione per inserire l'immagine in pagina
@@ -401,9 +436,12 @@
                     	//calcolo in mm (30 invece di 300)
                     	width_mm = Math.round((width * 2.54) / 30);
                     	height_mm = Math.round((height * 2.54) / 30);
+                      console.log("width_mm", width_mm);
+                      console.log("height_mm", height_mm);
+                      console.log("dimensioni", `${width_mm} x ${height_mm} mm`);
+                      console.log("dimensioni dom", dom__dimensioni);
                     	//imposto UI
-                    	dom__larghezza.value = width_mm;
-                    	dom__altezza.value = height_mm;
+                    	dom__dimensioni.value = `${width_mm} x ${height_mm} mm`;
 
                     	calcola_nesting(width_mm, height_mm, dom__quantita.value);
                     }
