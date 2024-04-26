@@ -331,6 +331,7 @@
                     //Variabili d'appoggio DOM
                     const dom__dimensioni = document.getElementById("conf_dimensioni");
                     const dom__preview = document.getElementById('conf_preview');
+                    const dom__nome_grafica = document.getElementById('conf_name');
                     const dom__file = document.getElementById('conf_file');
                     const dom__file_hq = document.getElementById('conf_file_hq');
                     const dom__file_header = document.getElementById('conf_file_header');
@@ -352,8 +353,7 @@
                     var height_mm = 0;
 
                     //Resetto eventuali valori in cache per il form
-                    //dom__file.value = "";
-                    //reset();
+                    reset(true);
 
                     //Imposto gli event listener che avviano il tutto
                     dom__file.addEventListener("change", function () {
@@ -365,20 +365,29 @@
                     	calcola_nesting(width_mm, height_mm, dom__quantita.value);
                     });
 
-                    function reset() {
+                    function reset(initialLoad) {
                       console.log("Lummy.configuratore: Resetto il form");
                       dom__preview.setAttribute('src', placeholder_img);
                       dom__dimensioni.value = "";
                       dom__metri_necessari.value = "";
                       dom__totale_preventivo.value = "";
+                      dom__nome_grafica.value = "";
                       
-                      //Resetto il file uncompressed
+                      //Resetto il file originale, compresso e header
                       dom__file_hq.value = "";
+                      dom__file_header.value = "";
                       let newFileContainer = new DataTransfer(); 
                       dom__file_hq.files = newFileContainer.files;
+                      if(initialLoad) {
+                        dom__file.value = "";
+                        dom__file.files = newFileContainer.files;
+                      }
 
-                  		document.querySelector(shopify_dom__quantity).value = 0;
-                      document.querySelector(shopify_dom__addToCart).disabled = true;
+                      //Resetto i campi originali (nascosti) di shopify
+                      if(initialLoad!=true) {
+                        document.querySelector(shopify_dom__quantity).value = 0;
+                        document.querySelector(shopify_dom__addToCart).disabled = true;
+                      }
                     }
 
                     //Funzione per leggere file caricato e inserirlo in DOM
