@@ -203,8 +203,8 @@
                   </div>
                   <table id="formTable">
                     <tr>
-                      <td><label for="conf_file">Seleziona un file</label></td>
-                      <td>
+                      <td class="left_cell"><label for="conf_file">Seleziona un file</label></td>
+                      <td class="right_cell">
                         <input
                           type="file"
                           form="{{product_form_id}}"
@@ -231,8 +231,8 @@
                       </td>
                     </tr>
                     <tr>
-                      <td><label for="conf_name">Nome grafica</label></td>
-                      <td>
+                      <td class="left_cell"><label for="conf_name">Nome grafica</label></td>
+                      <td class="right_cell">
                         <input
                           type="text"
                           form="{{product_form_id}}"
@@ -245,23 +245,8 @@
                       </td>
                     </tr>
                     <tr>
-                      <td><label for="conf_larghezza">Larghezza x Altezza (mm)</label></td>
-                      <td>
-                        <input
-                          type="text"
-                          form="{{product_form_id}}"
-                          id="conf_dimensioni"
-                          name="properties[dimensioni]"
-                          readonly
-                          placeholder="Larghezza x Altezza (mm)"
-                          aria-label="Dimensioni larghezza x altezza (mm)"
-                          value="" autocomplete="off"
-                        >
-                      </td>
-                    </tr>
-                    <tr>
-                      <td><label for="conf_quantita">Quantità</label></td>
-                      <td>
+                      <td class="left_cell"><label for="conf_quantita">Quantità</label></td>
+                      <td class="right_cell">
                         <input
                           type="number"
                           form="{{product_form_id}}"
@@ -276,8 +261,8 @@
                       </td>
                     </tr>
                     <tr>
-                      <td><label for="conf_note">Note</label></td>
-                      <td>
+                      <td class="left_cell"><label for="conf_note">Note</label></td>
+                      <td class="right_cell">
                         <textarea
                           name="properties[note]"
                           form="{{product_form_id}}"
@@ -291,12 +276,29 @@
                     </tr>
                     <!-- Dati calcolati -->
                     <tr>
-                      <td>Metri lineari necessari</td>
-                      <td>
+                      <td class="left_cell"><label for="conf_larghezza">Larghezza x Altezza (mm)</label></td>
+                      <td class="right_cell">
+                        <input
+                          type="text"
+                          form="{{product_form_id}}"
+                          id="conf_dimensioni"
+                          class="input__calcolato"
+                          name="properties[dimensioni]"
+                          readonly
+                          value="Larghezza x Altezza (mm)"
+                          aria-label="Dimensioni larghezza x altezza (mm)"
+                          autocomplete="off"
+                        >
+                      </td>
+                    </tr>
+                    <tr>
+                      <td class="left_cell">Metri lineari necessari</td>
+                      <td class="right_cell">
                         <input
                           type="text"
                           form="{{product_form_id}}"
                           id="metri_necessari"
+                          class="input__calcolato"
                           name="properties[metri necessari]"
                           readonly
                           value="0 m"
@@ -305,16 +307,17 @@
                       </td>
                     </tr>
                     <tr>
-                      <td>Costo al metro</td>
-                      <td>30 €/m</td>
+                      <td class="left_cell">Costo al metro</td>
+                      <td class="right_cell">30 €/m</td>
                     </tr>
                     <tr>
-                      <td>Totale</td>
-                      <td>
+                      <td class="left_cell">Totale</td>
+                      <td class="right_cell">
                         <input
                           type="text"
                           form="{{product_form_id}}"
                           id="totale_preventivo"
+                          class="input__calcolato"
                           name="properties[costo]"
                           readonly
                           value="0 €"
@@ -507,6 +510,8 @@
                                         max-width: 100%;
                                         max-height: 50vh;
                                         overflow-y: auto;
+                                        border: solid 1px #D0D0D0;
+                                        border-bottom: none;
                                       }
 
                                        img#conf_preview {
@@ -517,49 +522,53 @@
                                           max-height: auto;
                                           display: block;
                                        }
-                                       .input {
-                                       	border: solid 1px #CCC;
-                                       	width: 100%;
-                                       }
 
-                                       .stacca1 {
-                                       	margin-top: 0.5rem;
-                                       }
+                                      .stacca1 { margin-top: 0.5rem; }
+                                      .stacca2 { margin-top: 1rem; }
+                                      .stacca3 { margin-top: 2rem; }
 
-                                       .stacca2 {
-                                       	margin-top: 1rem;
-                                       }
-
-                                       .stacca3 {
-                                       	margin-top: 2rem;
-                                       }
-
-                                       #configuratore {
+                                      #configuratore {
                                        	width: 90%;
                                        	margin: 0 auto;
-                                       }
+                                      }
 
-                                       #formTable {
+                                      #formTable {
                                        	width: 100%;
-                                       }
+                                      }
 
-                                       table,
-                                       td {
-                                       	border: solid 1px #DDD;
+                                      table,
+                                      td {
+                                        border: solid 1px #E0E0E0;
+                                        border-style: solid !important;
+                                        outline: none;
+                                        box-shadow: none !important;
                                        	border-collapse: collapse;
                                        	padding: 1rem;
-                                       }
+                                      }
 
-                                       #configuratore td {
+                                      #configuratore td {
                                        	width: 50%;
-                                       	font-size: 1.1rem;
-                                       }
+                                      }
 
-                    #configuratore td input,
-                    #configuratore td textarea,
-                    #configuratore td select {
-                    	font-size: 1.1rem;
-                    }
+                                      table .left_cell {
+                                        text-align: right;
+                                      }
+                                      table .right_cell {
+                                        text-align: left;
+                                      }
+                                      
+                                      #configuratore td,
+                                      #configuratore td input,
+                                      #configuratore td textarea,
+                                      #configuratore td select {
+                                        color: rgba(18, 18, 18, 0.75);
+                                        font-size: 1.2rem;
+                                        font-family: var(--font-body-family);
+                                        font-style: normal;
+                                        font-weight: 700;
+                                        letter-spacing: 0.06rem;
+                                        line-height: 1.4rem;
+                                      }
 
                                        input,
                                        textarea {
@@ -579,6 +588,24 @@
                                        	box-shadow: none;
                                        	border: solid 1px rgb(227, 51, 35);
                                        }
+
+                                      .input__calcolato {
+                                        padding: 0;
+                                        margin: 0;
+                                        border: none;
+                                        outline: none;
+                                        box-shadow: none;
+                                      }
+
+                                      .input__calcolato:active,
+                                      .input__calcolato:focus-within,
+                                      .input__calcolato:focus-visible {
+                                        padding: 0;
+                                        margin: 0;
+                                        border: none;
+                                        outline: none;
+                                        box-shadow: none;
+                                      }
                   </style>
                   {% comment %} ************************************** {% endcomment %}
                   {% comment %} ******** FINE LUMMY LINE-ITEM ******** {% endcomment %}
