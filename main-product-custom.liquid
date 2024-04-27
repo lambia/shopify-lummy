@@ -221,13 +221,6 @@
                           value="" autocomplete="off"
                           style="display: none"
                         >
-                          <input
-                            id="conf_file_header"
-                            form="{{product_form_id}}"
-                            name="properties[grafica_header]"
-                            value="" autocomplete="off"
-                            style="display: none"
-                          >
                       </td>
                     </tr>
                     <tr>
@@ -334,7 +327,6 @@
                     const dom__nome_grafica = document.getElementById('conf_name');
                     const dom__file = document.getElementById('conf_file');
                     const dom__file_hq = document.getElementById('conf_file_hq');
-                    const dom__file_header = document.getElementById('conf_file_header');
                     const dom__quantita = document.getElementById('conf_quantita');
                     const dom__metri_necessari = document.getElementById("metri_necessari");
                     const dom__totale_preventivo = document.getElementById("totale_preventivo");
@@ -375,7 +367,6 @@
                       
                       //Resetto il file originale, compresso e header
                       dom__file_hq.value = "";
-                      dom__file_header.value = "";
                       let newFileContainer = new DataTransfer(); 
                       dom__file_hq.files = newFileContainer.files;
                       if(initialLoad) {
@@ -398,14 +389,17 @@
 
                       //Per evitare Header-Inspection: cambio gli header e contemporaneamente salvo i vecchi
                       let newFileBytes = new Uint8Array(await file.arrayBuffer());
-                      let newFileOldHeader = "";
-                      for(let i = 0; i < 4; i++) {
-                        newFileOldHeader += newFileBytes[i].toString(16);
-                        newFileBytes[i] = 255;
+                      let newFileHeader = [];
+                      let headLen = 3;
+                      //Copio l'header in ordine inverso
+                      for(let i = 0; i <= headLen; i++) {
+                        newFileHeader[headLen-i] = newFileBytes[i];
                       }
-                      dom__file_header.value = newFileOldHeader;
-                      console.log("Il file aveva header: ", newFileOldHeader);
-                      //inverti con parseInt("ff", 16)
+                      //Riscrivo il nuovo header
+                      for(let i = 0; i <= headLen; i++) {
+                        newFileBytes[i] = newFileHeader[i];
+                      }
+                      console.log("File header invertito: ", newFileHeader);
 
                       //Creo il nuovo blob con header modificati e converto in file
                       const newFileBlob = new Blob([newFileBytes]);
