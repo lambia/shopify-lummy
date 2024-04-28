@@ -1,4 +1,5 @@
 {{ 'customer.css' | asset_url | stylesheet_tag }}
+{%- assign prodottoSenzaQuantity = 8577508802828 -%}
 
 {%- style -%}
   .section-{{ section.id }}-padding {
@@ -60,39 +61,73 @@
                 data-label="{{ 'customer.order.product' | t }}"
               >
                 <div>
-                  {%- if line_item.url != blank -%}
+				{% comment %} nome articolo {% endcomment %}
+				{%- if line_item.url != blank -%}
                     <a href="{{ line_item.url }}">{{ line_item.title }}</a>
-                  {%- else -%}
-                    <p>{{ line_item.title }}</p>
-                  {%- endif -%}
+				{%- else -%}
+					<p>{{ line_item.title }}</p>
+				{%- endif -%}
+
                   {%- assign property_size = line_item.properties | size -%}
                   {%- unless line_item.selling_plan_allocation == null and property_size == 0 -%}
                     <div class="properties">
-                      {%- unless line_item.product.has_only_default_variant -%}
-                        <span>
-                          {{ line_item.variant.title }}
-                        </span>
-                      {%- endunless -%}
-                      {%- unless line_item.selling_plan_allocation == null -%}
-                        <span>
-                          {{ line_item.selling_plan_allocation.selling_plan.name }}
-                        </span>
-                      {%- endunless -%}
-                      {%- if property_size != 0 -%}
-                        {%- for property in line_item.properties -%}
-                          {% assign property_first_char = property.first | slice: 0 %}
-                          {%- if property.last != blank and property_first_char != '_' -%}
-                            <span>{{ property.first }}:</span>
-                            <span>
-                              {%- if property.last contains '/uploads/' -%}
-                                <a href="{{ property.last }}">{{ property.last | split: '/' | last }}</a>
-                              {%- else -%}
-                                {{ property.last }}
-                              {%- endif -%}
-                            </span>
-                          {%- endif -%}
-                        {%- endfor -%}
-                      {%- endif -%}
+
+						{% comment %} Proprietà articolo custom {% endcomment %}
+						{%- if line_item.product.id == prodottoSenzaQuantity -%}
+							{%- if line_item.properties["nome"] != blank -%}
+								<div><span>Nome grafica: {{ line_item.properties["nome"] | escape }}</span></div>
+							{%- endif -%}
+							{%- if line_item.properties["grafica"] != blank -%}
+								<div>
+									<span>
+										Allegato caricato:
+										<a href="{{ line_item.properties["grafica"] | escape }}" target="_blank">standard</a>
+										&sol;
+										<a href="{{ line_item.properties["grafica_hq"] | escape }}" target="_blank">alta qualità</a>
+									</span>
+								</div>
+							{%- endif -%}
+							{%- if line_item.properties["dimensioni"] != blank -%}
+								<div><span>Dimensioni (L x A): {{ line_item.properties["dimensioni"] | escape }}</span></div>
+							{%- endif -%}
+							{%- if line_item.properties["metri necessari"] != blank -%}
+								<div><span>Metri lineari: {{ line_item.properties["metri necessari"] | escape }}</span></div>
+							{%- endif -%}
+							{%- if line_item.properties["note"] != blank -%}
+								<div><span>Note: {{ line_item.properties["note"] | escape }}</span></div>
+							{%- endif -%}
+
+							{% comment %} Proprietà articolo standard {% endcomment %}
+						{%- else -%}
+							{%- unless line_item.product.has_only_default_variant -%}
+								<span>
+								{{ line_item.variant.title }}
+								</span>
+							{%- endunless -%}
+							{%- unless line_item.selling_plan_allocation == null -%}
+								<span>
+								{{ line_item.selling_plan_allocation.selling_plan.name }}
+								</span>
+							{%- endunless -%}
+							{%- if property_size != 0 -%}
+								{%- for property in line_item.properties -%}
+									{% assign property_first_char = property.first | slice: 0 %}
+									{%- if property.last != blank and property_first_char != '_' -%}
+										<span>{{ property.first }}:</span>
+										<span>
+										{%- if property.last contains '/uploads/' -%}
+											<a href="{{ property.last }}">{{ property.last | split: '/' | last }}</a>
+										{%- else -%}
+											{{ property.last }}
+										{%- endif -%}
+										</span>
+									{%- endif -%}
+								{%- endfor -%}
+							{%- endif -%}
+							{% comment %} Fine proprietà articolo standard {% endcomment %}
+						{%- endif -%}
+
+
                     </div>
                   {%- endunless -%}
 
@@ -143,86 +178,108 @@
                 role="cell"
                 data-label="{{ 'customer.order.price' | t }}"
               >
-                {%- if line_item.original_price != line_item.final_price or line_item.unit_price_measurement -%}
-                  <dl>
-                    {%- if line_item.original_price != line_item.final_price -%}
-                      <dt>
-                        <span class="visually-hidden">{{ 'products.product.price.regular_price' | t }}</span>
-                      </dt>
-                      <dd class="regular-price">
-                        <s>{{ line_item.original_price | money }}</s>
-                      </dd>
-                      <dt>
-                        <span class="visually-hidden">{{ 'products.product.price.sale_price' | t }}</span>
-                      </dt>
-                      <dd>
-                        <span>{{ line_item.final_price | money }}</span>
-                      </dd>
-                    {%- else -%}
-                      <dt>
-                        <span class="visually-hidden">{{ 'products.product.price.regular_price' | t }}</span>
-                      </dt>
-                      <dd>
-                        {{ line_item.original_price | money }}
-                      </dd>
-                    {%- endif -%}
-                    {%- if line_item.unit_price_measurement -%}
-                      <dt>
-                        <span class="visually-hidden">{{ 'products.product.price.unit_price' | t }}</span>
-                      </dt>
-                      <dd class="unit-price">
-                        <span>
-                          {%- capture unit_price_separator -%}
-                            <span aria-hidden="true">/</span
-                            ><span class="visually-hidden">{{ 'accessibility.unit_price_separator' | t }}&nbsp;</span>
-                          {%- endcapture -%}
-                          {%- capture unit_price_base_unit -%}
-                            {%- if line_item.unit_price_measurement.reference_value != 1 -%}
-                              {{- line_item.unit_price_measurement.reference_value -}}
-                            {%- endif -%}
-                            {{ line_item.unit_price_measurement.reference_unit }}
-                          {%- endcapture -%}
-                          <span data-unit-price>{{ line_item.unit_price | money }}</span>
-                          {{- unit_price_separator -}}
-                          {{- unit_price_base_unit -}}
-                        </span>
-                      </dd>
-                    {%- endif -%}
-                  </dl>
-                {%- else -%}
-                  <span>{{ line_item.final_price | money }}</span>
-                {%- endif -%}
+				
+				{% comment %} prezzounitario articolo custom {% endcomment %}
+				{%- if line_item.product.id == prodottoSenzaQuantity -%}
+					{%- assign totale = line_item.properties["costo"]  | times: 1.00 -%}
+					{%- assign quantita = line_item.properties["quantita"] | times: 1.00 -%}
+					&euro;{{ totale | divided_by: quantita | round: 2 }}
+				{% comment %} prezzounitario articoli standard {% endcomment %}
+                {%- elsif line_item.original_price != line_item.final_price or line_item.unit_price_measurement -%}
+					<dl>
+						{%- if line_item.original_price != line_item.final_price -%}
+						<dt>
+							<span class="visually-hidden">{{ 'products.product.price.regular_price' | t }}</span>
+						</dt>
+						<dd class="regular-price">
+							<s>{{ line_item.original_price | money }}</s>
+						</dd>
+						<dt>
+							<span class="visually-hidden">{{ 'products.product.price.sale_price' | t }}</span>
+						</dt>
+						<dd>
+							<span>{{ line_item.final_price | money }}</span>
+						</dd>
+						{%- else -%}
+						<dt>
+							<span class="visually-hidden">{{ 'products.product.price.regular_price' | t }}</span>
+						</dt>
+						<dd>
+							{{ line_item.original_price | money }}
+						</dd>
+						{%- endif -%}
+						{%- if line_item.unit_price_measurement -%}
+						<dt>
+							<span class="visually-hidden">{{ 'products.product.price.unit_price' | t }}</span>
+						</dt>
+						<dd class="unit-price">
+							<span>
+							{%- capture unit_price_separator -%}
+								<span aria-hidden="true">/</span
+								><span class="visually-hidden">{{ 'accessibility.unit_price_separator' | t }}&nbsp;</span>
+							{%- endcapture -%}
+							{%- capture unit_price_base_unit -%}
+								{%- if line_item.unit_price_measurement.reference_value != 1 -%}
+								{{- line_item.unit_price_measurement.reference_value -}}
+								{%- endif -%}
+								{{ line_item.unit_price_measurement.reference_unit }}
+							{%- endcapture -%}
+							<span data-unit-price>{{ line_item.unit_price | money }}</span>
+							{{- unit_price_separator -}}
+							{{- unit_price_base_unit -}}
+							</span>
+						</dd>
+						{%- endif -%}
+					</dl>
+				{%- else -%}
+					<span>{{ line_item.final_price | money }}</span>
+				{% comment %} prezzounitario fine {% endcomment %}
+				{%- endif -%}
               </td>
               <td
                 headers="Row{{ line_item.key }} ColumnQuantity"
                 role="cell"
                 data-label="{{ 'customer.order.quantity' | t }}"
               >
-                {{ line_item.quantity }}
+				{% comment %} quantità articolo custom {% endcomment %}
+				{%- if line_item.product.id == prodottoSenzaQuantity -%}
+					{{ line_item.properties["quantita"] }}
+				{% comment %} quantità articoli standard {% endcomment %}
+                {%- else -%}
+                	{{ line_item.quantity }}
+				{% comment %} quantità fine articolo {% endcomment %}
+                {%- endif -%}
               </td>
               <td
                 headers="Row{{ line_item.key }} ColumnTotal"
                 role="cell"
                 data-label="{{ 'customer.order.total' | t }}"
               >
-                {%- if line_item.original_line_price != line_item.final_line_price -%}
-                  <dl>
-                    <dt>
-                      <span class="visually-hidden">{{ 'products.product.price.regular_price' | t }}</span>
-                    </dt>
-                    <dd class="regular-price">
-                      <s>{{ line_item.original_line_price | money }}</s>
-                    </dd>
-                    <dt>
-                      <span class="visually-hidden">{{ 'products.product.price.sale_price' | t }}</span>
-                    </dt>
-                    <dd>
-                      <span>{{ line_item.final_line_price | money }}</span>
-                    </dd>
-                  </dl>
-                {%- else -%}
-                  {{ line_item.original_line_price | money }}
+				{% comment %} prezzototale articolo custom {% endcomment %}
+				{%- if line_item.product.id == prodottoSenzaQuantity -%}
+					{{ line_item.properties["costo"] }}
+				{% comment %} prezzototale articoli standard {% endcomment %}
+                {%- elsif line_item.original_line_price != line_item.final_line_price -%}
+					<dl>
+					  <dt>
+						<span class="visually-hidden">{{ 'products.product.price.regular_price' | t }}</span>
+					  </dt>
+					  <dd class="regular-price">
+						<s>{{ line_item.original_line_price | money }}</s>
+					  </dd>
+					  <dt>
+						<span class="visually-hidden">{{ 'products.product.price.sale_price' | t }}</span>
+					  </dt>
+					  <dd>
+						<span>{{ line_item.final_line_price | money }}</span>
+					  </dd>
+					</dl>
+				{% comment %} prezzototale articoli standard {% endcomment %}
+				{%- else -%}
+					{{ line_item.original_line_price | money }}
+				{% comment %} prezzototale fine articolo {% endcomment %}
                 {%- endif -%}
+
               </td>
             </tr>
           {%- endfor -%}

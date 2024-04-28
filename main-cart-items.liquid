@@ -120,7 +120,7 @@
 
                       {% comment %} Titolo per prodotto custom {% endcomment %}
                       {%- if item.product.id == prodottoSenzaQuantity -%}
-                        <a href="{{ item.url }}" class="cart-item__name h4 break">{{ item.product.title | escape }}:<br/>{{ item.properties.nome | escape }}</a>
+                        <a href="{{ item.url }}" class="cart-item__name h4 break">{{ item.product.title | escape }}</a>
                       {% comment %} Titolo per prodotti standard {% endcomment %}
                       {%- else -%}
                         <a href="{{ item.url }}" class="cart-item__name h4 break">{{ item.product.title | escape }}</a>
@@ -162,14 +162,24 @@
 
                           {% comment %} Proprietà per prodotto custom {% endcomment %}
                           {% if item.product.id==prodottoSenzaQuantity -%}
+                            {% if item.properties.nome != blank -%}
+                            <div class="product-option">
+                              <dt>Nome grafica:</dt>
+                              <dd>{{ item.properties.nome | escape }}</dd>
+                            </div>
+                            {%- endif -%}
+                            {% if item.properties.dimensioni != blank -%}
                             <div class="product-option">
                               <dt>Dimensioni:</dt>
                               <dd>{{ item.properties.dimensioni | escape }}</dd>
                             </div>
+                            {%- endif -%}
+                            {% if item.properties["metri necessari"] != blank -%}
                             <div class="product-option">
                               <dt>Metri necessari:</dt>
                               <dd>{{ item.properties["metri necessari"] | escape }}</dd>
                             </div>
+                            {%- endif -%}
                             {%- if item.properties.note != blank -%}
                             <div class="product-option">
                               <dt>Note:</dt>
