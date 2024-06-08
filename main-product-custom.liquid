@@ -307,7 +307,17 @@
                     </tr>
                     <tr>
                       <td class="left_cell">Costo al metro</td>
-                      <td class="right_cell">30 €/m</td>
+                      <td class="right_cell">
+                        <input
+                          type="text"
+                          id="costo_al_metro"
+                          class="input__calcolato"
+                          name="properties[costo al pezzo]"
+                          readonly
+                          value="0 €/m"
+                          autocomplete="off"
+                        >
+                      </td>
                     </tr>
                     <tr>
                       <td class="left_cell">Totale</td>
@@ -329,7 +339,6 @@
                       <td class="right_cell">
                         <input
                           type="text"
-                          form="{{product_form_id}}"
                           id="costo_al_pezzo"
                           class="input__calcolato"
                           name="properties[costo al pezzo]"
@@ -351,6 +360,7 @@
                     const dom__metri_necessari = document.getElementById('metri_necessari');
                     const dom__totale_preventivo = document.getElementById('totale_preventivo');
                     const dom__costo_al_pezzo = document.getElementById('costo_al_pezzo');
+                    const dom__costo_al_metro = document.getElementById('costo_al_metro');
                     const shopify_dom__quantity = '.quantity__input';
                     const shopify_dom__addToCart = '.product-form__buttons button';
 
@@ -359,8 +369,17 @@
                       'https://upload.wikimedia.org/wikipedia/commons/thumb/3/3f/Placeholder_view_vector.svg/619px-Placeholder_view_vector.svg.png';
                     const larghezza_rullo = 550;
                     const offset = 0; //al momento considerato solo a destra e sotto
-                    const costo_metro = 30;
                     const price_increments = 0.3;
+                    const prices = [
+                      { lessThan: 0.50, price: 29.90 },
+                      { lessThan: 1.00, price: 15.90 },
+                      { lessThan: 3.00, price: 13.90 },
+                      { lessThan: 10.00, price: 12.90 },
+                      { lessThan: 25.00, price: 11.90 },
+                      { lessThan: 50.00, price: 10.90 },
+                      { lessThan: 100.00, price: 9.90 },
+                      { lessThan: Infinity, price: 8.90 },
+                    ];
 
                     //Globali
                     var width_mm = 0;
@@ -391,6 +410,7 @@
                       dom__totale_preventivo.value = '';
                       dom__costo_al_pezzo.value = '';
                       dom__nome_grafica.value = '';
+                      dom__costo_al_metro.value = prices[0].price + ' €/m'
 
                       //Resetto il file originale, compresso e header
                       dom__file_hq.value = '';
@@ -533,6 +553,13 @@
                       } else {
                         metri = altezza_ruotati / 1000;
                       }
+
+                      //Calcolo costo al metro, fallback sul max
+                      const costo_metro = Math.max( ...prices.filter(x=> metri < x.lessThan).map(x=> x.price) );
+                      if(costo_metro > Math.max(...prices.map(x=>x.price)) || costo_metro < Math.min(...prices.map(x=>x.price)) ){
+                        costo_metro = Math.max(...prices.map(x=>x.price));
+                      }
+                      dom__costo_al_metro.value = costo_metro + ' €/m';
 
                       //Arrotondamento manuale
                       metri = metri.toFixed(2);
