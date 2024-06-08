@@ -590,27 +590,40 @@
                       margin-top: 2rem;
                     }
 
-                    #configuratore {
-                      width: 90%;
-                      margin: 0 auto;
-                    }
-
-                    #formTable {
+                    #formTable,
+                    #priceTable {
                       width: 100%;
                     }
 
-                    table,
-                    td {
+                    #formTable table,
+                    #formTable td,
+                    #priceTable table,
+                    #priceTable td {
                       border: solid 1px #e0e0e0;
                       border-style: solid !important;
                       outline: none;
                       box-shadow: none !important;
                       border-collapse: collapse;
+                    }
+
+                    #formTable table,
+                    #formTable td {
                       padding: 1rem;
                     }
 
-                    #configuratore td {
+                    #priceTable table,
+                    #priceTable td {
+                      padding: 0.5rem;
+                    }
+
+                    #formTable td,
+                    #priceTable td {
                       width: 50%;
+                    }
+
+                    #priceTable thead {
+                      background: rgb(var(--color-button));
+                      color: white;
                     }
 
                     table .left_cell {
@@ -621,10 +634,10 @@
                       text-align: left;
                     }
 
-                    #configuratore td,
-                    #configuratore td input,
-                    #configuratore td textarea,
-                    #configuratore td select {
+                    #formTable td,
+                    #formTable td input,
+                    #formTable td textarea,
+                    #formTable td select {
                       color: rgba(18, 18, 18, 0.75);
                       font-size: 1.2rem;
                       font-family: var(--font-body-family);
@@ -634,20 +647,20 @@
                       line-height: 1.4rem;
                     }
 
-                    input,
-                    textarea {
+                    #formTable input,
+                    #formTable textarea {
                       width: 100%;
                       border: solid 1px #ccc;
                       padding: 0.7rem;
                       border-radius: 0.7rem;
                     }
 
-                    input:active,
-                    input:focus-within,
-                    input:focus-visible,
-                    textarea:active,
-                    textarea:focus-within,
-                    textarea:focus-visible {
+                    #formTable input:active,
+                    #formTable input:focus-within,
+                    #formTable input:focus-visible,
+                    #formTable textarea:active,
+                    #formTable textarea:focus-within,
+                    #formTable textarea:focus-visible {
                       outline: none;
                       box-shadow: none;
                       border: solid 1px rgb(227, 51, 35);
@@ -732,6 +745,59 @@
                   section_id: section.id,
                   show_pickup_availability: true
                 -%}
+
+                {% comment %} ************************************** {% endcomment %}
+                {% comment %} *********** LUMMY LINE-ITEM ********** {% endcomment %}
+                {% comment %} ************************************** {% endcomment %}
+
+                <table id="priceTable">
+                  <thead>
+                    <tr>
+                      <td class="left_cell">Metri lineari</td>
+                      <td class="right_cell">Prezzo al metro</td>
+                    </tr>
+                  </thead>
+                  <tbody>
+
+                      <tr>
+                        <td class="left_cell">&lt; 0.5 metri</td>
+                        <td class="right_cell">29.90 €/m</td>
+                      </tr>
+                      <tr>
+                        <td class="left_cell">tra 0.5 e 1 metri</td>
+                        <td class="right_cell">15.90 €/m</td>
+                      </tr>
+                      <tr>
+                        <td class="left_cell">tra 1 e 3 metri</td>
+                        <td class="right_cell">13.90 €/m</td>
+                      </tr>
+                      <tr>
+                        <td class="left_cell">tra 3 e 10 metri</td>
+                        <td class="right_cell">12.90 €/m</td>
+                      </tr>
+                      <tr>
+                        <td class="left_cell">tra 10 e 25 metri</td>
+                        <td class="right_cell">11.90 €/m</td>
+                      </tr>
+                      <tr>
+                        <td class="left_cell">tra 25 e 50 metri</td>
+                        <td class="right_cell">10.90 €/m</td>
+                      </tr>
+                      <tr>
+                        <td class="left_cell">tra 50 e 100 metri</td>
+                        <td class="right_cell">9.90 €/m</td>
+                      </tr>
+                      <tr>
+                        <td class="left_cell">&gt; 100 metri</td>
+                        <td class="right_cell">8.90 €/m</td>
+                      </tr>
+                  </tbody>
+                </table>
+                
+                {% comment %} ************************************** {% endcomment %}
+                {% comment %} ******** FINE LUMMY LINE-ITEM ******** {% endcomment %}
+                {% comment %} ************************************** {% endcomment %}
+
               {%- when 'rating' -%}
                 {%- if product.metafields.reviews.rating.value != blank -%}
                   {% liquid
