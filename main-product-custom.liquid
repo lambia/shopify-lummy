@@ -324,6 +324,20 @@
                         >
                       </td>
                     </tr>
+                    <tr>
+                      <td class="left_cell">Costo al pezzo</td>
+                      <td class="right_cell">
+                        <input
+                          type="text"
+                          form="{{product_form_id}}"
+                          id="costo_al_pezzo"
+                          class="input__calcolato"
+                          name="properties[costo al pezzo]"
+                          readonly
+                          value="0 €"
+                          autocomplete="off"
+                        ></td>
+                    </tr>
                   </table>
 
                   <script>
@@ -336,6 +350,7 @@
                     const dom__quantita = document.getElementById('conf_quantita');
                     const dom__metri_necessari = document.getElementById('metri_necessari');
                     const dom__totale_preventivo = document.getElementById('totale_preventivo');
+                    const dom__costo_al_pezzo = document.getElementById('costo_al_pezzo');
                     const shopify_dom__quantity = '.quantity__input';
                     const shopify_dom__addToCart = '.product-form__buttons button';
 
@@ -374,6 +389,7 @@
                       dom__dimensioni.value = '';
                       dom__metri_necessari.value = '';
                       dom__totale_preventivo.value = '';
+                      dom__costo_al_pezzo.value = '';
                       dom__nome_grafica.value = '';
 
                       //Resetto il file originale, compresso e header
@@ -519,12 +535,14 @@
                       }
 
                       //Arrotondamento manuale
-                      metri = Math.round(metri * 100) / 100;
-                      costo = Math.round(metri * costo_metro * 100) / 100;
+                      metri = metri.toFixed(2);
+                      costo = (metri * costo_metro).toFixed(2);
+                      costoPezzo = (costo / numero_copie).toFixed(2);
 
                       //Imposto risultati nel DOM
                       dom__metri_necessari.value = metri + ' m';
                       dom__totale_preventivo.value = costo + ' €';
+                      dom__costo_al_pezzo.value = costoPezzo + ' €';
 
                       //Calcolo la quantità di shopify necessaria
                       pezzi = Math.round(costo / price_increments);
