@@ -453,32 +453,6 @@
                         dom__file_hq.files = newFileContainer.files;
                       });
 
-                      /*
-						//Per evitare Header-Inspection: cambio gli header e contemporaneamente salvo i vecchi
-						let newFileBytes = new Uint8Array(await file.arrayBuffer());
-						let newFileHeader = [];
-						let headLen = 3;
-						//Copio l'header in ordine inverso
-						for (let i = 0; i <= headLen; i++) {
-							newFileHeader[headLen - i] = newFileBytes[i];
-						}
-						//Riscrivo il nuovo header
-						for (let i = 0; i <= headLen; i++) {
-							newFileBytes[i] = newFileHeader[i];
-						}
-						console.log('File header invertito: ', newFileHeader);
-			
-						//Creo il nuovo blob con header modificati e converto in file
-						const newFileBlob = new Blob([newFileBytes]);
-						const newFile = new File([newFileBlob], file.name, { type: 'application/x-binary' });
-						console.log(`${newFile.name} is ${newFile.type}`);
-			
-						//Sposto il file binario nel secondo input
-						let newFileContainer = new DataTransfer();
-						newFileContainer.items.add(newFile);
-						dom__file_hq.files = newFileContainer.files;
-						*/
-
                       //Preparo lettura file
                       const reader = new FileReader();
                       reader.onload = async (event) => {
