@@ -590,8 +590,9 @@
           <style>
             div#conf_preview_columns { /* affianca img e form configuratore */
               display: flex;
+              flex-direction: row;
             }
-
+            
             .product, .product__info-container { /* allarga la pagina */
               max-width: unset !important;
             }
@@ -754,6 +755,18 @@
               margin-top: 0.75rem;
               margin-bottom: 0;
             }
+
+            /* media query min -> sm:576px md:768px lg:992px xl:1200px xx:1400px */
+            @media screen and (max-width: 768px) {
+              div#conf_preview_columns {
+                flex-direction: column;
+              }
+              div#conf_preview_wrapper, #formTable {
+                width: 100%;
+              }
+
+            }
+
           </style>
                   {% comment %} ************************************** {% endcomment %}
                   {% comment %} ******** FINE LUMMY LINE-ITEM ******** {% endcomment %}
