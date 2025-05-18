@@ -373,6 +373,7 @@
             const dom__costo_al_metro = document.getElementById('costo_al_metro');
             const shopify_dom__quantity = '.quantity__input';
             const shopify_dom__addToCart = '.product-form__buttons button';
+            let incrementale = 1;
 
             //Costanti
             const placeholder_img =
@@ -428,6 +429,28 @@
               }
             });
 
+            dom__nome_grafica.addEventListener('focus', function(e) {
+              dom__nome_grafica.value = dom__nome_grafica.value.slice(0, -3);
+            });
+            dom__nome_grafica.addEventListener('blur', function(e) {
+              dom__nome_grafica.value += generaIncrementale(dom__nome_grafica.value);
+            });
+
+            function generaIncrementale(testo="") {
+              let risultato = testo;
+              if(testo && testo!="" && testo.trim().length) {
+                risultato += "-";
+              }
+
+              if(incrementale<10) {
+                risultato += "0";
+              }
+
+              risultato += incrementale;
+
+              return risultato;
+            }
+
             function reset(initialLoad) {
               console.log('Lummy.configuratore: Resetto il form');
               dom__preview.setAttribute('src', placeholder_img);
@@ -435,7 +458,7 @@
               dom__metri_necessari.value = '';
               dom__totale_preventivo.value = '';
               dom__costo_al_pezzo.value = '';
-              dom__nome_grafica.value = '';
+              dom__nome_grafica.value = generaIncrementale();
               dom__costo_al_metro.value = prices[0].price + ' €/m'
 
               //Resetto il file originale, compresso e header
