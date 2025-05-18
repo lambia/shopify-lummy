@@ -291,7 +291,7 @@
                       </td>
                     </tr>
                     <tr>
-                      <td class="left_cell">Metri lineari necessari</td>
+                      <td class="left_cell">Metri lineari sviluppati</td>
                       <td class="right_cell">
                         <input
                           type="text"
@@ -349,6 +349,11 @@
                     </tr>
                   </table>
 
+                  <div id="sezione_statica">
+                    <input type="checkbox" id="conf_disclaimer" name="conf_disclaimer" value="yes" checked>
+                    <label for="conf_disclaimer"> Disclaimer responsabilità immagini caricate</label>
+                  </div>
+
                   <script>
                     //Variabili d'appoggio DOM
                     const dom__dimensioni = document.getElementById('conf_dimensioni');
@@ -357,6 +362,7 @@
                     const dom__file = document.getElementById('conf_file');
                     const dom__file_hq = document.getElementById('conf_file_hq');
                     const dom__quantita = document.getElementById('conf_quantita');
+                    const dom__disclaimer = document.getElementById('conf_disclaimer');
                     const dom__metri_necessari = document.getElementById('metri_necessari');
                     const dom__totale_preventivo = document.getElementById('totale_preventivo');
                     const dom__costo_al_pezzo = document.getElementById('costo_al_pezzo');
@@ -371,14 +377,10 @@
                     const offset = 0; //al momento considerato solo a destra e sotto
                     const price_increments = 0.3;
                     const prices = [
-                      { lessThan: 0.50, price: 29.90 },
-                      { lessThan: 1.00, price: 15.90 },
-                      { lessThan: 3.00, price: 13.90 },
-                      { lessThan: 10.00, price: 12.90 },
-                      { lessThan: 25.00, price: 11.90 },
-                      { lessThan: 50.00, price: 10.90 },
-                      { lessThan: 100.00, price: 9.90 },
-                      { lessThan: Infinity, price: 8.90 },
+                      { lessThan: 3.00, price: 15.00 },
+                      { lessThan: 10.00, price: 13.90 },
+                      { lessThan: 25.00, price: 12.90 },
+                      { lessThan: Infinity, price: 12.90 }, //chiedi quotazione
                     ];
 
                     //Globali
@@ -400,6 +402,22 @@
 
                     dom__quantita.addEventListener('input', function () {
                       calcola_nesting(width_mm, height_mm, dom__quantita.value);
+                    });
+
+                    dom__quantita.addEventListener('change', function (e) {
+                      const valore = e.target.value;
+                      if(valore==0 || valore=="" || isNaN(valore)) {
+                        dom__quantita.value=1;
+                        calcola_nesting(width_mm, height_mm, dom__quantita.value);
+                      }
+                    });
+
+                    dom__disclaimer.addEventListener('change', function(e) {
+                      if(e.target.checked) {
+                        document.querySelector(shopify_dom__addToCart).disabled = false;
+                      } else {
+                        document.querySelector(shopify_dom__addToCart).disabled = true;
+                      }
                     });
 
                     function reset(initialLoad) {
@@ -535,8 +553,15 @@
                       }
                       dom__costo_al_metro.value = costo_metro + ' €/m';
 
+                      //Aggiungo 0.1 metri fisso
+                      metri += 0.1;
+
                       //Arrotondamento manuale
                       metri = metri.toFixed(2);
+
+                      //Minimo ordinabile: 1 metro
+                      metri = (metri < 1) ? 1 : metri;
+
                       costo = (metri * costo_metro).toFixed(2);
                       costoPezzo = (costo / numero_copie).toFixed(2);
 
@@ -683,6 +708,10 @@
                       outline: none;
                       box-shadow: none;
                     }
+
+                    #sezione_statica {
+                      margin-top: 1.5rem;
+                    }
                   </style>
                   {% comment %} ************************************** {% endcomment %}
                   {% comment %} ******** FINE LUMMY LINE-ITEM ******** {% endcomment %}
@@ -760,36 +789,20 @@
                   <tbody>
 
                       <tr>
-                        <td class="left_cell">&lt; 0.5 metri</td>
-                        <td class="right_cell">29.90 €/m</td>
-                      </tr>
-                      <tr>
-                        <td class="left_cell">tra 0.5 e 1 metri</td>
-                        <td class="right_cell">15.90 €/m</td>
-                      </tr>
-                      <tr>
-                        <td class="left_cell">tra 1 e 3 metri</td>
-                        <td class="right_cell">13.90 €/m</td>
+                        <td class="left_cell">&lt; 3 metri</td>
+                        <td class="right_cell">15.00 €/m</td>
                       </tr>
                       <tr>
                         <td class="left_cell">tra 3 e 10 metri</td>
-                        <td class="right_cell">12.90 €/m</td>
+                        <td class="right_cell">13.90 €/m</td>
                       </tr>
                       <tr>
                         <td class="left_cell">tra 10 e 25 metri</td>
-                        <td class="right_cell">11.90 €/m</td>
+                        <td class="right_cell">12.90 €/m</td>
                       </tr>
                       <tr>
-                        <td class="left_cell">tra 25 e 50 metri</td>
-                        <td class="right_cell">10.90 €/m</td>
-                      </tr>
-                      <tr>
-                        <td class="left_cell">tra 50 e 100 metri</td>
-                        <td class="right_cell">9.90 €/m</td>
-                      </tr>
-                      <tr>
-                        <td class="left_cell">&gt; 100 metri</td>
-                        <td class="right_cell">8.90 €/m</td>
+                        <td class="left_cell">&gt; 25 metri</td>
+                        <td class="right_cell">Richiedi una <a href="/pages/contact">quotazione</a></td>
                       </tr>
                   </tbody>
                 </table>
