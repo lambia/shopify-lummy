@@ -198,521 +198,563 @@
 				  <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"
 					integrity="sha512-XMVd28F1oH/O71fzwBnV7HucLxVwtxf26XV8P4wPk26EDxuGZ91N8bsOttmnomcCD3CS5ZMRL50H0GgOHvegtg=="
 					crossorigin="anonymous" referrerpolicy="no-referrer"></script> 
-				  <div id="conf_preview_wrapper">
-                    <img
-                      id="conf_preview"
-                      src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/3f/Placeholder_view_vector.svg/619px-Placeholder_view_vector.svg.png"
-                    >
-                  </div>
-                  <table id="formTable">
-                    <tr>
-                      <td class="left_cell"><label for="conf_file">Seleziona un file</label></td>
-                      <td class="right_cell">
-                        <input
-                          type="file"
-                          form="{{product_form_id}}"
-                          id="conf_file"
-                          name="properties[grafica]"
-                          aria-label="Seleziona un file"
-                          value=""
-                          autocomplete="off"
-                        >
-                        <input
-                          type="file"
-                          form="{{product_form_id}}"
-                          id="conf_file_hq"
-                          name="properties[grafica_hq]"
-                          value=""
-                          autocomplete="off"
-                          style="display: none"
-                        >
-                      </td>
-                    </tr>
-                    <tr>
-                      <td class="left_cell"><label for="conf_name">Nome grafica</label></td>
-                      <td class="right_cell">
-                        <input
-                          type="text"
-                          form="{{product_form_id}}"
-                          id="conf_name"
-                          name="properties[nome]"
-                          placeholder="Nome grafica"
-                          aria-label="Nome grafica"
-                          value=""
-                          autocomplete="off"
-                        >
-                      </td>
-                    </tr>
-                    <tr>
-                      <td class="left_cell"><label for="conf_quantita">Quantità</label></td>
-                      <td class="right_cell">
-                        <input
-                          type="number"
-                          form="{{product_form_id}}"
-                          id="conf_quantita"
-                          name="properties[quantita]"
-                          placeholder="Quantità"
-                          aria-label="Quantità"
-                          value="1"
-                          min="1"
-                          autocomplete="off"
-                        >
-                      </td>
-                    </tr>
-                    <tr>
-                      <td class="left_cell"><label for="conf_note">Note</label></td>
-                      <td class="right_cell">
-                        <textarea
-                          name="properties[note]"
-                          form="{{product_form_id}}"
-                          rows="5"
-                          cols="50"
-                          placeholder="Note"
-                          aria-label="Note"
-                          autocomplete="off"
-                        ></textarea>
-                      </td>
-                    </tr>
-                    <!-- Dati calcolati -->
-                    <tr>
-                      <td class="left_cell"><label for="conf_larghezza">Larghezza x Altezza (mm)</label></td>
-                      <td class="right_cell">
-                        <input
-                          type="text"
-                          form="{{product_form_id}}"
-                          id="conf_dimensioni"
-                          class="input__calcolato"
-                          name="properties[dimensioni]"
-                          readonly
-                          value="Larghezza x Altezza (mm)"
-                          aria-label="Dimensioni larghezza x altezza (mm)"
-                          autocomplete="off"
-                        >
-                      </td>
-                    </tr>
-                    <tr>
-                      <td class="left_cell">Metri lineari sviluppati</td>
-                      <td class="right_cell">
-                        <input
-                          type="text"
-                          form="{{product_form_id}}"
-                          id="metri_necessari"
-                          class="input__calcolato"
-                          name="properties[metri necessari]"
-                          readonly
-                          value="0 m"
-                          autocomplete="off"
-                        >
-                      </td>
-                    </tr>
-                    <tr>
-                      <td class="left_cell">Costo al metro</td>
-                      <td class="right_cell">
-                        <input
-                          type="text"
-                          id="costo_al_metro"
-                          class="input__calcolato"
-                          name="properties[costo al pezzo]"
-                          readonly
-                          value="0 €/m"
-                          autocomplete="off"
-                        >
-                      </td>
-                    </tr>
-                    <tr>
-                      <td class="left_cell">Totale</td>
-                      <td class="right_cell">
-                        <input
-                          type="text"
-                          form="{{product_form_id}}"
-                          id="totale_preventivo"
-                          class="input__calcolato"
-                          name="properties[costo]"
-                          readonly
-                          value="0 €"
-                          autocomplete="off"
-                        >
-                      </td>
-                    </tr>
-                    <tr>
-                      <td class="left_cell">Costo al pezzo</td>
-                      <td class="right_cell">
-                        <input
-                          type="text"
-                          id="costo_al_pezzo"
-                          class="input__calcolato"
-                          name="properties[costo al pezzo]"
-                          readonly
-                          value="0 €"
-                          autocomplete="off"
-                        ></td>
-                    </tr>
-                  </table>
+          <div id="conf_preview_columns">
+				    <div id="conf_preview_wrapper">
+              <img
+                id="conf_preview"
+                src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/3f/Placeholder_view_vector.svg/619px-Placeholder_view_vector.svg.png"
+              >
+            </div>
+            <table id="formTable">
+              <tr>
+                <td class="left_cell"><label for="conf_file">Seleziona un file</label></td>
+                <td class="right_cell">
+                  <input
+                    type="file"
+                    form="{{product_form_id}}"
+                    id="conf_file"
+                    name="properties[grafica]"
+                    aria-label="Seleziona un file"
+                    value=""
+                    autocomplete="off"
+                  >
+                  <input
+                    type="file"
+                    form="{{product_form_id}}"
+                    id="conf_file_hq"
+                    name="properties[grafica_hq]"
+                    value=""
+                    autocomplete="off"
+                    style="display: none"
+                  >
+                  <p class="conf_file_note">Carica un file PNG con risoluzione a 300dpi, massimo 20mb</p>
+                </td>
+              </tr>
+              <tr>
+                <td class="left_cell"><label for="conf_name">Nome grafica</label></td>
+                <td class="right_cell">
+                  <input
+                    type="text"
+                    form="{{product_form_id}}"
+                    id="conf_name"
+                    name="properties[nome]"
+                    placeholder="Nome grafica"
+                    aria-label="Nome grafica"
+                    value=""
+                    autocomplete="off"
+                  >
+                </td>
+              </tr>
+              <tr>
+                <td class="left_cell"><label for="conf_quantita">Quantità</label></td>
+                <td class="right_cell">
+                  <input
+                    type="number"
+                    form="{{product_form_id}}"
+                    id="conf_quantita"
+                    name="properties[quantita]"
+                    placeholder="Quantità"
+                    aria-label="Quantità"
+                    value="1"
+                    min="1"
+                    autocomplete="off"
+                  >
+                </td>
+              </tr>
+              <tr>
+                <td class="left_cell"><label for="conf_note">Note</label></td>
+                <td class="right_cell">
+                  <textarea
+                    name="properties[note]"
+                    form="{{product_form_id}}"
+                    rows="5"
+                    cols="50"
+                    placeholder="Note"
+                    aria-label="Note"
+                    autocomplete="off"
+                  ></textarea>
+                </td>
+              </tr>
+              <!-- Dati calcolati -->
+              <tr>
+                <td class="left_cell"><label for="conf_larghezza">Larghezza x Altezza (mm)</label></td>
+                <td class="right_cell">
+                  <input
+                    type="text"
+                    form="{{product_form_id}}"
+                    id="conf_dimensioni"
+                    class="input__calcolato"
+                    name="properties[dimensioni]"
+                    readonly
+                    value="Larghezza x Altezza (mm)"
+                    aria-label="Dimensioni larghezza x altezza (mm)"
+                    autocomplete="off"
+                  >
+                </td>
+              </tr>
+              <tr>
+                <td class="left_cell">Metri lineari sviluppati</td>
+                <td class="right_cell">
+                  <input
+                    type="text"
+                    form="{{product_form_id}}"
+                    id="metri_necessari"
+                    class="input__calcolato"
+                    name="properties[metri necessari]"
+                    readonly
+                    value="0 m"
+                    autocomplete="off"
+                  >
+                </td>
+              </tr>
+              <tr>
+                <td class="left_cell">Costo al metro</td>
+                <td class="right_cell">
+                  <input
+                    type="text"
+                    id="costo_al_metro"
+                    class="input__calcolato"
+                    name="properties[costo al pezzo]"
+                    readonly
+                    value="0 €/m"
+                    autocomplete="off"
+                  >
+                </td>
+              </tr>
+              <tr>
+                <td class="left_cell">Totale</td>
+                <td class="right_cell">
+                  <input
+                    type="text"
+                    form="{{product_form_id}}"
+                    id="totale_preventivo"
+                    class="input__calcolato"
+                    name="properties[costo]"
+                    readonly
+                    value="0 €"
+                    autocomplete="off"
+                  >
+                </td>
+              </tr>
+              <tr>
+                <td class="left_cell">Costo al pezzo</td>
+                <td class="right_cell">
+                  <input
+                    type="text"
+                    id="costo_al_pezzo"
+                    class="input__calcolato"
+                    name="properties[costo al pezzo]"
+                    readonly
+                    value="0 €"
+                    autocomplete="off"
+                  ></td>
+              </tr>
+            </table>
+          </div>
 
-                  <div id="sezione_statica">
-                    <input type="checkbox" id="conf_disclaimer" name="conf_disclaimer" value="yes" checked>
-                    <label for="conf_disclaimer"> Disclaimer responsabilità immagini caricate</label>
-                  </div>
+          <div id="sezione_statica">
+            <input type="checkbox" id="conf_disclaimer" name="conf_disclaimer" value="yes" checked>
+            <label for="conf_disclaimer" class="conf_disclaimer_label"> Disclaimer responsabilità immagini caricate</label>
+            <p class="conf_nota_responsive">Nota: è consigliato l'utilizzo del configuratore da PC</p>
+          </div>
 
-                  <script>
-                    //Variabili d'appoggio DOM
-                    const dom__dimensioni = document.getElementById('conf_dimensioni');
-                    const dom__preview = document.getElementById('conf_preview');
-                    const dom__nome_grafica = document.getElementById('conf_name');
-                    const dom__file = document.getElementById('conf_file');
-                    const dom__file_hq = document.getElementById('conf_file_hq');
-                    const dom__quantita = document.getElementById('conf_quantita');
-                    const dom__disclaimer = document.getElementById('conf_disclaimer');
-                    const dom__metri_necessari = document.getElementById('metri_necessari');
-                    const dom__totale_preventivo = document.getElementById('totale_preventivo');
-                    const dom__costo_al_pezzo = document.getElementById('costo_al_pezzo');
-                    const dom__costo_al_metro = document.getElementById('costo_al_metro');
-                    const shopify_dom__quantity = '.quantity__input';
-                    const shopify_dom__addToCart = '.product-form__buttons button';
+          <script>
+            //Variabili d'appoggio DOM
+            const dom__dimensioni = document.getElementById('conf_dimensioni');
+            const dom__preview = document.getElementById('conf_preview');
+            const dom__nome_grafica = document.getElementById('conf_name');
+            const dom__file = document.getElementById('conf_file');
+            const dom__file_hq = document.getElementById('conf_file_hq');
+            const dom__quantita = document.getElementById('conf_quantita');
+            const dom__disclaimer = document.getElementById('conf_disclaimer');
+            const dom__metri_necessari = document.getElementById('metri_necessari');
+            const dom__totale_preventivo = document.getElementById('totale_preventivo');
+            const dom__costo_al_pezzo = document.getElementById('costo_al_pezzo');
+            const dom__costo_al_metro = document.getElementById('costo_al_metro');
+            const shopify_dom__quantity = '.quantity__input';
+            const shopify_dom__addToCart = '.product-form__buttons button';
 
-                    //Costanti
-                    const placeholder_img =
-                      'https://upload.wikimedia.org/wikipedia/commons/thumb/3/3f/Placeholder_view_vector.svg/619px-Placeholder_view_vector.svg.png';
-                    const larghezza_rullo = 550;
-                    const offset = 0; //al momento considerato solo a destra e sotto
-                    const price_increments = 0.3;
-                    const prices = [
-                      { lessThan: 3.00, price: 15.00 },
-                      { lessThan: 10.00, price: 13.90 },
-                      { lessThan: 25.00, price: 12.90 },
-                      { lessThan: Infinity, price: 12.90 }, //chiedi quotazione
-                    ];
+            //Costanti
+            const placeholder_img =
+              'https://upload.wikimedia.org/wikipedia/commons/thumb/3/3f/Placeholder_view_vector.svg/619px-Placeholder_view_vector.svg.png';
+            const larghezza_rullo = 550;
+            const offset = 0; //al momento considerato solo a destra e sotto
+            const price_increments = 0.3;
+            const prices = [
+              { lessThan: 3.00, price: 15.00 },
+              { lessThan: 10.00, price: 13.90 },
+              { lessThan: 25.00, price: 12.90 },
+              { lessThan: Infinity, price: 12.90 }, //chiedi quotazione
+            ];
 
-                    //Globali
-                    var width_mm = 0;
-                    var height_mm = 0;
+            //Globali
+            var width_mm = 0;
+            var height_mm = 0;
 
-                    //Resetto eventuali valori in cache per il form
-                    reset(true);
+            //Resetto eventuali valori in cache per il form
+            reset(true);
 
-                    //Imposto gli event listener che avviano il tutto
-                    dom__file.addEventListener(
-                      'change',
-                      function () {
-                        reset();
-                        readFile(this.files[0]);
-                      },
-                      false
-                    );
+            //Imposto gli event listener che avviano il tutto
+            dom__file.addEventListener(
+              'change',
+              function () {
+                reset();
+                readFile(this.files[0]);
+              },
+              false
+            );
 
-                    dom__quantita.addEventListener('input', function () {
-                      calcola_nesting(width_mm, height_mm, dom__quantita.value);
-                    });
+            dom__quantita.addEventListener('input', function () {
+              calcola_nesting(width_mm, height_mm, dom__quantita.value);
+            });
 
-                    dom__quantita.addEventListener('change', function (e) {
-                      const valore = e.target.value;
-                      if(valore==0 || valore=="" || isNaN(valore)) {
-                        dom__quantita.value=1;
-                        calcola_nesting(width_mm, height_mm, dom__quantita.value);
-                      }
-                    });
+            dom__quantita.addEventListener('change', function (e) {
+              const valore = e.target.value;
+              if(valore==0 || valore=="" || isNaN(valore)) {
+                dom__quantita.value=1;
+                calcola_nesting(width_mm, height_mm, dom__quantita.value);
+              }
+            });
 
-                    dom__disclaimer.addEventListener('change', function(e) {
-                      if(e.target.checked) {
-                        document.querySelector(shopify_dom__addToCart).disabled = false;
-                      } else {
-                        document.querySelector(shopify_dom__addToCart).disabled = true;
-                      }
-                    });
+            dom__disclaimer.addEventListener('change', function(e) {
+              if(e.target.checked) {
+                document.querySelector(shopify_dom__addToCart).disabled = false;
+              } else {
+                document.querySelector(shopify_dom__addToCart).disabled = true;
+              }
+            });
 
-                    function reset(initialLoad) {
-                      console.log('Lummy.configuratore: Resetto il form');
-                      dom__preview.setAttribute('src', placeholder_img);
-                      dom__dimensioni.value = '';
-                      dom__metri_necessari.value = '';
-                      dom__totale_preventivo.value = '';
-                      dom__costo_al_pezzo.value = '';
-                      dom__nome_grafica.value = '';
-                      dom__costo_al_metro.value = prices[0].price + ' €/m'
+            function reset(initialLoad) {
+              console.log('Lummy.configuratore: Resetto il form');
+              dom__preview.setAttribute('src', placeholder_img);
+              dom__dimensioni.value = '';
+              dom__metri_necessari.value = '';
+              dom__totale_preventivo.value = '';
+              dom__costo_al_pezzo.value = '';
+              dom__nome_grafica.value = '';
+              dom__costo_al_metro.value = prices[0].price + ' €/m'
 
-                      //Resetto il file originale, compresso e header
-                      dom__file_hq.value = '';
-                      let newFileContainer = new DataTransfer();
-                      dom__file_hq.files = newFileContainer.files;
-                      if (initialLoad) {
-                        dom__file.value = '';
-                        dom__file.files = newFileContainer.files;
-                      }
+              //Resetto il file originale, compresso e header
+              dom__file_hq.value = '';
+              let newFileContainer = new DataTransfer();
+              dom__file_hq.files = newFileContainer.files;
+              if (initialLoad) {
+                dom__file.value = '';
+                dom__file.files = newFileContainer.files;
+              }
 
-                      //Resetto i campi originali (nascosti) di shopify
-                      if (initialLoad != true) {
-                        document.querySelector(shopify_dom__quantity).value = 0;
-                        document.querySelector(shopify_dom__addToCart).disabled = true;
-                      }
-                    }
+              //Resetto i campi originali (nascosti) di shopify
+              if (initialLoad != true) {
+                document.querySelector(shopify_dom__quantity).value = 0;
+                document.querySelector(shopify_dom__addToCart).disabled = true;
+              }
+            }
 
-                    //Funzione per leggere file caricato e inserirlo in DOM
-                    async function readFile(file) {
-                      //Debuggo
-                      console.log(`${file.name} is ${file.type}`);
+            //Funzione per leggere file caricato e inserirlo in DOM
+            async function readFile(file) {
+              //Debuggo
+              console.log(`${file.name} is ${file.type}`);
 
-                      //prendo i dati
-                      const newArrayBuffer = await file.arrayBuffer();
-                      console.log('newArrayBuffer', newArrayBuffer);
+              //prendo i dati
+              const newArrayBuffer = await file.arrayBuffer();
+              console.log('newArrayBuffer', newArrayBuffer);
 
-                      //creo uno zip
-                      const zip = new JSZip();
-                      zip.file(file.name, newArrayBuffer, { binary: true });
+              //creo uno zip
+              const zip = new JSZip();
+              zip.file(file.name, newArrayBuffer, { binary: true });
 
-                      //ToDO gestire: catch (se si rompe) + async (se uno va avanti mentre carica)
-                      zip.generateAsync({ type: 'blob' }).then(function (content) {
-                        //Prendo il nuovo blob converto in file
-                        const newFile = new File([content], `${file.name}.zip`, { type: 'application/zip' });
-                        console.log(`Zip generated: ${newFile.name} is ${newFile.type}`);
+              //ToDO gestire: catch (se si rompe) + async (se uno va avanti mentre carica)
+              zip.generateAsync({ type: 'blob' }).then(function (content) {
+                //Prendo il nuovo blob converto in file
+                const newFile = new File([content], `${file.name}.zip`, { type: 'application/zip' });
+                console.log(`Zip generated: ${newFile.name} is ${newFile.type}`);
 
-                        //Sposto il file binario nel secondo input
-                        let newFileContainer = new DataTransfer();
-                        newFileContainer.items.add(newFile);
-                        dom__file_hq.files = newFileContainer.files;
-                      });
+                //Sposto il file binario nel secondo input
+                let newFileContainer = new DataTransfer();
+                newFileContainer.items.add(newFile);
+                dom__file_hq.files = newFileContainer.files;
+              });
 
-                      //Preparo lettura file
-                      const reader = new FileReader();
-                      reader.onload = async (event) => {
-                        let imgPath = event.target.result;
-                        dom__preview.setAttribute('src', imgPath);
-                        getImgSize(imgPath);
-                      };
-                      //Leggo i file
-                      reader.readAsDataURL(file);
+              //Preparo lettura file
+              const reader = new FileReader();
+              reader.onload = async (event) => {
+                let imgPath = event.target.result;
+                dom__preview.setAttribute('src', imgPath);
+                getImgSize(imgPath);
+              };
+              //Leggo i file
+              reader.readAsDataURL(file);
 
-                      //Stampo il contenuto del form
-                      console.log(
-                        'Valori nel form: ',
-                        Object.fromEntries(new FormData(document.querySelector('.product-form form')))
-                      );
-                    }
+              //Stampo il contenuto del form
+              console.log(
+                'Valori nel form: ',
+                Object.fromEntries(new FormData(document.querySelector('.product-form form')))
+              );
+            }
 
-                    //Funzione per inserire l'immagine in pagina
-                    function getImgSize(imgSrc) {
-                      //Preparo la creazione dell'image
-                      let newImg = new Image();
-                      newImg.onload = function () {
-                        useImgSize(newImg.height, newImg.width);
-                      };
-                      //Carico l'image
-                      newImg.src = imgSrc;
-                    }
+            //Funzione per inserire l'immagine in pagina
+            function getImgSize(imgSrc) {
+              //Preparo la creazione dell'image
+              let newImg = new Image();
+              newImg.onload = function () {
+                useImgSize(newImg.height, newImg.width);
+              };
+              //Carico l'image
+              newImg.src = imgSrc;
+            }
 
-                    //Funzione per recuperare larghezza in pixel e mm da un'immagine del DOM
-                    function useImgSize(width, height) {
-                      //calcolo in mm (30 invece di 300)
-                      width_mm = Math.round((width * 2.54) / 30);
-                      height_mm = Math.round((height * 2.54) / 30);
-                      console.log('width_mm', width_mm);
-                      console.log('height_mm', height_mm);
-                      console.log('dimensioni', `${width_mm} x ${height_mm} mm`);
-                      console.log('dimensioni dom', dom__dimensioni);
-                      //imposto UI
-                      dom__dimensioni.value = `${width_mm} x ${height_mm} mm`;
+            //Funzione per recuperare larghezza in pixel e mm da un'immagine del DOM
+            function useImgSize(width, height) {
+              //calcolo in mm (30 invece di 300)
+              width_mm = Math.round((width * 2.54) / 30);
+              height_mm = Math.round((height * 2.54) / 30);
+              console.log('width_mm', width_mm);
+              console.log('height_mm', height_mm);
+              console.log('dimensioni', `${width_mm} x ${height_mm} mm`);
+              console.log('dimensioni dom', dom__dimensioni);
+              //imposto UI
+              dom__dimensioni.value = `${width_mm} x ${height_mm} mm`;
 
-                      calcola_nesting(width_mm, height_mm, dom__quantita.value);
-                    }
+              calcola_nesting(width_mm, height_mm, dom__quantita.value);
+            }
 
-                    //Funzione per la scelta del nesting e il calcolo metri lineare
-                    function calcola_nesting(larghezza_grafica, altezza_grafica, numero_copie) {
-                      //Preparo i risultati
-                      let altezza_affiancati = 0;
-                      let altezza_ruotati = 0;
-                      let metri = 0;
-                      let costo = 0;
+            //Funzione per la scelta del nesting e il calcolo metri lineare
+            function calcola_nesting(larghezza_grafica, altezza_grafica, numero_copie) {
+              //Preparo i risultati
+              let altezza_affiancati = 0;
+              let altezza_ruotati = 0;
+              let metri = 0;
+              let costo = 0;
 
-                      //Uso floor per considerare solo un numero INTERO di item/riga.
-                      //Es. grafica da 20 su rullo 50 => 2,5/riga => 2/riga, su 2 righe
-                      const quanti_su_riga_affiancati = Math.floor(larghezza_rullo / (larghezza_grafica + offset));
-                      const quanti_su_riga_ruotati = Math.floor(larghezza_rullo / (altezza_grafica + offset));
+              //Uso floor per considerare solo un numero INTERO di item/riga.
+              //Es. grafica da 20 su rullo 50 => 2,5/riga => 2/riga, su 2 righe
+              const quanti_su_riga_affiancati = Math.floor(larghezza_rullo / (larghezza_grafica + offset));
+              const quanti_su_riga_ruotati = Math.floor(larghezza_rullo / (altezza_grafica + offset));
 
-                      //Calcolo Affiancati
-                      if (quanti_su_riga_affiancati >= 1) {
-                        let quante_righe = Math.ceil(numero_copie / quanti_su_riga_affiancati); //ceil per calcolare la riga intera anche se poco usata (es. 11/2)
-                        altezza_affiancati = altezza_grafica * quante_righe;
-                      }
+              //Calcolo Affiancati
+              if (quanti_su_riga_affiancati >= 1) {
+                let quante_righe = Math.ceil(numero_copie / quanti_su_riga_affiancati); //ceil per calcolare la riga intera anche se poco usata (es. 11/2)
+                altezza_affiancati = altezza_grafica * quante_righe;
+              }
 
-                      //Calcolo Ruotati 90°
-                      if (quanti_su_riga_ruotati >= 1) {
-                        let quante_righe = Math.ceil(numero_copie / quanti_su_riga_ruotati); //ceil per calcolare la riga intera anche se poco usata (es. 11/2)
-                        altezza_ruotati = larghezza_grafica * quante_righe;
-                      }
+              //Calcolo Ruotati 90°
+              if (quanti_su_riga_ruotati >= 1) {
+                let quante_righe = Math.ceil(numero_copie / quanti_su_riga_ruotati); //ceil per calcolare la riga intera anche se poco usata (es. 11/2)
+                altezza_ruotati = larghezza_grafica * quante_righe;
+              }
 
-                      //Calcolo finale
-                      if (altezza_affiancati < altezza_ruotati) {
-                        metri = altezza_affiancati / 1000;
-                      } else {
-                        metri = altezza_ruotati / 1000;
-                      }
+              //Calcolo finale
+              if (altezza_affiancati < altezza_ruotati) {
+                metri = altezza_affiancati / 1000;
+              } else {
+                metri = altezza_ruotati / 1000;
+              }
 
-                      //Calcolo costo al metro, fallback sul max
-                      const costo_metro = Math.max( ...prices.filter(x=> metri < x.lessThan).map(x=> x.price) );
-                      if(costo_metro > Math.max(...prices.map(x=>x.price)) || costo_metro < Math.min(...prices.map(x=>x.price)) ){
-                        costo_metro = Math.max(...prices.map(x=>x.price));
-                      }
-                      dom__costo_al_metro.value = costo_metro + ' €/m';
+              //Calcolo costo al metro, fallback sul max
+              const costo_metro = Math.max( ...prices.filter(x=> metri < x.lessThan).map(x=> x.price) );
+              if(costo_metro > Math.max(...prices.map(x=>x.price)) || costo_metro < Math.min(...prices.map(x=>x.price)) ){
+                costo_metro = Math.max(...prices.map(x=>x.price));
+              }
+              dom__costo_al_metro.value = costo_metro + ' €/m';
 
-                      //Aggiungo 0.1 metri fisso
-                      metri += 0.1;
+              //Aggiungo 0.1 metri fisso
+              metri += 0.1;
 
-                      //Arrotondamento manuale
-                      metri = metri.toFixed(2);
+              //Arrotondamento manuale
+              metri = metri.toFixed(2);
 
-                      //Minimo ordinabile: 1 metro
-                      metri = (metri < 1) ? 1 : metri;
+              //Minimo ordinabile: 1 metro
+              metri = (metri < 1) ? 1 : metri;
 
-                      costo = (metri * costo_metro).toFixed(2);
-                      costoPezzo = (costo / numero_copie).toFixed(2);
+              costo = (metri * costo_metro).toFixed(2);
+              costoPezzo = (costo / numero_copie).toFixed(2);
 
-                      //Imposto risultati nel DOM
-                      dom__metri_necessari.value = metri + ' m';
-                      dom__totale_preventivo.value = costo + ' €';
-                      dom__costo_al_pezzo.value = costoPezzo + ' €';
+              //Imposto risultati nel DOM
+              dom__metri_necessari.value = metri + ' m';
+              dom__totale_preventivo.value = costo + ' €';
+              dom__costo_al_pezzo.value = costoPezzo + ' €';
 
-                      //Calcolo la quantità di shopify necessaria
-                      pezzi = Math.round(costo / price_increments);
-                      document.querySelector(shopify_dom__quantity).value = pezzi; //bisogna farlo qui
+              //Calcolo la quantità di shopify necessaria
+              pezzi = Math.round(costo / price_increments);
+              document.querySelector(shopify_dom__quantity).value = pezzi; //bisogna farlo qui
 
-                      //Debugger
-                      console.log('Preventivo aggiornato');
-                      console.log('Metri necessari: ', metri);
-                      console.log('Costo: ', costo);
-                      console.log('Pezzi per shopify: ', pezzi);
+              //Debugger
+              console.log('Preventivo aggiornato');
+              console.log('Metri necessari: ', metri);
+              console.log('Costo: ', costo);
+              console.log('Pezzi per shopify: ', pezzi);
 
-                      document.querySelector(shopify_dom__addToCart).disabled = false; //bisogna farlo qui
-                    }
-                  </script>
-                  <style>
-                    div#conf_preview_wrapper {
-                      width: 100%;
-                      height: auto;
-                      max-width: 100%;
-                      max-height: 50vh;
-                      overflow-y: auto;
-                      border: solid 1px #d0d0d0;
-                      border-bottom: none;
-                    }
+              document.querySelector(shopify_dom__addToCart).disabled = false; //bisogna farlo qui
+            }
+          </script>
+          <style>
+            div#conf_preview_columns { /* affianca img e form configuratore */
+              display: flex;
+            }
 
-                    img#conf_preview {
-                      /* width: 5rem; testato su iOS */
-                      width: 100%;
-                      height: auto;
-                      max-width: 100%;
-                      max-height: auto;
-                      display: block;
-                    }
+            .product, .product__info-container { /* allarga la pagina */
+              max-width: unset !important;
+            }
 
-                    .stacca1 {
-                      margin-top: 0.5rem;
-                    }
+            div#conf_preview_wrapper {
+              border: solid 1px #e0e0e0;
 
-                    .stacca2 {
-                      margin-top: 1rem;
-                    }
+              /* Implementazione recente, non compatibile con vecchi browser (es. edge pre-chromium) */
+              /* background: repeating-conic-gradient(#808080 0 25%, #0000 0 50%) 50% / 20px 20px; */
 
-                    .stacca3 {
-                      margin-top: 2rem;
-                    }
+              /* Implementazione usata da Google Images, compatibile con browser vecchi */
+              background-position: 0px 0px, 10px 10px;
+              background-size: 20px 20px;
+              background-image: linear-gradient(45deg, #eee 25%, transparent 25%, transparent 75%, #eee 75%, #eee 100%),linear-gradient(45deg, #eee 25%, white 25%, white 75%, #eee 75%, #eee 100%);
 
-                    #formTable,
-                    #priceTable {
-                      width: 100%;
-                    }
+            }
 
-                    #formTable table,
-                    #formTable td,
-                    #priceTable table,
-                    #priceTable td {
-                      border: solid 1px #e0e0e0;
-                      border-style: solid !important;
-                      outline: none;
-                      box-shadow: none !important;
-                      border-collapse: collapse;
-                    }
+            div#conf_preview_wrapper, #formTable {
+              width: 50%;
+            }
 
-                    #formTable table,
-                    #formTable td {
-                      padding: 1rem;
-                    }
+            img#conf_preview {
+              width: 100%;
+              height: 100%;
+              display: block;
+              object-fit: contain;
+              padding: 2rem;
+            }
 
-                    #priceTable table,
-                    #priceTable td {
-                      padding: 0.5rem;
-                    }
+            .stacca1 {
+              margin-top: 0.5rem;
+            }
 
-                    #formTable td,
-                    #priceTable td {
-                      width: 50%;
-                    }
+            .stacca2 {
+              margin-top: 1rem;
+            }
 
-                    #priceTable thead {
-                      background: rgb(var(--color-button));
-                      color: white;
-                    }
+            .stacca3 {
+              margin-top: 2rem;
+            }
 
-                    table .left_cell {
-                      text-align: right;
-                    }
+            #priceTable {
+              max-width: 50rem;
+              width: 100%;
+              margin: 0 auto;
+            }
 
-                    table .right_cell {
-                      text-align: left;
-                    }
+            #priceTable,
+            #priceTable td,
+            #formTable {
+              border: solid 1px #e0e0e0;
+              border-style: solid !important;
+              outline: none;
+              box-shadow: none !important;
+              border-collapse: collapse;
+            }
 
-                    #formTable td,
-                    #formTable td input,
-                    #formTable td textarea,
-                    #formTable td select {
-                      color: rgba(18, 18, 18, 0.75);
-                      font-size: 1.2rem;
-                      font-family: var(--font-body-family);
-                      font-style: normal;
-                      font-weight: 700;
-                      letter-spacing: 0.06rem;
-                      line-height: 1.4rem;
-                    }
+            #formTable td {
+              border: solid 0px;
+              border-bottom: solid 1px #e0e0e0;
+              border-style: solid !important;
+              outline: none;
+              box-shadow: none !important;
+              border-collapse: collapse;
+            }
 
-                    #formTable input,
-                    #formTable textarea {
-                      width: 100%;
-                      border: solid 1px #ccc;
-                      padding: 0.7rem;
-                      border-radius: 0.7rem;
-                    }
+            #formTable,
+            #formTable td {
+              padding: 1rem;
+            }
 
-                    #formTable input:active,
-                    #formTable input:focus-within,
-                    #formTable input:focus-visible,
-                    #formTable textarea:active,
-                    #formTable textarea:focus-within,
-                    #formTable textarea:focus-visible {
-                      outline: none;
-                      box-shadow: none;
-                      border: solid 1px rgb(227, 51, 35);
-                    }
+            #priceTable,
+            #priceTable td {
+              padding: 0.5rem;
+            }
 
-                    .input__calcolato {
-                      padding: 0;
-                      margin: 0;
-                      border: none;
-                      outline: none;
-                      box-shadow: none;
-                    }
+            #formTable td,
+            #priceTable td {
+              width: 50%;
+            }
 
-                    .input__calcolato:active,
-                    .input__calcolato:focus-within,
-                    .input__calcolato:focus-visible {
-                      padding: 0;
-                      margin: 0;
-                      border: none;
-                      outline: none;
-                      box-shadow: none;
-                    }
+            #priceTable thead {
+              background: rgb(var(--color-button));
+              color: white;
+            }
 
-                    #sezione_statica {
-                      margin-top: 1.5rem;
-                    }
-                  </style>
+            table .left_cell {
+              text-align: right;
+            }
+
+            table .right_cell {
+              text-align: left;
+            }
+
+            #formTable td,
+            #formTable td input,
+            #formTable td textarea,
+            #formTable td select {
+              color: rgba(18, 18, 18, 0.75);
+              font-size: 1.2rem;
+              font-family: var(--font-body-family);
+              font-style: normal;
+              font-weight: 700;
+              letter-spacing: 0.06rem;
+              line-height: 1.4rem;
+            }
+
+            #formTable input,
+            #formTable textarea {
+              width: 100%;
+              border: solid 1px #ccc;
+              padding: 0.7rem;
+              border-radius: 0.7rem;
+            }
+
+            #formTable input:active,
+            #formTable input:focus-within,
+            #formTable input:focus-visible,
+            #formTable textarea:active,
+            #formTable textarea:focus-within,
+            #formTable textarea:focus-visible {
+              outline: none;
+              box-shadow: none;
+              border: solid 1px rgb(227, 51, 35);
+            }
+
+            .input__calcolato {
+              padding: 0;
+              margin: 0;
+              border: none;
+              outline: none;
+              box-shadow: none;
+            }
+
+            .input__calcolato:active,
+            .input__calcolato:focus-within,
+            .input__calcolato:focus-visible {
+              padding: 0;
+              margin: 0;
+              border: none;
+              outline: none;
+              box-shadow: none;
+            }
+
+            .conf_file_note {
+              margin-bottom: 0;
+              font-size: 1rem;
+            }
+
+            #sezione_statica {
+              margin-top: 1.5rem;
+              font-size: 1.5rem;
+            }
+
+            .conf_disclaimer_label {
+              font-size: 1.75rem;
+            }
+            .conf_nota_responsive {
+              font-size: 1.25rem;
+              margin-top: 0.75rem;
+              margin-bottom: 0;
+            }
+          </style>
                   {% comment %} ************************************** {% endcomment %}
                   {% comment %} ******** FINE LUMMY LINE-ITEM ******** {% endcomment %}
                   {% comment %} ************************************** {% endcomment %}
