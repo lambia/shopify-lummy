@@ -404,8 +404,12 @@
               false
             );
 
-            dom__quantita.addEventListener('input', function () {
-              calcola_nesting(width_mm, height_mm, dom__quantita.value);
+            dom__quantita.addEventListener('input', function (e) {
+              let valore = e.target.value;
+              if(valore==0 || valore=="" || isNaN(valore)) {
+                valore = 1;
+              }
+              calcola_nesting(width_mm, height_mm, valore);
             });
 
             dom__quantita.addEventListener('change', function (e) {
