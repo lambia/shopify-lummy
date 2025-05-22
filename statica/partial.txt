@@ -1,0 +1,76 @@
+<div id="conf_preview_columns">
+    <div id="conf_preview_wrapper">
+        <img id="conf_preview"
+            src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/3f/Placeholder_view_vector.svg/619px-Placeholder_view_vector.svg.png">
+    </div>
+    <table id="formTable">
+        <tr>
+            <td class="left_cell"><label for="conf_file">Seleziona un file</label></td>
+            <td class="right_cell">
+                <input type="file" form="{{product_form_id}}" id="conf_file" name="properties[grafica]"
+                    aria-label="Seleziona un file" value="" autocomplete="off">
+                <input type="file" form="{{product_form_id}}" id="conf_file_hq" name="properties[grafica_hq]"
+                    value="" autocomplete="off" style="display: none">
+                <p class="conf_file_note">Carica un file PNG con risoluzione a 300dpi, massimo 20mb</p>
+            </td>
+        </tr>
+        <tr>
+            <td class="left_cell"><label for="conf_name">Nome grafica</label></td>
+            <td class="right_cell">
+                <input type="text" form="{{product_form_id}}" id="conf_name" name="properties[nome]"
+                    placeholder="Nome grafica" aria-label="Nome grafica" value="" autocomplete="off">
+            </td>
+        </tr>
+        <tr>
+            <td class="left_cell"><label for="conf_quantita">Quantità</label></td>
+            <td class="right_cell">
+                <input type="number" form="{{product_form_id}}" id="conf_quantita" name="properties[quantita]"
+                    placeholder="Quantità" aria-label="Quantità" value="1" min="1" autocomplete="off">
+            </td>
+        </tr>
+        <tr>
+            <td class="left_cell"><label for="conf_note">Note</label></td>
+            <td class="right_cell">
+                <textarea name="properties[note]" form="{{product_form_id}}" rows="5" cols="50" placeholder="Note"
+                    aria-label="Note" autocomplete="off"></textarea>
+            </td>
+        </tr>
+        <!-- Dati calcolati -->
+        <tr>
+            <td class="left_cell"><label for="conf_larghezza">Larghezza x Altezza (mm)</label></td>
+            <td class="right_cell">
+                <input type="text" form="{{product_form_id}}" id="conf_dimensioni" class="input__calcolato"
+                    name="properties[dimensioni]" readonly value="Larghezza x Altezza (mm)"
+                    aria-label="Dimensioni larghezza x altezza (mm)" autocomplete="off">
+            </td>
+        </tr>
+        <tr>
+            <td class="left_cell">Metri lineari sviluppati</td>
+            <td class="right_cell">
+                <input type="text" form="{{product_form_id}}" id="metri_necessari" class="input__calcolato"
+                    name="properties[metri necessari]" readonly value="0 m" autocomplete="off">
+            </td>
+        </tr>
+        <tr>
+            <td class="left_cell">Costo al metro</td>
+            <td class="right_cell">
+                <input type="text" id="costo_al_metro" class="input__calcolato" name="properties[costo al pezzo]"
+                    readonly value="0 €/m" autocomplete="off">
+            </td>
+        </tr>
+        <tr>
+            <td class="left_cell">Totale</td>
+            <td class="right_cell">
+                <input type="text" form="{{product_form_id}}" id="totale_preventivo" class="input__calcolato"
+                    name="properties[costo]" readonly value="0 €" autocomplete="off">
+            </td>
+        </tr>
+        <tr>
+            <td class="left_cell">Costo al pezzo</td>
+            <td class="right_cell">
+                <input type="text" id="costo_al_pezzo" class="input__calcolato" name="properties[costo al pezzo]"
+                    readonly value="0 €" autocomplete="off">
+            </td>
+        </tr>
+    </table>
+</div>
