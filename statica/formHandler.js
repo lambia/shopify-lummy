@@ -11,16 +11,12 @@ function formHandlerInit(scope) {
     const dom__file = wrapper.querySelector('#conf_file');
     const dom__file_hq = wrapper.querySelector('#conf_file_hq');
     const dom__quantita = wrapper.querySelector('#conf_quantita');
-    const dom__disclaimer = wrapper.querySelector('#conf_disclaimer');
     const dom__metri_necessari = wrapper.querySelector('#metri_necessari');
     const dom__totale_preventivo = wrapper.querySelector('#totale_preventivo');
     const dom__costo_al_pezzo = wrapper.querySelector('#costo_al_pezzo');
     const dom__costo_al_metro = wrapper.querySelector('#costo_al_metro');
 
-    const sezioneStatica = document.getElementById("sezione_statica");
     const shopify_dom__quantity = '.quantity__input';
-    const shopify_dom__addToCart = '.product-form__buttons button';
-    const shopify_dom__buyNow = ".shopify-payment-button";
     const shopify_dom__form = '.product-form form';
 
     //Costanti
@@ -37,8 +33,9 @@ function formHandlerInit(scope) {
     ];
 
     //Globali
-    var width_mm = 0;
-    var height_mm = 0;
+    let width_mm = 0;
+    let height_mm = 0;
+    let quantita = 1;
 
     //Resetto eventuali valori in cache per il form
     reset(true);
@@ -54,28 +51,23 @@ function formHandlerInit(scope) {
     );
 
     dom__quantita.addEventListener('input', function (e) {
-        let valore = e.target.value;
-        if (valore == 0 || valore == "" || isNaN(valore)) {
-            valore = 1;
+        quantita = e.target.value;
+        if (quantita == 0 || quantita == "" || isNaN(quantita)) {
+            quantita = 1;
         }
-        calcola_nesting(width_mm, height_mm, valore);
+
+        calcola_nesting();
     });
 
     dom__quantita.addEventListener('change', function (e) {
-        const valore = e.target.value;
-        if (valore == 0 || valore == "" || isNaN(valore)) {
+        quantita = e.target.value;
+        if (quantita == 0 || quantita == "" || isNaN(quantita)) {
             dom__quantita.value = 1;
-            calcola_nesting(width_mm, height_mm, dom__quantita.value);
+            quantita = 1;
         }
-    });
 
-    // dom__disclaimer.addEventListener('change', function (e) {
-    // 	if (e.target.checked) {
-    //         setCart(true);
-    // 	} else {
-    //         setCart(false);
-    // 	}
-    // });
+        calcola_nesting();
+    });
 
     dom__nome_grafica.addEventListener('focus', function (e) {
         dom__nome_grafica.value = dom__nome_grafica.value.slice(0, -3);
@@ -141,31 +133,9 @@ function formHandlerInit(scope) {
             dom__file.files = newFileContainer.files;
         }
 
-
         //Resetto i campi originali (nascosti) di shopify (Al primo load lo imposto per il ready)
-        if (initialLoad) {
-            ready(() => { setCart(false) });
-        } else {
+        if (!initialLoad) {
             document.querySelector(shopify_dom__quantity).value = 0;
-            setCart(false);
-        }
-    }
-
-    function setCart(value = false) {
-        if (document.querySelector(shopify_dom__addToCart)) {
-            document.querySelector(shopify_dom__addToCart).disabled = !value;
-        }
-
-        //if (document.querySelector(shopify_dom__buyNow)) {
-            //document.querySelector(shopify_dom__buyNow).remove();
-        //}
-    }
-
-    function ready(fn) {
-        if (document.readyState !== 'loading') {
-            fn();
-        } else {
-            document.addEventListener('DOMContentLoaded', fn); //ToDo: passare event?
         }
     }
 
@@ -234,11 +204,16 @@ function formHandlerInit(scope) {
         //imposto UI
         dom__dimensioni.value = `${width_mm} x ${height_mm} mm`;
 
-        calcola_nesting(width_mm, height_mm, dom__quantita.value);
+        calcola_nesting();
     }
 
     //Funzione per la scelta del nesting e il calcolo metri lineare
-    function calcola_nesting(larghezza_grafica, altezza_grafica, numero_copie, chiamataInterna=true) {
+    function calcola_nesting(chiamataInterna=true) {
+
+        let larghezza_grafica = width_mm;
+        let altezza_grafica = height_mm;
+        let numero_copie = quantita;
+ 
         //Preparo i risultati
         let altezza_affiancati = 0;
         let altezza_ruotati = 0;
@@ -249,6 +224,12 @@ function formHandlerInit(scope) {
         //Es. grafica da 20 su rullo 50 => 2,5/riga => 2/riga, su 2 righe
         const quanti_su_riga_affiancati = Math.floor(larghezza_rullo / (larghezza_grafica + offset));
         const quanti_su_riga_ruotati = Math.floor(larghezza_rullo / (altezza_grafica + offset));
+
+        //Controlla se l'immagine è più grande del rullo
+        if (quanti_su_riga_affiancati<1 && quanti_su_riga_ruotati<1) {
+            alert("Attenzione!\n\nIl file caricato copre un'area di stampa maggiore della superficie disponibile.\n\n- Assicurati che il file sia corretto (300dpi) o contattaci in caso di necessità particolari.");
+            return reset(true);
+        }
 
         //Calcolo Affiancati
         if (quanti_su_riga_affiancati >= 1) {
@@ -276,8 +257,11 @@ function formHandlerInit(scope) {
         metri = (metri < 1) ? 1 : metri;
 
         //Aggiungo ai metri complessivi fuori scope
-        metriTotaliPerScope[scope] = metri;
+        scopeContainer[scope] = { metri, calcola_nesting };
         metriTotaliOrdine = getMetriTotaliScope();
+        if(chiamataInterna) {
+            aggiornaScope();
+        }
 
         //Calcolo costo al metro, fallback sul max
         const costo_metro = Math.max(...prices.filter(x => metriTotaliOrdine < x.lessThan).map(x => x.price));
@@ -290,40 +274,45 @@ function formHandlerInit(scope) {
         //Arrotondamento manuale, STRINGA DA QUI
         costo = (metri * costo_metro).toFixed(2);
         metri = metri.toFixed(2);
-
         costoPezzo = (costo / numero_copie).toFixed(2);
+        
+        //Calcolo la quantità di shopify necessaria
+        pezzi = Math.round(costo / price_increments);
+        scopeContainer[scope].pezzi = pezzi;
 
         //Imposto risultati nel DOM
         dom__metri_necessari.value = metri + ' m';
         dom__totale_preventivo.value = costo + ' €';
         dom__costo_al_pezzo.value = costoPezzo + ' €';
 
-        //Calcolo la quantità di shopify necessaria
-        pezzi = Math.round(costo / price_increments);
-        document.querySelector(shopify_dom__quantity).value = pezzi; //bisogna farlo qui
-
         //Debugger
         console.log('Preventivo aggiornato');
         console.log('Metri necessari: ', metri);
         console.log('Costo: ', costo);
         console.log('Pezzi per shopify: ', pezzi);
+    }
 
-        setCart(true); //bisogna farlo qui
-
-        if(chiamataInterna) {
-            //avverti gli altri di ricalcolare
+    function aggiornaScope() {
+        for (const singolaGrafica of scopeContainer) {
+            if(singolaGrafica && singolaGrafica.calcola_nesting){
+                singolaGrafica.calcola_nesting(false);
+            }
         }
     }
 
     function getMetriTotaliScope() {
-        let metriTotaliScope = 0;
-        for (const metriGrafica of metriTotaliPerScope) {
-            const nMetriGrafica = parseFloat(metriGrafica);
-            if(!isNaN(nMetriGrafica)){
-                metriTotaliScope += nMetriGrafica;
+        let risultato = 0;
+
+        for (const singolaGrafica of scopeContainer) {
+            
+            if(singolaGrafica && singolaGrafica.metri) {
+                const singolaGraficaMetri = parseFloat(singolaGrafica.metri);
+                if(!isNaN(singolaGraficaMetri)){
+                    risultato += singolaGraficaMetri;
+                }
             }
         }
-        return metriTotaliScope;
+        return risultato;
     }
 
 }
