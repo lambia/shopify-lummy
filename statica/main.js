@@ -62,13 +62,13 @@ dom__quantita.addEventListener('change', function (e) {
 	}
 });
 
-dom__disclaimer.addEventListener('change', function (e) {
-	if (e.target.checked) {
-        setCart(true);
-	} else {
-        setCart(false);
-	}
-});
+// dom__disclaimer.addEventListener('change', function (e) {
+// 	if (e.target.checked) {
+//         setCart(true);
+// 	} else {
+//         setCart(false);
+// 	}
+// });
 
 dom__nome_grafica.addEventListener('focus', function (e) {
 	dom__nome_grafica.value = dom__nome_grafica.value.slice(0, -3);
