@@ -13,6 +13,7 @@ const dom__costo_al_pezzo = document.getElementById('costo_al_pezzo');
 const dom__costo_al_metro = document.getElementById('costo_al_metro');
 const shopify_dom__quantity = '.quantity__input';
 const shopify_dom__addToCart = '.product-form__buttons button';
+const shopify_dom__buyNow = ".shopify-payment-button";
 let incrementale = 1;
 
 //Costanti
@@ -63,9 +64,9 @@ dom__quantita.addEventListener('change', function (e) {
 
 dom__disclaimer.addEventListener('change', function (e) {
 	if (e.target.checked) {
-		document.querySelector(shopify_dom__addToCart).disabled = false;
+        setCart(true);
 	} else {
-		document.querySelector(shopify_dom__addToCart).disabled = true;
+        setCart(false);
 	}
 });
 
@@ -126,16 +127,39 @@ function reset(initialLoad) {
 	dom__file_hq.value = '';
 	let newFileContainer = new DataTransfer();
 	dom__file_hq.files = newFileContainer.files;
+
+    //Il file caricato viene resettato solo al load iniziale
 	if (initialLoad) {
 		dom__file.value = '';
 		dom__file.files = newFileContainer.files;
 	}
 
-	//Resetto i campi originali (nascosti) di shopify
-	if (initialLoad != true) {
-		document.querySelector(shopify_dom__quantity).value = 0;
-		document.querySelector(shopify_dom__addToCart).disabled = true;
-	}
+
+	//Resetto i campi originali (nascosti) di shopify (Al primo load lo imposto per il ready)
+	if (initialLoad) {
+        ready(()=>{setCart(false)});
+    } else {
+        document.querySelector(shopify_dom__quantity).value = 0;
+        setCart(false);
+    }
+}
+
+function setCart(value=false) {
+    if(document.querySelector(shopify_dom__addToCart)) {
+        document.querySelector(shopify_dom__addToCart).disabled = !value;
+    }
+
+    if(document.querySelector(shopify_dom__buyNow)){
+        document.querySelector(shopify_dom__buyNow).remove();
+    }
+}
+
+function ready(fn) {
+    if (document.readyState !== 'loading') {
+        fn();
+    } else {
+        document.addEventListener('DOMContentLoaded', fn); //ToDo: passare event?
+    }
 }
 
 //Funzione per leggere file caricato e inserirlo in DOM
@@ -272,5 +296,5 @@ function calcola_nesting(larghezza_grafica, altezza_grafica, numero_copie) {
 	console.log('Costo: ', costo);
 	console.log('Pezzi per shopify: ', pezzi);
 
-	document.querySelector(shopify_dom__addToCart).disabled = false; //bisogna farlo qui
+    setCart(true); //bisogna farlo qui
 }
