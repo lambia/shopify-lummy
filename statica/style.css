@@ -1,0 +1,187 @@
+div#conf_preview_columns {
+	/* affianca img e form configuratore */
+	display: flex;
+	flex-direction: row;
+}
+
+.product,
+.product__info-container {
+	/* allarga la pagina */
+	max-width: unset !important;
+}
+
+div#conf_preview_wrapper {
+	border: solid 1px #e0e0e0;
+
+	/* Implementazione recente, non compatibile con vecchi browser (es. edge pre-chromium) */
+	/* background: repeating-conic-gradient(#808080 0 25%, #0000 0 50%) 50% / 20px 20px; */
+
+	/* Implementazione usata da Google Images, compatibile con browser vecchi */
+	background-position: 0px 0px, 10px 10px;
+	background-size: 20px 20px;
+	background-image: linear-gradient(45deg, #eee 25%, transparent 25%, transparent 75%, #eee 75%, #eee 100%), linear-gradient(45deg, #eee 25%, white 25%, white 75%, #eee 75%, #eee 100%);
+
+	overflow: hidden;
+}
+
+div#conf_preview_wrapper,
+#formTable {
+	width: 50%;
+}
+
+img#conf_preview {
+	width: 100%;
+	height: 100%;
+	display: block;
+	object-fit: contain;
+	padding: 2rem;
+	transition: transform 200ms, transform-origin 200ms;
+}
+
+.stacca1 {
+	margin-top: 0.5rem;
+}
+
+.stacca2 {
+	margin-top: 1rem;
+}
+
+.stacca3 {
+	margin-top: 2rem;
+}
+
+#priceTable {
+	max-width: 50rem;
+	width: 100%;
+	margin: 0 auto;
+}
+
+#priceTable,
+#priceTable td,
+#formTable {
+	border: solid 1px #e0e0e0;
+	border-style: solid !important;
+	outline: none;
+	box-shadow: none !important;
+	border-collapse: collapse;
+}
+
+#formTable td {
+	border: solid 0px;
+	border-bottom: solid 1px #e0e0e0;
+	border-style: solid !important;
+	outline: none;
+	box-shadow: none !important;
+	border-collapse: collapse;
+}
+
+#formTable,
+#formTable td {
+	padding: 1rem;
+}
+
+#priceTable,
+#priceTable td {
+	padding: 0.5rem;
+}
+
+#formTable td,
+#priceTable td {
+	width: 50%;
+}
+
+#priceTable thead {
+	background: rgb(var(--color-button));
+	color: white;
+}
+
+table .left_cell {
+	text-align: right;
+}
+
+table .right_cell {
+	text-align: left;
+}
+
+#formTable td,
+#formTable td input,
+#formTable td textarea,
+#formTable td select {
+	color: rgba(18, 18, 18, 0.75);
+	font-size: 1.2rem;
+	font-family: var(--font-body-family);
+	font-style: normal;
+	font-weight: 700;
+	letter-spacing: 0.06rem;
+	line-height: 1.4rem;
+}
+
+#formTable input,
+#formTable textarea {
+	width: 100%;
+	border: solid 1px #ccc;
+	padding: 0.7rem;
+	border-radius: 0.7rem;
+}
+
+#formTable input:active,
+#formTable input:focus-within,
+#formTable input:focus-visible,
+#formTable textarea:active,
+#formTable textarea:focus-within,
+#formTable textarea:focus-visible {
+	outline: none;
+	box-shadow: none;
+	border: solid 1px rgb(227, 51, 35);
+}
+
+.input__calcolato {
+	padding: 0;
+	margin: 0;
+	border: none;
+	outline: none;
+	box-shadow: none;
+}
+
+.input__calcolato:active,
+.input__calcolato:focus-within,
+.input__calcolato:focus-visible {
+	padding: 0;
+	margin: 0;
+	border: none;
+	outline: none;
+	box-shadow: none;
+}
+
+.conf_file_note {
+	margin-bottom: 0;
+	font-size: 1rem;
+}
+
+#sezione_statica {
+	margin-top: 1.5rem;
+	font-size: 1.5rem;
+}
+
+.conf_disclaimer_label {
+	font-size: 1.75rem;
+}
+
+.conf_nota_responsive {
+	font-size: 1.25rem;
+	margin-top: 0.75rem;
+	margin-bottom: 0;
+}
+
+/* media query min -> sm:576px md:768px lg:992px xl:1200px xx:1400px */
+@media screen and (max-width: 768px) {
+	div#conf_preview_columns {
+		flex-direction: column;
+	}
+
+	div#conf_preview_wrapper,
+	#formTable {
+		width: 100%;
+	}
+
+}
