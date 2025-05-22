@@ -1,9 +1,12 @@
 const appWrapper = "appWrapper";
-let gfxCounter = 0;
+const newGfxBtn = "newGfx";
+let gfxCounter = 1;
 const texts = {
     loading: "Il configuratore è in caricamento",
     errorLoading: "Si è verificato un errore irreversibile"
 };
+//gli ID vengono usati come indici dell'array, il valore sono i metri della grafica
+const metriTotaliPerScope = [];
 
 document.getElementById(appWrapper).innerHTML = texts.loading;
 main();
@@ -12,16 +15,18 @@ async function main() {
     const partial = await getPartial();
     document.getElementById(appWrapper).innerHTML = "";
 
-    render(partial, gfxCounter);
-    gfxCounter++;
-    render(partial, gfxCounter);
+    newGfx(partial);
+
+    document.getElementById(newGfxBtn).addEventListener("click", function(e) {
+        newGfx(partial);
+    });
 }
 
-function render(partial="Errore", id=0) {
-
-    const newGfx = `<div class="gfxWrapper" data-gfx-id="${id}">${partial}<div>`;
-
-    document.getElementById(appWrapper).innerHTML += newGfx;
+function newGfx(partial="Errore") {
+    const newGfx = `<div class="gfxWrapper" id="gfxWrapper-${gfxCounter}">${partial}<div>`;
+    document.getElementById(appWrapper).insertAdjacentHTML('beforeend', newGfx)
+    formHandlerInit(gfxCounter); //external function!!
+    gfxCounter++;
 }
 
 async function getPartial() {
