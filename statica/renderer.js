@@ -17,10 +17,10 @@ const texts = {
 //document.querySelector(shopify_dom__addToCart).disabled = true;
 //document.querySelector(shopify_dom__buyNow).remove();
 document.getElementById(appWrapper).innerHTML = texts.loading;
-main();
+main("product-form-template--19062074048780__main");
 
-async function main() {
-    const partial = await getPartial();
+async function main(productFormId) {
+    const partial = await getPartial(productFormId);
     document.getElementById(appWrapper).innerHTML = "";
 
     newGfx(partial);
@@ -59,7 +59,7 @@ function newGfx(partial="Errore") {
     gfxCounter++;
 }
 
-async function getPartial() {
+async function getPartial(productFormId) {
     const partialURL = "https://raw.githubusercontent.com/lambia/shopify-lummy/refs/heads/main/statica/partial.html";
     let result = "";
     
@@ -69,7 +69,9 @@ async function getPartial() {
             throw new Error(`Response status: ${response.status}`);
         }
         let partialText = await partialResponse.text();
-        result = partialText;
+
+        result = partialText.replaceAll("{{product_form_id}}", productFormId);
+
     } catch (error) {
         console.error("Impossibile caricare il configuratore", error);
         result = texts.errorLoading;

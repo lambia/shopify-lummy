@@ -15,6 +15,7 @@ function formHandlerInit(scope) {
     const dom__totale_preventivo = wrapper.querySelector('#totale_preventivo');
     const dom__costo_al_pezzo = wrapper.querySelector('#costo_al_pezzo');
     const dom__costo_al_metro = wrapper.querySelector('#costo_al_metro');
+    const dom__addToCartCustom = document.getElementById('addToCartCustom');
 
     const shopify_dom__quantity = '.quantity__input';
     const shopify_dom__form = '.product-form form';
@@ -40,7 +41,11 @@ function formHandlerInit(scope) {
     //Resetto eventuali valori in cache per il form
     reset(true);
 
-    //Imposto gli event listener che avviano il tutto
+    //Imposto gli event listener che avviano il tutto    
+    dom__addToCartCustom.addEventListener("click", function (e) {
+        
+    });
+
     dom__file.addEventListener(
         'change',
         function () {
