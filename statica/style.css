@@ -20,6 +20,7 @@ div#conf_preview_columns {
 
 div#conf_preview_wrapper {
 	border: solid 1px #e0e0e0;
+	aspect-ratio: 1;
 
 	/* Implementazione recente, non compatibile con vecchi browser (es. edge pre-chromium) */
 	/* background: repeating-conic-gradient(#808080 0 25%, #0000 0 50%) 50% / 20px 20px; */
@@ -173,12 +174,6 @@ table .right_cell {
 
 .conf_disclaimer_label {
 	font-size: 1.75rem;
-}
-
-.conf_nota_responsive {
-	font-size: 1.25rem;
-	margin-top: 0.75rem;
-	margin-bottom: 0;
 }
 
 /* media query min -> sm:576px md:768px lg:992px xl:1200px xx:1400px */

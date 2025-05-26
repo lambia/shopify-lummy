@@ -5,6 +5,8 @@ const newGfxBtn = "newGfx";
 const shopify_dom__quantity = '.quantity__input';
 // const shopify_dom__form = '.product-form form';
 // const dom__disclaimer = wrapper.querySelector('#conf_disclaimer');
+const dtfProductFormId = "product-form-template--19062074048780__main";
+const welcomeMsg = "Al fine di garantirti la miglior esperienza utente possibile ti consigliamo l'utilizzo del configuratore da PC";
 
 //gli ID vengono usati come indici dell'array, il valore sono i metri della grafica
 const scopeContainer = [];
@@ -17,11 +19,13 @@ const texts = {
 //document.querySelector(shopify_dom__addToCart).disabled = true;
 //document.querySelector(shopify_dom__buyNow).remove();
 document.getElementById(appWrapper).innerHTML = texts.loading;
-main("product-form-template--19062074048780__main");
+main(dtfProductFormId);
 
 async function main(productFormId) {
     const partial = await getPartial(productFormId);
     document.getElementById(appWrapper).innerHTML = "";
+
+    alert(welcomeMsg);
 
     newGfx(partial);
 

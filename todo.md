@@ -4,6 +4,7 @@ Quando aggiungi una grafica ancora vuota, scrivi già oggetto per invalidare
 
 Bottone "aggiungi carrello" -> scrivi tutti i prodotti in carrello
 shopify_dom__quantity e shopify_dom__form
+Spinner loader in aggiunta a carrello
 
 Facili, dopo:
 Sistemare Disclaimer-Checkbox (non deve abilitare il pulsante se non era già abilitato)
