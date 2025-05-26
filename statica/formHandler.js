@@ -43,14 +43,22 @@ function formHandlerInit(scope) {
 
     //Imposto gli event listener che avviano il tutto    
     dom__addToCartCustom.addEventListener("click", function (e) {
-        
+
     });
 
     dom__file.addEventListener(
         'change',
         function () {
             reset();
-            readFile(this.files[0]);
+            if (this.files[0] && this.files[0].size && this.files[0].size <= 20 * 1024 * 1024) {
+                readFile(this.files[0]);
+            } else if (this.files[0] && this.files[0].size) {
+                reset(true);
+                alert("Il file supera le dimensioni massime consentite");
+            } else {
+                reset(true);
+                alert("Errore nell'elaborazione del file");
+            }
         },
         false
     );
@@ -78,7 +86,7 @@ function formHandlerInit(scope) {
         dom__nome_grafica.value = dom__nome_grafica.value.slice(0, -3);
     });
     dom__nome_grafica.addEventListener('blur', function (e) {
-        dom__nome_grafica.value += generaIncrementale(dom__nome_grafica.value);
+        dom__nome_grafica.value = generaIncrementale(dom__nome_grafica.value);
     });
 
     //Gestione zoom
@@ -213,12 +221,12 @@ function formHandlerInit(scope) {
     }
 
     //Funzione per la scelta del nesting e il calcolo metri lineare
-    function calcola_nesting(chiamataInterna=true) {
+    function calcola_nesting(chiamataInterna = true) {
 
         let larghezza_grafica = width_mm;
         let altezza_grafica = height_mm;
         let numero_copie = quantita;
- 
+
         //Preparo i risultati
         let altezza_affiancati = 0;
         let altezza_ruotati = 0;
@@ -231,7 +239,7 @@ function formHandlerInit(scope) {
         const quanti_su_riga_ruotati = Math.floor(larghezza_rullo / (altezza_grafica + offset));
 
         //Controlla se l'immagine è più grande del rullo
-        if (quanti_su_riga_affiancati<1 && quanti_su_riga_ruotati<1) {
+        if (quanti_su_riga_affiancati < 1 && quanti_su_riga_ruotati < 1) {
             alert("Attenzione!\n\nIl file caricato copre un'area di stampa maggiore della superficie disponibile.\n\n- Assicurati che il file sia corretto (300dpi) o contattaci in caso di necessità particolari.");
             return reset(true);
         }
@@ -264,7 +272,7 @@ function formHandlerInit(scope) {
         //Aggiungo ai metri complessivi fuori scope
         scopeContainer[scope] = { metri, calcola_nesting };
         metriTotaliOrdine = getMetriTotaliScope();
-        if(chiamataInterna) {
+        if (chiamataInterna) {
             aggiornaScope();
         }
 
@@ -280,7 +288,7 @@ function formHandlerInit(scope) {
         costo = (metri * costo_metro).toFixed(2);
         metri = metri.toFixed(2);
         costoPezzo = (costo / numero_copie).toFixed(2);
-        
+
         //Calcolo la quantità di shopify necessaria
         pezzi = Math.round(costo / price_increments);
         scopeContainer[scope].pezzi = pezzi;
@@ -299,7 +307,7 @@ function formHandlerInit(scope) {
 
     function aggiornaScope() {
         for (const singolaGrafica of scopeContainer) {
-            if(singolaGrafica && singolaGrafica.calcola_nesting){
+            if (singolaGrafica && singolaGrafica.calcola_nesting) {
                 singolaGrafica.calcola_nesting(false);
             }
         }
@@ -309,10 +317,10 @@ function formHandlerInit(scope) {
         let risultato = 0;
 
         for (const singolaGrafica of scopeContainer) {
-            
-            if(singolaGrafica && singolaGrafica.metri) {
+
+            if (singolaGrafica && singolaGrafica.metri) {
                 const singolaGraficaMetri = parseFloat(singolaGrafica.metri);
-                if(!isNaN(singolaGraficaMetri)){
+                if (!isNaN(singolaGraficaMetri)) {
                     risultato += singolaGraficaMetri;
                 }
             }

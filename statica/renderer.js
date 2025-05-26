@@ -24,10 +24,9 @@ main(dtfProductFormId);
 async function main(productFormId) {
     const partial = await getPartial(productFormId);
     document.getElementById(appWrapper).innerHTML = "";
-
-    alert(welcomeMsg);
-
     newGfx(partial);
+    
+    alert(welcomeMsg);
 
     document.getElementById(newGfxBtn).addEventListener("click", function(e) {
         newGfx(partial);

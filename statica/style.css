@@ -2,6 +2,7 @@
 	display: flex;
 	flex-direction: column;
 }
+
 .gfxWrapper {
 	margin: 2rem auto;
 }
@@ -170,6 +171,12 @@ table .right_cell {
 #sezione_statica {
 	margin-top: 1.5rem;
 	font-size: 1.5rem;
+}
+
+#sezione_statica button {
+	max-width: 44rem;
+	margin-left: auto;
+	margin-right: auto;
 }
 
 .conf_disclaimer_label {

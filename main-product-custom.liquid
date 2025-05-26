@@ -198,6 +198,41 @@
           
           <div id="appWrapper"></div>
 
+				  <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"
+					integrity="sha512-XMVd28F1oH/O71fzwBnV7HucLxVwtxf26XV8P4wPk26EDxuGZ91N8bsOttmnomcCD3CS5ZMRL50H0GgOHvegtg=="
+					crossorigin="anonymous" referrerpolicy="no-referrer"></script> 
+          <script src="https://www.lambia.it/shopify/formHandler.js"></script>
+          <script src="https://www.lambia.it/shopify/renderer.js"></script>
+          <link rel="stylesheet" href="https://www.lambia.it/shopify/style.css">
+
+                <table id="priceTable">
+                  <thead>
+                    <tr>
+                      <td class="left_cell">Metri lineari</td>
+                      <td class="right_cell">Prezzo al metro</td>
+                    </tr>
+                  </thead>
+                  <tbody>
+
+                      <tr>
+                        <td class="left_cell">&lt; 3 metri</td>
+                        <td class="right_cell">15.00 €/m</td>
+                      </tr>
+                      <tr>
+                        <td class="left_cell">tra 3 e 10 metri</td>
+                        <td class="right_cell">13.90 €/m</td>
+                      </tr>
+                      <tr>
+                        <td class="left_cell">tra 10 e 25 metri</td>
+                        <td class="right_cell">12.90 €/m</td>
+                      </tr>
+                      <tr>
+                        <td class="left_cell">&gt; 25 metri</td>
+                        <td class="right_cell">Richiedi una <a href="/pages/contact">quotazione</a></td>
+                      </tr>
+                  </tbody>
+                </table>
+                
           <div id="sezione_statica">
             <button id="newGfx" class="product-form__submit button button--full-width button--secondary">Aggiungi nuova grafica</button>
             <button id="addToCartCustom" class="product-form__submit button button--full-width button--secondary">Aggiungi al debug</button>
@@ -205,17 +240,10 @@
             <input type="checkbox" id="conf_disclaimer" name="conf_disclaimer" value="yes" checked>
             <label for="conf_disclaimer" class="conf_disclaimer_label"> Selezionando, ti assumi la responsabilità che l'immagine caricata non violi alcuna disposizione di legge vigente né i diritti di soggetti terzi.</label>
           </div>
-
-				  <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"
-					integrity="sha512-XMVd28F1oH/O71fzwBnV7HucLxVwtxf26XV8P4wPk26EDxuGZ91N8bsOttmnomcCD3CS5ZMRL50H0GgOHvegtg=="
-					crossorigin="anonymous" referrerpolicy="no-referrer"></script> 
-          <script src="https://www.lambia.it/shopify/formHandler.js"></script>
-          <script src="https://www.lambia.it/shopify/renderer.js"></script>
-          <link rel="stylesheet" href="https://www.lambia.it/shopify/style.css">
-                  
-                  {% comment %} ************************************** {% endcomment %}
-                  {% comment %} ******** FINE LUMMY LINE-ITEM ******** {% endcomment %}
-                  {% comment %} ************************************** {% endcomment %}
+              
+              {% comment %} ************************************** {% endcomment %}
+              {% comment %} ******** FINE LUMMY LINE-ITEM ******** {% endcomment %}
+              {% comment %} ************************************** {% endcomment %}
                   {% comment %} TODO: enable theme-check once `item_count_for_variant` is accepted as valid filter {% endcomment %}
                   {% # theme-check-disable %}
                   {%- assign cart_qty = cart
@@ -274,42 +302,6 @@
                   section_id: section.id,
                   show_pickup_availability: true
                 -%}
-
-                {% comment %} ************************************** {% endcomment %}
-                {% comment %} *********** LUMMY LINE-ITEM ********** {% endcomment %}
-                {% comment %} ************************************** {% endcomment %}
-
-                <table id="priceTable">
-                  <thead>
-                    <tr>
-                      <td class="left_cell">Metri lineari</td>
-                      <td class="right_cell">Prezzo al metro</td>
-                    </tr>
-                  </thead>
-                  <tbody>
-
-                      <tr>
-                        <td class="left_cell">&lt; 3 metri</td>
-                        <td class="right_cell">15.00 €/m</td>
-                      </tr>
-                      <tr>
-                        <td class="left_cell">tra 3 e 10 metri</td>
-                        <td class="right_cell">13.90 €/m</td>
-                      </tr>
-                      <tr>
-                        <td class="left_cell">tra 10 e 25 metri</td>
-                        <td class="right_cell">12.90 €/m</td>
-                      </tr>
-                      <tr>
-                        <td class="left_cell">&gt; 25 metri</td>
-                        <td class="right_cell">Richiedi una <a href="/pages/contact">quotazione</a></td>
-                      </tr>
-                  </tbody>
-                </table>
-                
-                {% comment %} ************************************** {% endcomment %}
-                {% comment %} ******** FINE LUMMY LINE-ITEM ******** {% endcomment %}
-                {% comment %} ************************************** {% endcomment %}
 
               {%- when 'rating' -%}
                 {%- if product.metafields.reviews.rating.value != blank -%}
