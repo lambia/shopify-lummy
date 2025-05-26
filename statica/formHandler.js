@@ -90,24 +90,41 @@ function formHandlerInit(scope) {
     });
 
     //Gestione zoom
+    let isZoomed = false;
+
+    //Attiva e disattiva al click
+    dom__preview_wrapper.addEventListener("click", function (e) {
+        if(isZoomed) {
+            dom__preview.style["transform"] = "unset";
+            dom__preview.style["transform-origin"] = "50% 50%";
+        }
+
+        isZoomed = !isZoomed;
+    });
+
     dom__preview_wrapper.addEventListener("mousemove", function (e) {
-        const imgBox = dom__preview_wrapper.getBoundingClientRect();
-        const imgStepY = imgBox.height / 100;
-        const imgStepX = imgBox.width / 100;
-        const relativeTop = e.clientY - imgBox.top;
-        const relativeLeft = e.clientX - imgBox.left;
+        if (isZoomed) {
+            const imgBox = dom__preview_wrapper.getBoundingClientRect();
+            const imgStepY = imgBox.height / 100;
+            const imgStepX = imgBox.width / 100;
+            const relativeTop = e.clientY - imgBox.top;
+            const relativeLeft = e.clientX - imgBox.left;
 
-        const percentageY = Math.round(relativeTop / imgStepY);
-        const percentageX = Math.round(relativeLeft / imgStepX);
-        const position = percentageX + "% " + percentageY + "%";
+            const percentageY = Math.round(relativeTop / imgStepY);
+            const percentageX = Math.round(relativeLeft / imgStepX);
+            const position = percentageX + "% " + percentageY + "%";
 
-        dom__preview.style["transform"] = "scale(3)";
-        dom__preview.style["transform-origin"] = position;
+            dom__preview.style["transform"] = "scale(3)";
+            dom__preview.style["transform-origin"] = position;
+        }
     })
 
     dom__preview_wrapper.addEventListener("mouseleave", function (e) {
-        dom__preview.style["transform"] = "unset";
-        dom__preview.style["transform-origin"] = "50% 50%";
+        //if(isZoomed) {
+            //isZoomed = !isZoomed;
+        //}
+            dom__preview.style["transform"] = "unset";
+            dom__preview.style["transform-origin"] = "50% 50%";
     });
 
     function generaIncrementale(testo = "") {
