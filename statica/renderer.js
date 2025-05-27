@@ -2,6 +2,7 @@ const appWrapper = "appWrapper";
 const newGfxBtn = "newGfx";
 // const shopify_dom__addToCart = '.product-form__buttons button';
 // const shopify_dom__buyNow = ".shopify-payment-button";
+const dom__addToCartCustom = document.getElementById('addToCartCustom');
 const shopify_dom__quantity = '.quantity__input';
 // const shopify_dom__form = '.product-form form';
 // const dom__disclaimer = wrapper.querySelector('#conf_disclaimer');
@@ -35,10 +36,19 @@ async function main(productFormId) {
 
     alert(welcomeMsg);
 
-    document.getElementById(newGfxBtn).addEventListener("click", function(e) {
+    document.getElementById(newGfxBtn).addEventListener("click", function (e) {
         newGfx(partial);
     });
 }
+
+function addToCartCustom() {
+    //Resetto quantita shopify
+    // document.querySelector(shopify_dom__quantity).value = 0;
+    //Stampo il contenuto del form
+    // console.log( Object.fromEntries(new FormData(document.querySelector(shopify_dom__form))) );
+}
+
+dom__addToCartCustom.addEventListener("click", valida);
 
 function valida() {
     let validazione = true;
@@ -47,11 +57,11 @@ function valida() {
         console.log(grafica);
 
         //Grafica rimossa o indice [0]
-        if(grafica==undefined) {
+        if (grafica == undefined) {
             continue;
         }
 
-        if(!grafica || !grafica.pezzi>0 && !grafica.metri>=1) {
+        if (!grafica || !grafica.pezzi > 0 && !grafica.metri >= 1) {
             validazione = false;
             break;
         } else {
@@ -59,10 +69,10 @@ function valida() {
         }
     }
     console.log("Pezzi finali: ", pezziTotali);
-    document.querySelector(shopify_dom__quantity).value = pezziTotali;
+    // document.querySelector(shopify_dom__quantity).value = pezziTotali;
 }
 
-function newGfx(partial="Errore") {
+function newGfx(partial = "Errore") {
     const newGfx = `<div class="gfxWrapper" id="gfxWrapper-${gfxCounter}">${partial}<div>`;
     document.getElementById(appWrapper).insertAdjacentHTML('beforeend', newGfx)
     formHandlerInit(gfxCounter); //external function!!
@@ -72,7 +82,7 @@ function newGfx(partial="Errore") {
 async function getPartial(productFormId) {
     const partialURL = "https://raw.githubusercontent.com/lambia/shopify-lummy/refs/heads/main/statica/partial.html";
     let result = "";
-    
+
     try {
         let partialResponse = await fetch(partialURL);
         if (!partialResponse.ok) {

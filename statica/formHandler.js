@@ -17,11 +17,6 @@ function formHandlerInit(scope) {
     const dom__costo_al_metro = wrapper.querySelector('#costo_al_metro');
     const dom__closeBtn = wrapper.querySelector(".graficCloseBtn");
 
-    const dom__addToCartCustom = document.getElementById('addToCartCustom');
-
-    const shopify_dom__quantity = '.quantity__input';
-    const shopify_dom__form = '.product-form form';
-
     //Costanti
     const placeholder_img =
         'https://upload.wikimedia.org/wikipedia/commons/thumb/3/3f/Placeholder_view_vector.svg/619px-Placeholder_view_vector.svg.png';
@@ -45,8 +40,15 @@ function formHandlerInit(scope) {
 
     //Imposto gli event listener che avviano il tutto    
     dom__closeBtn.addEventListener("click", function (e) {
-        reset(true);
-        wrapper.remove();
+        //recupero gli elementi non nulli
+        let grafiche = scopeContainer.filter(item=>item);
+        if(grafiche && grafiche.length>1) {
+            reset(true);
+            wrapper.remove();
+            delete scopeContainer[scope];
+        } else {
+            alert("Deve essere presente almeno una grafica");
+        }
     });
 
     dom__file.addEventListener(
@@ -175,11 +177,12 @@ function formHandlerInit(scope) {
 
         //Resetto i campi originali (nascosti) di shopify (Al primo load lo imposto per il ready)
         // if (!initialLoad) {
-            // document.querySelector(shopify_dom__quantity).value = 0;
         // }
 
         //Aggiorna tutte le informazioni dell'ordine perchè la precedente grafica è invalidata
-        delete scopeContainer[scope];
+        scopeContainer[scope] = {
+            valid: false
+        };
         getMetriTotaliScope();
         ricalcolaCostoMetro();
         ricalcolaCostiTutteLeGrafiche();
@@ -219,12 +222,6 @@ function formHandlerInit(scope) {
         };
         //Leggo i file
         reader.readAsDataURL(file);
-
-        //Stampo il contenuto del form
-        console.log(
-            'Valori nel form: ',
-            Object.fromEntries(new FormData(document.querySelector(shopify_dom__form)))
-        );
     }
 
     //Funzione per inserire l'immagine in pagina
@@ -303,7 +300,7 @@ function formHandlerInit(scope) {
         metri = (metri < 1) ? 1 : metri;
 
         //Aggiungo ai metri fuori scope
-        scopeContainer[scope] = { metri, calcola_nesting };
+        scopeContainer[scope] = { valid: false, metri, calcola_nesting };
 
         //Se questa grafica è cambiata, ricalcola il totale metri e il nesting
         if (chiamataInterna) {
@@ -322,6 +319,7 @@ function formHandlerInit(scope) {
         pezzi = Math.round(costo / price_increments);
         scopeContainer[scope].pezzi = pezzi;
         scopeContainer[scope].costo = costo;
+        scopeContainer[scope].valid = true; //logica validazione
 
         //Imposto risultati nel DOM
         dom__metri_necessari.value = metri + ' m';

@@ -1,17 +1,10 @@
-ORA:
 Logica pulsante disabled: controlla tutti i form
 Quando aggiungi una grafica ancora vuota, scrivi già oggetto per invalidare
-
-Bottone "aggiungi carrello" -> scrivi tutti i prodotti in carrello
 shopify_dom__quantity e shopify_dom__form
-Spinner loader in aggiunta a carrello
 
-Facili, dopo:
 Sistemare Disclaimer-Checkbox (non deve abilitare il pulsante se non era già abilitato)
+Dal carrello no cambio quantità, solo svuota
 Disclaimer per aggiunta carrello immutabile
-Pulsante rimuovi grafica
-Duplica UV/FLUO
-
 
 
     function ready(fn) {
