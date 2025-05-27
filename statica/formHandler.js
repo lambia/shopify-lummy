@@ -47,7 +47,7 @@ function formHandlerInit(scope) {
             wrapper.remove();
             delete scopeContainer[scope];
         } else {
-            alert("Deve essere presente almeno una grafica");
+            reset(true);
         }
     });
 
@@ -172,12 +172,10 @@ function formHandlerInit(scope) {
         dom__file_hq.files = newFileContainer.files;
 
         //Il file caricato viene resettato solo al load iniziale
-        // dom__file.value = '';
-        // dom__file.files = newFileContainer.files;
-
-        //Resetto i campi originali (nascosti) di shopify (Al primo load lo imposto per il ready)
-        // if (!initialLoad) {
-        // }
+        if(initialLoad) {
+            dom__file.value = '';
+            dom__file.files = newFileContainer.files;
+        }
 
         //Aggiorna tutte le informazioni dell'ordine perchè la precedente grafica è invalidata
         scopeContainer[scope] = {

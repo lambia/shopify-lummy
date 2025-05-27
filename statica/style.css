@@ -8,6 +8,10 @@
 	position: relative;
 }
 
+.wrapperValidationError {
+	border: solid 2px red;
+}
+
 .graficCloseBtn {
 	position: absolute;
 	top: -1rem;
