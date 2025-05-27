@@ -48,7 +48,6 @@ function addToCartCustom() {
 
     let validation = true;
     let bigError = false;
-    let pezziTotali = 0;
 
     for (const wrapper of wrappers) {
         const wrapperId = wrapper.dataset.gfxId;
@@ -65,24 +64,28 @@ function addToCartCustom() {
             continue;
         } else {
             wrapper.classList.remove("wrapperValidationError");
-            pezziTotali += grafica.pezzi;
         }
     }
 
-    console.log("Pezzi finali: ", pezziTotali);
     console.log("Validazione: ", validation);
 
     if(!validation && !bigError) {
         alert("Impossibile aggiungere al carrello: sono presenti grafiche non valide, ricontrollare e riprovare.")
         document.body.scrollTop = 0; //Safari
         document.documentElement.scrollTop = 0; //tutto il resto del mondo
+        return;
     } else if(bigError) {
         alert("Si è verificato un errore irreversibile. Si prega di ricaricare la pagina e riprovare.");
-    } else {
-        //aggiungi al carrello
+        return;
     }
 
-// data-gfx-id
+    const baseForm = new FormData(document.querySelector(shopify_dom__form));
+
+    for (const wrapper of wrappers) {
+        const thisGfxForm = new FormData(wrapper.querySelector("form"));
+        console.log(thisGfxForm);
+    }
+
 
     //Resetto quantita shopify
     // document.querySelector(shopify_dom__quantity).value = 0;
