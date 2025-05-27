@@ -42,7 +42,7 @@ async function main() {
     });
 }
 
-function addToCartCustom() {
+async function addToCartCustom() {
     // per ogni prodotto, aggiungi dtfProductFormId, pusha 
     const wrappers = document.getElementById(appWrapper).getElementsByClassName("gfxWrapper");
 
@@ -52,13 +52,13 @@ function addToCartCustom() {
     for (const wrapper of wrappers) {
         const wrapperId = wrapper.dataset.gfxId;
         const grafica = scopeContainer[wrapperId];
-        
-        if(!wrapperId || !grafica) {
+
+        if (!wrapperId || !grafica) {
             validation = false;
             wrapper.classList.add("wrapperValidationError");
             bigError = true;
             continue;
-        } else if(!grafica.valid || !grafica.pezzi > 0 || !grafica.metri >= 1 || !grafica.costo) {
+        } else if (!grafica.valid || !grafica.pezzi > 0 || !grafica.metri >= 1 || !grafica.costo) {
             validation = false;
             wrapper.classList.add("wrapperValidationError");
             continue;
@@ -69,21 +69,68 @@ function addToCartCustom() {
 
     console.log("Validazione: ", validation);
 
-    if(!validation && !bigError) {
+    const shopifyForm = document.querySelector(shopify_dom__form);
+    const baseForm = new FormData(shopifyForm);
+    const action = shopifyForm.action;
+
+    if (!validation && !bigError) {
         alert("Impossibile aggiungere al carrello: sono presenti grafiche non valide, ricontrollare e riprovare.")
         document.body.scrollTop = 0; //Safari
         document.documentElement.scrollTop = 0; //tutto il resto del mondo
         return;
-    } else if(bigError) {
+    } else if (bigError || !shopifyForm || !baseForm || !action) {
         alert("Si è verificato un errore irreversibile. Si prega di ricaricare la pagina e riprovare.");
         return;
     }
 
-    const baseForm = new FormData(document.querySelector(shopify_dom__form));
+    let prodottiPerCarrello = [];
 
     for (const wrapper of wrappers) {
+        const wrapperId = wrapper.dataset.gfxId;
+        const grafica = scopeContainer[wrapperId];
         const thisGfxForm = new FormData(wrapper.querySelector("form"));
-        console.log(thisGfxForm);
+
+        if(!wrapperId || !grafica || !grafica.pezzi) {
+            continue;
+        }
+
+        prodottiPerCarrello.push({id: wrapperId, status: null});
+
+        for (const pair of baseForm) {
+            thisGfxForm.append(pair[0], pair[1]);
+        }
+        thisGfxForm.set("quantity", grafica.pezzi);
+        thisGfxForm.set("sections", "cart-notification-product,cart-notification-button,cart-icon-bubble");
+        thisGfxForm.set("sections_url", "/products/dtf-custom-product");
+
+        const cfg = {
+            method: "POST",
+            headers: {
+                Accept: "application/javascript",
+                "X-Requested-With": "XMLHttpRequest"
+            },
+            body: thisGfxForm
+        };
+
+        let result = "";
+        try {
+            const response = await fetch(action, cfg);
+            if (!response.ok) {
+                throw new Error(`Response status: ${response.status}`);
+            }
+            result = await response.json();
+            prodottiPerCarrello.find(x=>x.id==wrapperId).status = true;
+        } catch (error) {
+            console.error("Impossibile aggiungere al carrello", error);
+            prodottiPerCarrello.find(x=>x.id==wrapperId).status = false;
+        }
+    }
+
+    let falliti = prodottiPerCarrello.filter(x=>x.status===false).length;
+    if(falliti) {
+        alert("Qualcosa è andato storto");
+    } else {
+        alert("Prodotti aggiunti al carrello");
     }
 
 
@@ -109,7 +156,7 @@ function valida() {
         } else {
             pezziTotali += grafica.pezzi;
         }
-        
+
     }
     console.log("Pezzi finali: ", pezziTotali);
     // document.querySelector(shopify_dom__quantity).value = pezziTotali;

@@ -41,8 +41,8 @@ function formHandlerInit(scope) {
     //Imposto gli event listener che avviano il tutto    
     dom__closeBtn.addEventListener("click", function (e) {
         //recupero gli elementi non nulli
-        let grafiche = scopeContainer.filter(item=>item);
-        if(grafiche && grafiche.length>1) {
+        let grafiche = scopeContainer.filter(item => item);
+        if (grafiche && grafiche.length > 1) {
             reset(true);
             wrapper.remove();
             delete scopeContainer[scope];
@@ -51,24 +51,20 @@ function formHandlerInit(scope) {
         }
     });
 
-    dom__file.addEventListener(
-        'change',
-        function () {
-            reset();
-            if (this.files[0] && this.files[0].size && this.files[0].size <= 20 * 1024 * 1024) {
-                readFile(this.files[0]);
-            } else if (this.files[0] && this.files[0].size) {
-                reset(true);
-                alert("Il file supera le dimensioni massime consentite");
-            } else {
-                reset(true);
-                alert("Errore nell'elaborazione del file");
-            }
-        },
-        false
-    );
+    dom__file.addEventListener('change', function () {
+        reset();
+        if (this.files[0] && this.files[0].size && this.files[0].size <= 20 * 1024 * 1024) {
+            readFile(this.files[0]);
+        } else if (this.files[0] && this.files[0].size) {
+            reset(true);
+            alert("Il file supera le dimensioni massime consentite");
+        } else {
+            reset(true);
+            alert("Errore nell'elaborazione del file");
+        }
+    }, false);
 
-    dom__closeBtn.addEventListener("click", function(e) {
+    dom__closeBtn.addEventListener("click", function (e) {
 
     });
 
@@ -151,7 +147,7 @@ function formHandlerInit(scope) {
         return risultato;
     }
 
-    function reset(initialLoad=false) {
+    function reset(initialLoad = false) {
         console.log('Lummy.configuratore: Resetto il form');
         dom__preview.setAttribute('src', placeholder_img);
         dom__dimensioni.value = '';
@@ -160,6 +156,7 @@ function formHandlerInit(scope) {
         dom__costo_al_pezzo.value = '';
         dom__nome_grafica.value = generaIncrementale();
         dom__costo_al_metro.value = prices[0].price + ' €/m'
+        quantita = 1;
         dom__quantita.value = 1;
         dom__quantita.disabled = true;
 
@@ -172,7 +169,7 @@ function formHandlerInit(scope) {
         dom__file_hq.files = newFileContainer.files;
 
         //Il file caricato viene resettato solo al load iniziale
-        if(initialLoad) {
+        if (initialLoad) {
             dom__file.value = '';
             dom__file.files = newFileContainer.files;
         }
@@ -307,6 +304,8 @@ function formHandlerInit(scope) {
         }
 
         dom__costo_al_metro.value = summaryContainer.costoAlMetro + ' €/m';
+        
+        //Qui calcolare "costo" in base a "costoAlMetro" e "price_increments"
 
         //Arrotondamento manuale, STRINGA DA QUI
         costo = (metri * summaryContainer.costoAlMetro).toFixed(2);
@@ -315,6 +314,8 @@ function formHandlerInit(scope) {
 
         //Calcolo la quantità di shopify necessaria
         pezzi = Math.round(costo / price_increments);
+
+        
         scopeContainer[scope].pezzi = pezzi;
         scopeContainer[scope].costo = costo;
         scopeContainer[scope].valid = true; //logica validazione
@@ -347,17 +348,17 @@ function formHandlerInit(scope) {
 
         summaryContainer.costoAlMetro = costo_metro;
 
-        const priceIndex = prices.findIndex(x=>x.price==costo_metro);
+        const priceIndex = prices.findIndex(x => x.price == costo_metro);
         const oldHighlighted = document.querySelector(`#priceTable tr.highlightedRow`);
         const newHighlighted = document.querySelector(`#priceTable tr[data-value="${priceIndex}"]`);
-        
-        if(!oldHighlighted || oldHighlighted!=newHighlighted) {
+
+        if (!oldHighlighted || oldHighlighted != newHighlighted) {
             oldHighlighted.classList.remove("highlightedRow");
             newHighlighted.classList.add("highlightedRow");
         }
-        
+
     }
-    
+
     function ricalcolaCostiTutteLeGrafiche() {
         for (const singolaGrafica of scopeContainer) {
             if (!singolaGrafica) {
@@ -367,7 +368,7 @@ function formHandlerInit(scope) {
                 singolaGrafica.calcola_nesting(false);
             }
         }
-        
+
         aggiornaSummary();
     }
 
@@ -394,7 +395,7 @@ function formHandlerInit(scope) {
 
         document.getElementById("riepilogoOrdine").innerHTML = `
         <h3>Riepilogo Totale:</h3>
-        <p>${summaryContainer.grafiche} ${summaryContainer.grafiche==1 ? "grafica" : "grafiche"} = ${summaryContainer.metri.toFixed(2)} metri x ${summaryContainer.costoAlMetro.toFixed(2)} €/metro = ${summaryContainer.costo.toFixed(2)} €</p>`;
+        <p>${summaryContainer.grafiche} ${summaryContainer.grafiche == 1 ? "grafica" : "grafiche"} = ${summaryContainer.metri.toFixed(2)} metri x ${summaryContainer.costoAlMetro.toFixed(2)} €/metro = ${summaryContainer.costo.toFixed(2)} €</p>`;
     }
 
     function getMetriTotaliScope() {

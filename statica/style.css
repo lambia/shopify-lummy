@@ -56,8 +56,12 @@ div#conf_preview_wrapper {
 }
 
 div#conf_preview_wrapper,
-#formTable {
+.gfxWrapper form {
 	width: 50%;
+}
+
+#formTable {
+	height: 100%;
 }
 
 img#conf_preview {
