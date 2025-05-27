@@ -10,6 +10,13 @@ const welcomeMsg = "Al fine di garantirti la miglior esperienza utente possibile
 
 //gli ID vengono usati come indici dell'array, il valore sono i metri della grafica
 const scopeContainer = [];
+const summaryContainer = {
+    costo: 0,
+    pezzi: 0,
+    metri: 0,
+    costoAlMetro: 0,
+    grafiche: 0
+};
 let gfxCounter = 1;
 const texts = {
     loading: "Il configuratore è in caricamento",
@@ -25,7 +32,7 @@ async function main(productFormId) {
     const partial = await getPartial(productFormId);
     document.getElementById(appWrapper).innerHTML = "";
     newGfx(partial);
-    
+
     alert(welcomeMsg);
 
     document.getElementById(newGfxBtn).addEventListener("click", function(e) {

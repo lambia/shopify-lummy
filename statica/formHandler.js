@@ -94,7 +94,7 @@ function formHandlerInit(scope) {
 
     //Attiva e disattiva al click
     dom__preview_wrapper.addEventListener("click", function (e) {
-        if(isZoomed) {
+        if (isZoomed) {
             dom__preview.style["transform"] = "unset";
             dom__preview.style["transform-origin"] = "50% 50%";
         }
@@ -120,11 +120,11 @@ function formHandlerInit(scope) {
     })
 
     dom__preview_wrapper.addEventListener("mouseleave", function (e) {
-        //if(isZoomed) {
-            //isZoomed = !isZoomed;
-        //}
+        if (isZoomed) {
+            isZoomed = !isZoomed;
             dom__preview.style["transform"] = "unset";
             dom__preview.style["transform-origin"] = "50% 50%";
+        }
     });
 
     function generaIncrementale(testo = "") {
@@ -142,7 +142,7 @@ function formHandlerInit(scope) {
         return risultato;
     }
 
-    function reset(initialLoad) {
+    function reset(initialLoad=false) {
         console.log('Lummy.configuratore: Resetto il form');
         dom__preview.setAttribute('src', placeholder_img);
         dom__dimensioni.value = '';
@@ -151,6 +151,11 @@ function formHandlerInit(scope) {
         dom__costo_al_pezzo.value = '';
         dom__nome_grafica.value = generaIncrementale();
         dom__costo_al_metro.value = prices[0].price + ' €/m'
+        dom__quantita.value = 1;
+        dom__quantita.disabled = true;
+
+        width_mm = 0;
+        height_mm = 0;
 
         //Resetto il file originale, compresso e header
         dom__file_hq.value = '';
@@ -158,15 +163,19 @@ function formHandlerInit(scope) {
         dom__file_hq.files = newFileContainer.files;
 
         //Il file caricato viene resettato solo al load iniziale
-        if (initialLoad) {
-            dom__file.value = '';
-            dom__file.files = newFileContainer.files;
-        }
+        // dom__file.value = '';
+        // dom__file.files = newFileContainer.files;
 
         //Resetto i campi originali (nascosti) di shopify (Al primo load lo imposto per il ready)
-        if (!initialLoad) {
-            document.querySelector(shopify_dom__quantity).value = 0;
-        }
+        // if (!initialLoad) {
+            // document.querySelector(shopify_dom__quantity).value = 0;
+        // }
+
+        //Aggiorna tutte le informazioni dell'ordine perchè la precedente grafica è invalidata
+        delete scopeContainer[scope];
+        getMetriTotaliScope();
+        ricalcolaCostoMetro();
+        ricalcolaCostiTutteLeGrafiche();
     }
 
     //Funzione per leggere file caricato e inserirlo in DOM
@@ -257,7 +266,7 @@ function formHandlerInit(scope) {
 
         //Controlla se l'immagine è più grande del rullo
         if (quanti_su_riga_affiancati < 1 && quanti_su_riga_ruotati < 1) {
-            alert("Attenzione!\n\nIl file caricato copre un'area di stampa maggiore della superficie disponibile.\n\n- Assicurati che il file sia corretto (300dpi) o contattaci in caso di necessità particolari.");
+            alert("Attenzione!\n\nIl file caricato copre un'area di stampa maggiore della superficie disponibile.\n\nAssicurati che il file sia corretto (300dpi) o contattaci in caso di necessità particolari.");
             return reset(true);
         }
 
@@ -286,29 +295,26 @@ function formHandlerInit(scope) {
         //Minimo ordinabile: 1 metro
         metri = (metri < 1) ? 1 : metri;
 
-        //Aggiungo ai metri complessivi fuori scope
+        //Aggiungo ai metri fuori scope
         scopeContainer[scope] = { metri, calcola_nesting };
-        metriTotaliOrdine = getMetriTotaliScope();
+
+        //Se questa grafica è cambiata, ricalcola il totale metri e il nesting
         if (chiamataInterna) {
-            aggiornaScope();
+            getMetriTotaliScope();
+            ricalcolaCostoMetro();
         }
 
-        //Calcolo costo al metro, fallback sul max
-        const costo_metro = Math.max(...prices.filter(x => metriTotaliOrdine < x.lessThan).map(x => x.price));
-        //Se il prezzo è fuori range, fai fallback sul prezzo massimo
-        if (costo_metro > Math.max(...prices.map(x => x.price)) || costo_metro < Math.min(...prices.map(x => x.price))) {
-            costo_metro = Math.max(...prices.map(x => x.price));
-        }
-        dom__costo_al_metro.value = costo_metro + ' €/m';
+        dom__costo_al_metro.value = summaryContainer.costoAlMetro + ' €/m';
 
         //Arrotondamento manuale, STRINGA DA QUI
-        costo = (metri * costo_metro).toFixed(2);
+        costo = (metri * summaryContainer.costoAlMetro).toFixed(2);
         metri = metri.toFixed(2);
         costoPezzo = (costo / numero_copie).toFixed(2);
 
         //Calcolo la quantità di shopify necessaria
         pezzi = Math.round(costo / price_increments);
         scopeContainer[scope].pezzi = pezzi;
+        scopeContainer[scope].costo = costo;
 
         //Imposto risultati nel DOM
         dom__metri_necessari.value = metri + ' m';
@@ -320,29 +326,87 @@ function formHandlerInit(scope) {
         console.log('Metri necessari: ', metri);
         console.log('Costo: ', costo);
         console.log('Pezzi per shopify: ', pezzi);
-    }
 
-    function aggiornaScope() {
-        for (const singolaGrafica of scopeContainer) {
-            if (singolaGrafica && singolaGrafica.calcola_nesting) {
-                singolaGrafica.calcola_nesting(false);
-            }
+        if (chiamataInterna) {
+            ricalcolaCostiTutteLeGrafiche();
+            dom__quantita.disabled = false;
         }
     }
 
+    function ricalcolaCostoMetro() {
+
+        let costo_metro = Math.max(...prices.filter(x => summaryContainer.metri < x.lessThan).map(x => x.price));
+
+        //Se il prezzo è fuori range, fai fallback sul prezzo massimo
+        if (costo_metro > Math.max(...prices.map(x => x.price)) || costo_metro < Math.min(...prices.map(x => x.price))) {
+            costo_metro = Math.max(...prices.map(x => x.price));
+        }
+
+        summaryContainer.costoAlMetro = costo_metro;
+
+        const priceIndex = prices.findIndex(x=>x.price==costo_metro);
+        const oldHighlighted = document.querySelector(`#priceTable tr.highlightedRow`);
+        const newHighlighted = document.querySelector(`#priceTable tr[data-value="${priceIndex}"]`);
+        
+        if(!oldHighlighted || oldHighlighted!=newHighlighted) {
+            oldHighlighted.classList.remove("highlightedRow");
+            newHighlighted.classList.add("highlightedRow");
+        }
+        
+    }
+    
+    function ricalcolaCostiTutteLeGrafiche() {
+        for (const singolaGrafica of scopeContainer) {
+            if (!singolaGrafica) {
+                continue;
+            }
+            if (singolaGrafica.calcola_nesting) {
+                singolaGrafica.calcola_nesting(false);
+            }
+        }
+        
+        aggiornaSummary();
+    }
+
+    function aggiornaSummary() {
+        summaryContainer.costo = 0;
+        summaryContainer.pezzi = 0;
+        summaryContainer.grafiche = 0;
+        // summaryContainer.metri = 0; //già calcolato da getMetriTotaliScope
+        // summaryContainer.costoAlMetro = 0; //già calcolato da ricalcolaCostoMetro
+
+        for (const singolaGrafica of scopeContainer) {
+            if (!singolaGrafica) {
+                continue;
+            }
+            if (singolaGrafica.costo && parseFloat(singolaGrafica.costo)) {
+                summaryContainer.costo += parseFloat(singolaGrafica.costo);
+                summaryContainer.grafiche++;
+            }
+            if (singolaGrafica.pezzi) {
+                summaryContainer.pezzi += singolaGrafica.pezzi;
+            }
+
+        }
+
+        document.getElementById("riepilogoOrdine").innerHTML = `
+        <h3>Riepilogo Totale:</h3>
+        <p>${summaryContainer.grafiche} ${summaryContainer.grafiche==1 ? "grafica" : "grafiche"} = ${summaryContainer.metri} metri * ${summaryContainer.costoAlMetro.toFixed(2)} €/metro = ${summaryContainer.costo.toFixed(2)} €</p>`;
+    }
+
     function getMetriTotaliScope() {
-        let risultato = 0;
+        summaryContainer.metri = 0;
 
         for (const singolaGrafica of scopeContainer) {
 
             if (singolaGrafica && singolaGrafica.metri) {
                 const singolaGraficaMetri = parseFloat(singolaGrafica.metri);
                 if (!isNaN(singolaGraficaMetri)) {
-                    risultato += singolaGraficaMetri;
+                    summaryContainer.metri += singolaGraficaMetri;
                 }
             }
         }
-        return risultato;
+        return summaryContainer.metri;
     }
 
 }
