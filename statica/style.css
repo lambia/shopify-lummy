@@ -10,13 +10,18 @@
 
 .graficCloseBtn {
 	position: absolute;
-	top: 0px;
-	right: 0px;
-	background-color:rgb(227, 51, 35);
+	top: -1rem;
+	right: -1rem;
+	background-color: rgb(227, 51, 35);
 	color: white;
 	border-radius: 50%;
-	height: 1rem;
-	width: 1rem;
+	height: 2rem;
+	width: 2rem;
+	font-size: 1rem;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	cursor: pointer;
 }
 
 div#conf_preview_columns {
@@ -79,7 +84,7 @@ img#conf_preview {
 }
 
 .highlightedRow {
-	background-color: rgb(255,230,230);
+	background-color: rgb(255, 230, 230);
 }
 
 #priceTable,

@@ -15,6 +15,8 @@ function formHandlerInit(scope) {
     const dom__totale_preventivo = wrapper.querySelector('#totale_preventivo');
     const dom__costo_al_pezzo = wrapper.querySelector('#costo_al_pezzo');
     const dom__costo_al_metro = wrapper.querySelector('#costo_al_metro');
+    const dom__closeBtn = wrapper.querySelector(".graficCloseBtn");
+
     const dom__addToCartCustom = document.getElementById('addToCartCustom');
 
     const shopify_dom__quantity = '.quantity__input';
@@ -42,8 +44,9 @@ function formHandlerInit(scope) {
     reset(true);
 
     //Imposto gli event listener che avviano il tutto    
-    dom__addToCartCustom.addEventListener("click", function (e) {
-
+    dom__closeBtn.addEventListener("click", function (e) {
+        reset(true);
+        wrapper.remove();
     });
 
     dom__file.addEventListener(
@@ -62,6 +65,10 @@ function formHandlerInit(scope) {
         },
         false
     );
+
+    dom__closeBtn.addEventListener("click", function(e) {
+
+    });
 
     dom__quantita.addEventListener('input', function (e) {
         quantita = e.target.value;
@@ -391,7 +398,7 @@ function formHandlerInit(scope) {
 
         document.getElementById("riepilogoOrdine").innerHTML = `
         <h3>Riepilogo Totale:</h3>
-        <p>${summaryContainer.grafiche} ${summaryContainer.grafiche==1 ? "grafica" : "grafiche"} = ${summaryContainer.metri} metri * ${summaryContainer.costoAlMetro.toFixed(2)} €/metro = ${summaryContainer.costo.toFixed(2)} €</p>`;
+        <p>${summaryContainer.grafiche} ${summaryContainer.grafiche==1 ? "grafica" : "grafiche"} = ${summaryContainer.metri.toFixed(2)} metri x ${summaryContainer.costoAlMetro.toFixed(2)} €/metro = ${summaryContainer.costo.toFixed(2)} €</p>`;
     }
 
     function getMetriTotaliScope() {
