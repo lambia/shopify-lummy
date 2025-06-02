@@ -1,3 +1,4 @@
+testare se ora si vedono tutte le prop: grafica/hq/costometro/costopezzo
 rimuovere tasto carrello e quantity form da LIQUID (solo ajax)
 aggiungere "svuota tutto in carrello?"
 vedere se si può smezzare l'immagine sdoppiata
