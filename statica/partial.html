@@ -9,7 +9,7 @@
             <tr>
                 <td class="left_cell"><label for="conf_file">Seleziona un file</label></td>
                 <td class="right_cell">
-                    <input type="file" id="conf_file" name="properties[grafica]"
+                    <input type="file" id="conf_file" name="grafica"
                         aria-label="Seleziona un file" value="" autocomplete="off">
                     <input type="file" id="conf_file_hq" name="properties[grafica_hq]"
                         value="" autocomplete="off" style="display: none">
@@ -19,21 +19,21 @@
             <tr>
                 <td class="left_cell"><label for="conf_name">Nome grafica</label></td>
                 <td class="right_cell">
-                    <input type="text" id="conf_name" name="properties[nome]"
+                    <input type="text" id="conf_name" name="nome"
                         placeholder="Nome grafica" aria-label="Nome grafica" value="" autocomplete="off">
                 </td>
             </tr>
             <tr>
                 <td class="left_cell"><label for="conf_quantita">Quantità</label></td>
                 <td class="right_cell">
-                    <input type="number" id="conf_quantita" name="properties[quantita]"
+                    <input type="number" id="conf_quantita" name="quantita"
                         placeholder="Quantità" aria-label="Quantità" value="1" min="1" autocomplete="off">
                 </td>
             </tr>
             <tr>
                 <td class="left_cell"><label for="conf_note">Note</label></td>
                 <td class="right_cell">
-                    <textarea name="properties[note]" rows="5" cols="50" placeholder="Note"
+                    <textarea name="note" rows="5" cols="50" placeholder="Note"
                         aria-label="Note" autocomplete="off"></textarea>
                 </td>
             </tr>
@@ -42,7 +42,7 @@
                 <td class="left_cell"><label for="conf_larghezza">Larghezza x Altezza (mm)</label></td>
                 <td class="right_cell">
                     <input type="text" id="conf_dimensioni" class="input__calcolato"
-                        name="properties[dimensioni]" readonly value="Larghezza x Altezza (mm)"
+                        name="dimensioni" readonly value="Larghezza x Altezza (mm)"
                         aria-label="Dimensioni larghezza x altezza (mm)" autocomplete="off">
                 </td>
             </tr>
@@ -50,13 +50,13 @@
                 <td class="left_cell">Metri lineari sviluppati</td>
                 <td class="right_cell">
                     <input type="text" id="metri_necessari" class="input__calcolato"
-                        name="properties[metri necessari]" readonly value="0 m" autocomplete="off">
+                        name="metri necessari" readonly value="0 m" autocomplete="off">
                 </td>
             </tr>
             <tr>
                 <td class="left_cell">Costo al metro</td>
                 <td class="right_cell">
-                    <input type="text" id="costo_al_metro" class="input__calcolato" name="properties[costo al pezzo]"
+                    <input type="text" id="costo_al_metro" class="input__calcolato" name="costoPezzo"
                         readonly value="0 €/m" autocomplete="off">
                 </td>
             </tr>
@@ -64,13 +64,13 @@
                 <td class="left_cell">Totale</td>
                 <td class="right_cell">
                     <input type="text" id="totale_preventivo" class="input__calcolato"
-                        name="properties[costo]" readonly value="0 €" autocomplete="off">
+                        name="costo" readonly value="0 €" autocomplete="off">
                 </td>
             </tr>
             <tr>
                 <td class="left_cell">Costo al pezzo</td>
                 <td class="right_cell">
-                    <input type="text" id="costo_al_pezzo" class="input__calcolato" name="properties[costo al pezzo]"
+                    <input type="text" id="costo_al_pezzo" class="input__calcolato" name="costoPezzo"
                         readonly value="0 €" autocomplete="off">
                 </td>
             </tr>

@@ -7,6 +7,7 @@ const shopify_dom__quantity = '.quantity__input';
 const shopify_dom__form = '.product-form form';
 // const dom__disclaimer = wrapper.querySelector('#conf_disclaimer');
 const dtfProductFormId = "product-form-template--19062074048780__main";
+const dtfProductId = 45067988533516;
 const welcomeMsg = "Al fine di garantirti la miglior esperienza utente possibile ti consigliamo l'utilizzo del configuratore da PC";
 
 //gli ID vengono usati come indici dell'array, il valore sono i metri della grafica
@@ -69,75 +70,66 @@ async function addToCartCustom() {
 
     console.log("Validazione: ", validation);
 
-    const shopifyForm = document.querySelector(shopify_dom__form);
-    const baseForm = new FormData(shopifyForm);
-    const action = shopifyForm.action;
-
     if (!validation && !bigError) {
         alert("Impossibile aggiungere al carrello: sono presenti grafiche non valide, ricontrollare e riprovare.")
         document.body.scrollTop = 0; //Safari
         document.documentElement.scrollTop = 0; //tutto il resto del mondo
         return;
-    } else if (bigError || !shopifyForm || !baseForm || !action) {
+    } else if (bigError) {
         alert("Si è verificato un errore irreversibile. Si prega di ricaricare la pagina e riprovare.");
         return;
     }
 
-    let prodottiPerCarrello = [];
+    const prodotti = {
+        items: []
+    };
 
     for (const wrapper of wrappers) {
         const wrapperId = wrapper.dataset.gfxId;
         const grafica = scopeContainer[wrapperId];
-        const thisGfxForm = new FormData(wrapper.querySelector("form"));
+        const propertiesForm = wrapper.querySelector("form");
 
-        if(!wrapperId || !grafica || !grafica.pezzi) {
+        if (!wrapperId || !grafica || !grafica.pezzi || !propertiesForm) {
             continue;
         }
 
-        prodottiPerCarrello.push({id: wrapperId, status: null});
+        const properties = Object.fromEntries(new FormData(propertiesForm));
 
-        for (const pair of baseForm) {
-            thisGfxForm.append(pair[0], pair[1]);
-        }
-        thisGfxForm.set("quantity", grafica.pezzi);
+        /*
         thisGfxForm.set("sections", "cart-notification-product,cart-notification-button,cart-icon-bubble");
         thisGfxForm.set("sections_url", "/products/dtf-custom-product");
+        */
 
-        const cfg = {
-            method: "POST",
-            headers: {
-                Accept: "application/javascript",
-                "X-Requested-With": "XMLHttpRequest"
-            },
-            body: thisGfxForm
-        };
+        prodotti.items.push({
+            id: dtfProductId,
+            quantity: grafica.pezzi,
+            properties
+        });
+    }
 
-        let result = "";
-        try {
-            const response = await fetch(action, cfg);
-            if (!response.ok) {
-                throw new Error(`Response status: ${response.status}`);
-            }
-            result = await response.json();
-            prodottiPerCarrello.find(x=>x.id==wrapperId).status = true;
-        } catch (error) {
-            console.error("Impossibile aggiungere al carrello", error);
-            prodottiPerCarrello.find(x=>x.id==wrapperId).status = false;
+    let cfg = {
+        method: "POST",
+        headers: {
+            'Content-Type': 'application/json',
+            //Accept: "application/javascript",
+            //"X-Requested-With": "XMLHttpRequest"
+        },
+        body: JSON.stringify(prodotti)
+    };
+
+    try {
+        const response = await fetch("/cart/add.js", cfg);
+        if (!response.ok) {
+            throw new Error(`Response status: ${response.status}`);
         }
+        result = await response.json();
+        console.log("Risultato ---> ", result);
+        alert("qui ci va un messaggio di conferma");
+    } catch (error) {
+        alert("Si è verificato un errore. Impossibile aggiungere al carrello.");
+        console.error("Errore carrello: ", error);
     }
 
-    let falliti = prodottiPerCarrello.filter(x=>x.status===false).length;
-    if(falliti) {
-        alert("Qualcosa è andato storto");
-    } else {
-        alert("Prodotti aggiunti al carrello");
-    }
-
-
-    //Resetto quantita shopify
-    // document.querySelector(shopify_dom__quantity).value = 0;
-    //Stampo il contenuto del form
-    // console.log( Object.fromEntries(new FormData(document.querySelector(shopify_dom__form))) );
 }
 
 function valida() {
