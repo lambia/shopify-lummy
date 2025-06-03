@@ -1,3 +1,11 @@
+usare il trigger del nesting per postare in carrello
+assicurasi che ogni modifica (update, insert, delete) vada ad aggiornare il carrello
+rimuovere il tasto "aggiungi al carrello"
+usare "conferma" e "annulla" => link to cart e svuota cookie cart
+pagina carello: rimuovi il cestino e aggiungi "svuota tutto"
+
+vedere se riesco a inviare una sola immagine: zippone da estrarre per anteprima oppure anteprima non comprimibile
+sistemare increments da 0.30
 testare se ora si vedono tutte le prop: grafica/hq/costometro/costopezzo
 rimuovere tasto carrello e quantity form da LIQUID (solo ajax)
 aggiungere "svuota tutto in carrello?"

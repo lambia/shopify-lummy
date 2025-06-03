@@ -212,6 +212,7 @@ function formHandlerInit(scope) {
         const reader = new FileReader();
         reader.onload = async (event) => {
             let imgPath = event.target.result;
+            scopeContainer[scope]["fileLow"] = event.target.result;
             dom__preview.setAttribute('src', imgPath);
             getImgSize(imgPath);
         };
@@ -304,7 +305,7 @@ function formHandlerInit(scope) {
         }
 
         dom__costo_al_metro.value = summaryContainer.costoAlMetro + ' €/m';
-        
+
         //Qui calcolare "costo" in base a "costoAlMetro" e "price_increments"
 
         //Arrotondamento manuale, STRINGA DA QUI
@@ -314,8 +315,8 @@ function formHandlerInit(scope) {
 
         //Calcolo la quantità di shopify necessaria
         pezzi = Math.round(costo / price_increments);
-
         
+
         scopeContainer[scope].pezzi = pezzi;
         scopeContainer[scope].costo = costo;
         scopeContainer[scope].valid = true; //logica validazione

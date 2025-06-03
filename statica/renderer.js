@@ -95,6 +95,24 @@ async function addToCartCustom() {
 
         const properties = Object.fromEntries(new FormData(propertiesForm));
 
+        const blobToData = (blob) => {
+            return new Promise((resolve) => {
+                const reader = new FileReader();
+                reader.onloadend = () => resolve(reader.result);
+                reader.onerror = () => reject();
+
+                reader.readAsDataURL(blob);
+            })
+        }
+
+        const fileLow = wrapper.querySelector("#conf_file").files[0];
+        //const fileHigh = wrapper.querySelector("#conf_file_hq").files[0];
+        const resData = await blobToData(fileLow);
+        //const resDataHigh = await blobToData(fileHigh);
+        properties.grafica = resData;
+        //properties.grafica_hq = resDataHigh;
+        properties.grafica_hq = null;
+
         /*
         thisGfxForm.set("sections", "cart-notification-product,cart-notification-button,cart-icon-bubble");
         thisGfxForm.set("sections_url", "/products/dtf-custom-product");
@@ -107,12 +125,19 @@ async function addToCartCustom() {
         });
     }
 
+    console.log("pre --->", prodotti.items);
+    console.log("post --->", JSON.stringify(prodotti.items));
+
     let cfg = {
         method: "POST",
         headers: {
             'Content-Type': 'application/json',
-            //Accept: "application/javascript",
-            //"X-Requested-With": "XMLHttpRequest"
+
+            // 'Content-Type': 'multipart/form-data',
+            // 'Content-Type': 'application/x-www-form-urlencoded'
+
+            // Accept: "application/javascript",
+            // "X-Requested-With": "XMLHttpRequest"
         },
         body: JSON.stringify(prodotti)
     };
