@@ -1,6 +1,4 @@
 - configuratore: checkbox consenso che disattiva l'aggiunta a carrello
-- carrello: togliere pulsante per "cestinare" un item
-- carrello: aggiungere tasto "svuota tutto"
 - bug: doppia normalità (v. id)
 - bug: doppia quantità -> sto letteralmente triggerando 2 eventi
 - bug: note e nome non contano (onChange old!=new ?)
