@@ -202,10 +202,20 @@ table .right_cell {
 	font-size: 1.5rem;
 }
 
-#sezione_statica button {
+#sezione_statica .button {
 	max-width: 44rem;
+	margin-bottom: 1rem;
 	margin-left: auto;
 	margin-right: auto;
+}
+
+#sezione_statica #newGfx {
+}
+#sezione_statica #finalAccept {
+	background: deepskyblue !important;
+}
+#sezione_statica #finalRefuse {
+	background: crimson !important;
 }
 
 .conf_disclaimer_label {

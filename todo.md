@@ -1,19 +1,17 @@
-update deve aggiornare il carrello (se diverso)
-delete deve rimuovere da carrello
+- configuratore: checkbox consenso che disattiva l'aggiunta a carrello
+- carrello: togliere pulsante per "cestinare" un item
+- carrello: aggiungere tasto "svuota tutto"
+- bug: doppia normalità (v. id)
+- bug: doppia quantità -> sto letteralmente triggerando 2 eventi
+- bug: note e nome non contano (onChange old!=new ?)
+- bug: 0.3 increments
 
-cambio quantità = doppia insert -> si può evitare togliendo hash e usando onChange(old!=new) su tutto il form?
-rimuovere codice inutile per fetch totale
-controllare se "valid" serve ancora
-rimuovere il tasto "aggiungi al carrello"
-usare "conferma" e "annulla" => link to cart e svuota cookie cart
-pagina carello: rimuovi il cestino e aggiungi "svuota tutto"
+- validazione di base?
+- snellire tutto, soprattutto renderer (v. fetch totale)
+- rifare?
+
 
 vedere se riesco a inviare una sola immagine: zippone da estrarre per anteprima oppure anteprima non comprimibile
-sistemare increments da 0.30
-testare se ora si vedono tutte le prop: grafica/hq/costometro/costopezzo
-rimuovere tasto carrello e quantity form da LIQUID (solo ajax)
-aggiungere "svuota tutto in carrello?"
-vedere se si può smezzare l'immagine sdoppiata
 duplicare tutto per prodotto diverso (v. id)
 dopo aggiunta carrello far mostrare popup? (thisGfxForm.set)
 

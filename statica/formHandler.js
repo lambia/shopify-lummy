@@ -40,16 +40,37 @@ function formHandlerInit(scope) {
     reset(true);
 
     //Imposto gli event listener che avviano il tutto    
-    dom__closeBtn.addEventListener("click", function (e) {
+    dom__closeBtn.addEventListener("click", async function (e) {
         //recupero gli elementi non nulli
+        
+        if(scopeContainer[scope]) {
+            if(scopeContainer[scope].cart) {
+                await rimuoviCarrello();
+            }
+            delete scopeContainer[scope];
+        }
+
+        wrapper.remove();
+        
+        let grafiche = scopeContainer.filter(item => item);
+        if(!grafiche.length) {
+            //aggiungi wrapper in dom
+            window.newGfx( window.partial );
+        }
+
+        /*
         let grafiche = scopeContainer.filter(item => item);
         if (grafiche && grafiche.length > 1) {
+            await rimuoviCarrello();
             reset(true);
             wrapper.remove();
             delete scopeContainer[scope];
         } else {
+            await rimuoviCarrello();
             reset(true);
+            scopeContainer[scope] = {};
         }
+        */
     });
 
     dom__file.addEventListener('change', function () {
@@ -64,10 +85,6 @@ function formHandlerInit(scope) {
             alert("Errore nell'elaborazione del file");
         }
     }, false);
-
-    dom__closeBtn.addEventListener("click", function (e) {
-
-    });
 
     dom__quantita.addEventListener('input', function (e) {
         quantita = e.target.value;
@@ -89,7 +106,7 @@ function formHandlerInit(scope) {
     });
 
     dom__nome_grafica.addEventListener('focus', function (e) {
-        dom__nome_grafica.value = dom__nome_grafica.value.slice(0, -3);
+        dom__nome_grafica.value = dom__nome_grafica.value.slice(0, dom__nome_grafica.value.lastIndexOf("-") )
     });
     dom__nome_grafica.addEventListener('blur', function (e) {
         dom__nome_grafica.value = generaIncrementale(dom__nome_grafica.value);
@@ -342,6 +359,44 @@ function formHandlerInit(scope) {
         }
     }
 
+    async function rimuoviCarrello() {
+        
+        const newProduct = new FormData();
+        newProduct.set("id", scopeContainer[scope].cart );
+        newProduct.set("quantity", 0);
+
+        let cfg = {
+            method: "POST",
+            headers: {
+                Accept: "application/javascript",
+                "X-Requested-With": "XMLHttpRequest"
+            },
+            body: newProduct
+        };
+
+        try {
+            const response = await fetch(`/cart/change.js`, cfg);
+            if (!response.ok) {
+                throw new Error(`Response status: ${response.status}`);
+            }
+            result = await response.json();
+            console.log(result); 
+
+            if(!result || !result.items_removed || !result.items_removed.length) {
+                throw new Error(`Errore durante l'eliminazione dal carrello.`);
+            }
+            
+            alert("Prodotto rimosso con successo");
+
+        } catch (error) {
+            alert("Errore durante l'eliminazione dal carrello.");
+            console.error("Errore carrello: ", error);
+
+            scopeContainer[scope].cart = false;
+            scopeContainer[scope].previousCart = false;
+        }
+    }
+
     async function aggiungiCarrello() {
 
         const shopifyProductForm = document.querySelector('.product-form form');
@@ -380,14 +435,6 @@ function formHandlerInit(scope) {
             action = "change";
             newProduct.set("id", scopeContainer[scope].cart);
         }
-
-        /*
-        Problemi:
-        il prodotto cambia id così come lo tocchi
-        quando aggiorni il prodotto non ti restituisce il nuovo id, ma l'intero carrello, aggiornato senza dirti cosa è cambiato
-        la "soluzione" è usare l'indice posizionale del carrello (??)
-        il metodo "modifica singolo item" del carrello restituisce l'intera collection
-        */
 
         let cfg = {
             method: "POST",
