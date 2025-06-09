@@ -8,6 +8,7 @@ function formHandlerInit(scope) {
     const dom__preview = wrapper.querySelector('#conf_preview');
     const dom__preview_wrapper = wrapper.querySelector('#conf_preview_wrapper');
     const dom__nome_grafica = wrapper.querySelector('#conf_name');
+    const dom__microid = wrapper.querySelector('#microid');
     const dom__file = wrapper.querySelector('#conf_file');
     const dom__file_hq = wrapper.querySelector('#conf_file_hq');
     const dom__quantita = wrapper.querySelector('#conf_quantita');
@@ -149,6 +150,7 @@ function formHandlerInit(scope) {
 
     function reset(initialLoad = false) {
         console.log('Lummy.configuratore: Resetto il form');
+        dom__microid.value = scope;
         dom__preview.setAttribute('src', placeholder_img);
         dom__dimensioni.value = '';
         dom__metri_necessari.value = '';
@@ -417,8 +419,8 @@ function formHandlerInit(scope) {
 
             if (result.key) { //first add: { key }
                 scopeContainer[scope].cart = result.key;
-            } else if(result.items && result.items.length==1 && result.items[0] && result.items[0].key) { //second add
-                scopeContainer[scope].cart = result.items[0].key;
+            } else if(result.items && result.items.length) { //next changes: [ {key} ]
+                scopeContainer[scope].cart = result.items.filter(x=> x.properties.microid == scope );
             } else {
                 scopeContainer[scope].previousCart = false;
                 throw new Error(`Cart didn't provide a Key`);
