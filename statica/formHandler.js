@@ -8,6 +8,7 @@ function formHandlerInit(scope) {
     const dom__preview = wrapper.querySelector('#conf_preview');
     const dom__preview_wrapper = wrapper.querySelector('#conf_preview_wrapper');
     const dom__nome_grafica = wrapper.querySelector('#conf_name');
+    const dom__note_grafica = wrapper.querySelector('#conf_note');
     const dom__microid = wrapper.querySelector('#microid');
     const dom__file = wrapper.querySelector('#conf_file');
     const dom__file_hq = wrapper.querySelector('#conf_file_hq');
@@ -86,14 +87,14 @@ function formHandlerInit(scope) {
         }
     }, false);
 
-    dom__quantita.addEventListener('input', function (e) {
-        quantita = e.target.value;
-        if (quantita == 0 || quantita == "" || isNaN(quantita)) {
-            quantita = 1;
-        }
+    // dom__quantita.addEventListener('input', function (e) {
+    //     quantita = e.target.value;
+    //     if (quantita == 0 || quantita == "" || isNaN(quantita)) {
+    //         quantita = 1;
+    //     }
 
-        calcola_nesting();
-    });
+    //     calcola_nesting();
+    // });
 
     dom__quantita.addEventListener('change', function (e) {
         quantita = e.target.value;
@@ -110,6 +111,15 @@ function formHandlerInit(scope) {
     });
     dom__nome_grafica.addEventListener('blur', function (e) {
         dom__nome_grafica.value = generaIncrementale(dom__nome_grafica.value);
+    });
+
+    dom__nome_grafica.addEventListener('change', function (e) {
+        console.log("CHANGE noMe");
+        aggiungiCarrello();
+    });
+    dom__note_grafica.addEventListener('change', function (e) {
+        console.log("CHANGE noTe");
+        aggiungiCarrello();
     });
 
     //Gestione zoom
