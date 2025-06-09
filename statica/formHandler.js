@@ -1,7 +1,6 @@
 function formHandlerInit(scope) {
 
     let wrapper = document.getElementById(`gfxWrapper-${scope}`);
-    let incrementale = scope;
 
     //Variabili d'appoggio DOM
     const dom__dimensioni = wrapper.querySelector('#conf_dimensioni');
@@ -87,16 +86,7 @@ function formHandlerInit(scope) {
         }
     }, false);
 
-    // dom__quantita.addEventListener('input', function (e) {
-    //     quantita = e.target.value;
-    //     if (quantita == 0 || quantita == "" || isNaN(quantita)) {
-    //         quantita = 1;
-    //     }
-
-    //     calcola_nesting();
-    // });
-
-    dom__quantita.addEventListener('change', function (e) {
+    dom__quantita.addEventListener('input', function (e) {
         quantita = e.target.value;
         if (quantita == 0 || quantita == "" || isNaN(quantita)) {
             dom__quantita.value = 1;
@@ -106,20 +96,31 @@ function formHandlerInit(scope) {
         calcola_nesting();
     });
 
+    // dom__quantita.addEventListener('change', function (e) {
+    //     quantita = e.target.value;
+    //     if (quantita == 0 || quantita == "" || isNaN(quantita)) {
+    //         dom__quantita.value = 1;
+    //         quantita = 1;
+    //     }
+
+    //     calcola_nesting();
+    // });
+
     dom__nome_grafica.addEventListener('focus', function (e) {
-        dom__nome_grafica.value = dom__nome_grafica.value.slice(0, dom__nome_grafica.value.lastIndexOf("-") )
+        dom__nome_grafica.value = dom__nome_grafica.value.slice(0, dom__nome_grafica.value.lastIndexOf("#") )
     });
     dom__nome_grafica.addEventListener('blur', function (e) {
+        console.log("NOME BLUR", e.target.value);
         dom__nome_grafica.value = generaIncrementale(dom__nome_grafica.value);
+        if(scopeContainer[scope] && scopeContainer[scope].pezzi){
+            aggiungiCarrello();
+        }
     });
 
-    dom__nome_grafica.addEventListener('change', function (e) {
-        console.log("CHANGE noMe");
-        aggiungiCarrello();
-    });
     dom__note_grafica.addEventListener('change', function (e) {
-        console.log("CHANGE noTe");
-        aggiungiCarrello();
+        if(scopeContainer[scope] && scopeContainer[scope].pezzi){
+            aggiungiCarrello();
+        }
     });
 
     //Gestione zoom
@@ -162,22 +163,29 @@ function formHandlerInit(scope) {
 
     function generaIncrementale(testo = "") {
         let risultato = testo;
-        if (testo && testo != "" && testo.trim().length) {
-            risultato += "-";
-        }
+        risultato += "#";
 
-        if (incrementale < 10) {
+        if (scope < 10) {
             risultato += "0";
         }
 
-        risultato += incrementale;
+        risultato += scope;
 
         return risultato;
     }
 
     function reset(initialLoad = false) {
         console.log('Lummy.configuratore: Resetto il form');
-        dom__microid.value = scope;
+        const shopifyProductForm = document.querySelector('.product-form form');
+        
+        if(!scope || !shopifyProductForm) {
+            alert("Si è verificato un errore");
+            return;
+        }
+
+        const product = Object.fromEntries(new FormData(shopifyProductForm));
+        dom__microid.value = `${product.id}##${scope}`;
+
         dom__preview.setAttribute('src', placeholder_img);
         dom__dimensioni.value = '';
         dom__metri_necessari.value = '';
@@ -468,7 +476,7 @@ function formHandlerInit(scope) {
             if (result.key) { //first add: { key }
                 scopeContainer[scope].cart = result.key;
             } else if(result.items && result.items.length) { //next changes: [ {key} ]
-                const foundItemInCart = result.items.find(x=> x.properties.microid == scope );
+                const foundItemInCart = result.items.find(x=> x.properties.microid == `${product.id}##${scope}` );
                 if(foundItemInCart) {
                     scopeContainer[scope].cart = foundItemInCart.key;
                 } else {

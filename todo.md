@@ -1,9 +1,7 @@
 - configuratore: checkbox consenso che disattiva l'aggiunta a carrello
-- bug: doppia normalità (v. id)
-- bug: doppia quantità -> sto letteralmente triggerando 2 eventi
-- bug: note e nome non contano (onChange old!=new ?)
 - bug: 0.3 increments
 
+- on initial load (render main, get cart, inject forms?)
 - validazione di base?
 - snellire tutto, soprattutto renderer (v. fetch totale)
 - rifare?
