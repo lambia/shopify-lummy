@@ -176,10 +176,6 @@ function formHandlerInit(scope) {
             dom__file.files = newFileContainer.files;
         }
 
-        //Aggiorna tutte le informazioni dell'ordine perchè la precedente grafica è invalidata
-        scopeContainer[scope] = {
-            valid: false
-        };
         getMetriTotaliScope();
         ricalcolaCostoMetro();
         ricalcolaCostiTutteLeGrafiche();
@@ -298,11 +294,9 @@ function formHandlerInit(scope) {
 
         //Aggiungo ai metri fuori scope
         if (scopeContainer[scope] && scopeContainer[scope].calcola_nesting) {
-            scopeContainer[scope].valid = false;
             scopeContainer[scope].metri = metri;
         } else {
             scopeContainer[scope] = {
-                valid: false,
                 cart: false,
                 metri,
                 calcola_nesting,
@@ -330,7 +324,6 @@ function formHandlerInit(scope) {
 
         scopeContainer[scope].pezzi = pezzi;
         scopeContainer[scope].costo = costo;
-        scopeContainer[scope].valid = true; //logica validazione
 
         //Imposto risultati nel DOM
         dom__metri_necessari.value = metri + ' m';
@@ -414,17 +407,21 @@ function formHandlerInit(scope) {
                 throw new Error(`Response status: ${response.status}`);
             }
             result = await response.json();
-            console.log("Risultato ---> ", result.key);
-            alert("Messaggio di conferma");
 
             if (result.key) { //first add: { key }
                 scopeContainer[scope].cart = result.key;
             } else if(result.items && result.items.length) { //next changes: [ {key} ]
-                scopeContainer[scope].cart = result.items.filter(x=> x.properties.microid == scope );
+                const foundItemInCart = result.items.find(x=> x.properties.microid == scope );
+                if(foundItemInCart) {
+                    scopeContainer[scope].cart = foundItemInCart.key;
+                } else {
+                    throw new Error(`Cart didn't provide a Key`);
+                }
             } else {
-                scopeContainer[scope].previousCart = false;
                 throw new Error(`Cart didn't provide a Key`);
             }
+            
+            //alert("Messaggio di conferma");
 
         } catch (error) {
             alert("Si è verificato un errore. Impossibile aggiungere al carrello.");
