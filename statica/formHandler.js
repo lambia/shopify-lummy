@@ -357,6 +357,9 @@ function formHandlerInit(scope) {
         //Calcolo la quantità di shopify necessaria
         pezzi = Math.round(costo / price_increments);
 
+        //Ricalcola il costo considerando gli increments da 0.30
+        costo = (price_increments * pezzi).toFixed(2);
+
         scopeContainer[scope].pezzi = pezzi;
         scopeContainer[scope].costo = costo;
 
