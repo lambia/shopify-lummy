@@ -1,5 +1,9 @@
-usare il trigger del nesting per postare in carrello
-assicurasi che ogni modifica (update, insert, delete) vada ad aggiornare il carrello
+update deve aggiornare il carrello (se diverso)
+delete deve rimuovere da carrello
+
+cambio quantità = doppia insert -> si può evitare togliendo hash e usando onChange(old!=new) su tutto il form?
+rimuovere codice inutile per fetch totale
+controllare se "valid" serve ancora
 rimuovere il tasto "aggiungi al carrello"
 usare "conferma" e "annulla" => link to cart e svuota cookie cart
 pagina carello: rimuovi il cestino e aggiungi "svuota tutto"

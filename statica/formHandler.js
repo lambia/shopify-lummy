@@ -212,7 +212,6 @@ function formHandlerInit(scope) {
         const reader = new FileReader();
         reader.onload = async (event) => {
             let imgPath = event.target.result;
-            scopeContainer[scope]["fileLow"] = event.target.result;
             dom__preview.setAttribute('src', imgPath);
             getImgSize(imgPath);
         };
@@ -296,7 +295,18 @@ function formHandlerInit(scope) {
         metri = (metri < 1) ? 1 : metri;
 
         //Aggiungo ai metri fuori scope
-        scopeContainer[scope] = { valid: false, metri, calcola_nesting };
+        if (scopeContainer[scope] && scopeContainer[scope].calcola_nesting) {
+            scopeContainer[scope].valid = false;
+            scopeContainer[scope].metri = metri;
+        } else {
+            scopeContainer[scope] = {
+                valid: false,
+                cart: false,
+                metri,
+                calcola_nesting,
+                aggiungiCarrello
+            };
+        }
 
         //Se questa grafica è cambiata, ricalcola il totale metri e il nesting
         if (chiamataInterna) {
@@ -315,7 +325,6 @@ function formHandlerInit(scope) {
 
         //Calcolo la quantità di shopify necessaria
         pezzi = Math.round(costo / price_increments);
-        
 
         scopeContainer[scope].pezzi = pezzi;
         scopeContainer[scope].costo = costo;
@@ -333,8 +342,94 @@ function formHandlerInit(scope) {
         console.log('Pezzi per shopify: ', pezzi);
 
         if (chiamataInterna) {
-            ricalcolaCostiTutteLeGrafiche();
             dom__quantita.disabled = false;
+            ricalcolaCostiTutteLeGrafiche(); //aggiunge anche al carrello
+        }
+    }
+
+    async function aggiungiCarrello() {
+
+        const shopifyProductForm = document.querySelector('.product-form form');
+        const product = Object.fromEntries(new FormData(shopifyProductForm));
+
+        const propertiesForm = wrapper.querySelector("form");
+        const properties = new FormData(propertiesForm);
+        const propertiesObj = Object.fromEntries(properties); //usato per aggiornare la copia di carrello
+
+        const newProduct = new FormData();
+        for (const prop of properties) {
+            newProduct.set(`properties[${prop[0]}]`, prop[1]);
+        }
+        newProduct.set("id", product.id);
+        newProduct.set("quantity", scopeContainer[scope].pezzi);
+
+        const newCartHashing = JSON.stringify({
+            file: {
+                'lastModified': propertiesObj.grafica?.lastModified,
+                'name': propertiesObj.grafica?.name,
+                'size': propertiesObj.grafica?.size,
+            },
+            properties: propertiesObj,
+            pezzi: scopeContainer[scope].pezzi
+        });
+        
+        if(newCartHashing == scopeContainer[scope].previousCart) {
+            console.log("Evito aggiornamento di carrello immutato");
+            return;
+        }
+
+        scopeContainer[scope].previousCart = newCartHashing;
+
+        let action = "add";
+        if(scopeContainer[scope].cart) {
+            action = "change";
+            newProduct.set("id", scopeContainer[scope].cart);
+        }
+
+        /*
+        Problemi:
+        il prodotto cambia id così come lo tocchi
+        quando aggiorni il prodotto non ti restituisce il nuovo id, ma l'intero carrello, aggiornato senza dirti cosa è cambiato
+        la "soluzione" è usare l'indice posizionale del carrello (??)
+        il metodo "modifica singolo item" del carrello restituisce l'intera collection
+        */
+
+        let cfg = {
+            method: "POST",
+            headers: {
+                Accept: "application/javascript",
+                "X-Requested-With": "XMLHttpRequest"
+            },
+            body: newProduct
+        };
+
+        // thisGfxForm.set("sections", "cart-notification-product,cart-notification-button,cart-icon-bubble");
+        // thisGfxForm.set("sections_url", "/products/dtf-custom-product");
+
+        try {
+            const response = await fetch(`/cart/${action}.js`, cfg);
+            if (!response.ok) {
+                throw new Error(`Response status: ${response.status}`);
+            }
+            result = await response.json();
+            console.log("Risultato ---> ", result.key);
+            alert("Messaggio di conferma");
+
+            if (result.key) { //first add: { key }
+                scopeContainer[scope].cart = result.key;
+            } else if(result.items && result.items.length==1 && result.items[0] && result.items[0].key) { //second add
+                scopeContainer[scope].cart = result.items[0].key;
+            } else {
+                scopeContainer[scope].previousCart = false;
+                throw new Error(`Cart didn't provide a Key`);
+            }
+
+        } catch (error) {
+            alert("Si è verificato un errore. Impossibile aggiungere al carrello.");
+            console.error("Errore carrello: ", error);
+
+            scopeContainer[scope].cart = false;
+            scopeContainer[scope].previousCart = false;
         }
     }
 
@@ -367,6 +462,9 @@ function formHandlerInit(scope) {
             }
             if (singolaGrafica.calcola_nesting) {
                 singolaGrafica.calcola_nesting(false);
+            }
+            if (singolaGrafica.aggiungiCarrello) {
+                singolaGrafica.aggiungiCarrello();
             }
         }
 
