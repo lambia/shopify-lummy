@@ -21,7 +21,7 @@ function formHandlerInit(scope) {
     //Costanti
     const placeholder_img =
         'https://upload.wikimedia.org/wikipedia/commons/thumb/3/3f/Placeholder_view_vector.svg/619px-Placeholder_view_vector.svg.png';
-    const larghezza_rullo = 550;
+    const larghezza_rullo = 570;
     const offset = 0; //al momento considerato solo a destra e sotto
     const price_increments = 0.3;
     const prices = [
@@ -86,17 +86,7 @@ function formHandlerInit(scope) {
         }
     }, false);
 
-    dom__quantita.addEventListener('input', function (e) {
-        quantita = e.target.value;
-        if (quantita == 0 || quantita == "" || isNaN(quantita)) {
-            dom__quantita.value = 1;
-            quantita = 1;
-        }
-
-        calcola_nesting();
-    });
-
-    // dom__quantita.addEventListener('change', function (e) {
+    // dom__quantita.addEventListener('input', function (e) {
     //     quantita = e.target.value;
     //     if (quantita == 0 || quantita == "" || isNaN(quantita)) {
     //         dom__quantita.value = 1;
@@ -105,6 +95,16 @@ function formHandlerInit(scope) {
 
     //     calcola_nesting();
     // });
+
+    dom__quantita.addEventListener('change', function (e) {
+        quantita = e.target.value;
+        if (quantita<1 || quantita == "" || isNaN(quantita)) {
+            dom__quantita.value = 1;
+            quantita = 1;
+        }
+
+        calcola_nesting();
+    });
 
     dom__nome_grafica.addEventListener('focus', function (e) {
         dom__nome_grafica.value = dom__nome_grafica.value.slice(0, dom__nome_grafica.value.lastIndexOf("#") )
@@ -315,7 +315,7 @@ function formHandlerInit(scope) {
         }
 
         //Calcolo finale
-        if (altezza_affiancati < altezza_ruotati) {
+        if (!altezza_ruotati || altezza_affiancati < altezza_ruotati) {
             metri = altezza_affiancati / 1000;
         } else {
             metri = altezza_ruotati / 1000;

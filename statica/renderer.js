@@ -8,7 +8,7 @@ const dtfProductFormId = "product-form-template--19062074048780__main";
 // const dtfProductVariantId = 45067988533516;
 // const dtfProductId = 8577508802828;
 
-const welcomeMsg = "Al fine di garantirti la miglior esperienza utente possibile ti consigliamo l'utilizzo del configuratore da PC";
+const welcomeMsg = "Al fine di garantirti la miglior esperienza utente possibile ti consigliamo l'utilizzo del configuratore da PC o MAC.";
 
 //gli ID vengono usati come indici dell'array, il valore sono i metri della grafica
 const scopeContainer = [];
