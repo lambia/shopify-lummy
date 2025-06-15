@@ -3,7 +3,6 @@ const newGfxBtn = "newGfx";
 const shopify_dom__addToCart = '.product-form__buttons button';
 const shopify_dom__quantity = '.quantity__input';
 const shopify_dom__form = '.product-form form';
-// const dom__disclaimer = wrapper.querySelector('#conf_disclaimer');
 const dtfProductFormId = "product-form-template--19062074048780__main";
 // const dtfProductVariantId = 45067988533516;
 // const dtfProductId = 8577508802828;

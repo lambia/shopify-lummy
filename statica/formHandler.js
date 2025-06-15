@@ -560,8 +560,8 @@ function formHandlerInit(scope) {
         }
 
         document.getElementById("riepilogoOrdine").innerHTML = `
-        <h3>Riepilogo Totale:</h3>
-        <p>${summaryContainer.grafiche} ${summaryContainer.grafiche == 1 ? "grafica" : "grafiche"} = ${summaryContainer.metri.toFixed(2)} metri x ${summaryContainer.costoAlMetro.toFixed(2)} €/metro = ${summaryContainer.costo.toFixed(2)} €</p>`;
+        <h3>Riepilogo Totale (${summaryContainer.grafiche} ${summaryContainer.grafiche == 1 ? "grafica" : "grafiche"})</h3>
+        <p>${summaryContainer.metri.toFixed(2)} metri x ${summaryContainer.costoAlMetro.toFixed(2)} €/metro = ${summaryContainer.costo.toFixed(2)} €</p>`;
     }
 
     function getMetriTotaliScope() {

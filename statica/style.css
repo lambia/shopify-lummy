@@ -92,7 +92,8 @@ img#conf_preview {
 }
 
 .highlightedRow {
-	background-color: rgb(255, 230, 230);
+	background-color: rgb(100, 230, 255);
+	color: black;
 }
 
 #priceTable,
@@ -194,11 +195,12 @@ table .right_cell {
 
 .conf_file_note {
 	margin-bottom: 0;
-	font-size: 1rem;
+	font-size: 1.1rem;
+	color: crimson;
 }
 
 #sezione_statica {
-	margin-top: 1.5rem;
+	margin-top: 0;
 	font-size: 1.5rem;
 }
 
@@ -209,17 +211,40 @@ table .right_cell {
 	margin-right: auto;
 }
 
-#sezione_statica #newGfx {
-}
+#sezione_statica #newGfx {}
+
 #sezione_statica #finalAccept {
-	background: deepskyblue !important;
+	background: rgb(100, 230, 255) !important;
 }
+
 #sezione_statica #finalRefuse {
 	background: crimson !important;
+	color: white !important;
 }
 
 .conf_disclaimer_label {
-	font-size: 1.75rem;
+	font-size: 1.65rem;
+	color: black;
+
+	margin: 2rem;
+	margin-top: 1rem;
+	margin-bottom: 3rem;
+	padding: 1rem 2rem;
+	background: rgba(0, 0, 0, 0.1);
+	border: solid 1px rgba(0, 0, 0, 0.15);
+}
+
+#riepilogoOrdine {
+	margin: 2rem;
+	margin-bottom: 1rem;
+	padding: 1rem 2rem;
+	background: rgba(0, 0, 0, 0.1);
+	border: solid 1px rgba(0, 0, 0, 0.15);
+}
+
+#riepilogoOrdine h3,
+#riepilogoOrdine p {
+	margin: 0.5rem;
 }
 
 /* media query min -> sm:576px md:768px lg:992px xl:1200px xx:1400px */
