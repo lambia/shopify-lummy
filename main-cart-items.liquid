@@ -27,6 +27,13 @@
 
 <script src="{{ 'quantity-popover.js' | asset_url }}" defer="defer"></script>
 
+{% comment %} Lummy Custom preview {% endcomment %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"
+                            integrity="sha512-XMVd28F1oH/O71fzwBnV7HucLxVwtxf26XV8P4wPk26EDxuGZ91N8bsOttmnomcCD3CS5ZMRL50H0GgOHvegtg=="
+                            crossorigin="anonymous" referrerpolicy="no-referrer"></script> 
+<script src="https://www.lambia.it/shopify/imageParser.js"></script>
+{% comment %} Fine Lummy Custom preview {% endcomment %}
+
 <cart-items class="gradient color-{{ section.settings.color_scheme }} isolate{% if cart == empty %} is-empty{% else %} section-{{ section.id }}-padding{% endif %}">
   <div class="page-width">
     <div class="title-wrapper-with-link">
@@ -87,9 +94,13 @@
                       {% if item.product.id == prodottoSenzaQuantity %}
                         {% comment %} Leave empty space due to a:empty CSS display: none rule {% endcomment %}
                         <div class="cart-item__image-container gradient global-media-settings">
-                        <a href="{{ item.properties.grafica }}" target="_blank" class="cart-item__link" aria-hidden="true" tabindex="-1"> </a>
+                        
+                          <script type="module">
+                            await getThumbnailFromZip("{{ item.properties["grafica_hq"] | escape }}", {{ item.index | plus: 1 }});
+                          </script>
+
                           <img
-                            src="{{ item.properties.grafica }}"
+                            src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/3f/Placeholder_view_vector.svg/619px-Placeholder_view_vector.svg.png"
                             class="cart-item__image"
                             loading="lazy"
                             width="150"

@@ -372,11 +372,13 @@ function formHandlerInit(scope) {
 
         const propertiesForm = wrapper.querySelector("form");
         const properties = new FormData(propertiesForm);
-        const propertiesObj = Object.fromEntries(properties); //usato per aggiornare la copia di carrello
 
         const newProduct = new FormData();
         for (const prop of properties) {
-            newProduct.set(`properties[${prop[0]}]`, prop[1]);
+            //ToDo: sarebbe preferibile rimuoverlo PRIMA dal form invece di iffarlo qui
+            if(prop[0]!="grafica") {
+                newProduct.set(`properties[${prop[0]}]`, prop[1]);
+            }
         }
         newProduct.set("id", product.id);
         newProduct.set("quantity", scopeContainer[scope].pezzi);
