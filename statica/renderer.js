@@ -25,6 +25,7 @@ const texts = {
 };
 
 
+document.body.classList.add("no-scroll");
 document.getElementById(appWrapper).innerHTML = texts.loading;
 main();
 
@@ -42,6 +43,8 @@ async function main() {
     newGfx(partial);
     
     alert(welcomeMsg);
+    document.body.classList.remove("no-scroll");
+    document.getElementById("spinner-loader-generale").classList.add("hidden");
     
     document.getElementById("finalAccept").addEventListener("click", aggiungiTuttoAlCarrello);
     document.getElementById(newGfxBtn).addEventListener("click", function (e) {
@@ -50,6 +53,7 @@ async function main() {
 }
 
 async function aggiungiTuttoAlCarrello() {
+    document.getElementById("spinner-loader-generale").classList.remove("hidden");
     for (const singolaGrafica of scopeContainer) {
         if (!singolaGrafica) {
             continue;
@@ -63,7 +67,8 @@ async function aggiungiTuttoAlCarrello() {
                 break;
             }
         }
-    }
+    }    
+    //document.getElementById("spinner-loader-generale").classList.add("hidden");
     //uso replace invece di href per evitare che tornino indietro
     window.location.replace("/cart");
 }
