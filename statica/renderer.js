@@ -38,13 +38,34 @@ async function main() {
     document.querySelector(shopify_dom__addToCart).style.display = "none";
     document.querySelector(shopify_dom__addToCart).remove();
 
+    
     newGfx(partial);
-
+    
     alert(welcomeMsg);
-
+    
+    document.getElementById("finalAccept").addEventListener("click", aggiungiTuttoAlCarrello);
     document.getElementById(newGfxBtn).addEventListener("click", function (e) {
         newGfx(partial);
     });
+}
+
+async function aggiungiTuttoAlCarrello() {
+    for (const singolaGrafica of scopeContainer) {
+        if (!singolaGrafica) {
+            continue;
+        }
+        if (singolaGrafica.aggiungiCarrello) {
+            let result = await singolaGrafica.aggiungiCarrello();
+
+            if(!result) {
+                alert("Si è verificato un errore durante l'aggiunta al carrello");
+                window.location.replace("/cart/clear");
+                break;
+            }
+        }
+    }
+    //uso replace invece di href per evitare che tornino indietro
+    window.location.replace("/cart");
 }
 
 // function valida() {

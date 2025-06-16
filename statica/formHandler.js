@@ -44,9 +44,6 @@ function formHandlerInit(scope) {
         //recupero gli elementi non nulli
         
         if(scopeContainer[scope]) {
-            if(scopeContainer[scope].cart) {
-                await rimuoviCarrello();
-            }
             delete scopeContainer[scope];
         }
 
@@ -61,12 +58,10 @@ function formHandlerInit(scope) {
         /*
         let grafiche = scopeContainer.filter(item => item);
         if (grafiche && grafiche.length > 1) {
-            await rimuoviCarrello();
             reset(true);
             wrapper.remove();
             delete scopeContainer[scope];
         } else {
-            await rimuoviCarrello();
             reset(true);
             scopeContainer[scope] = {};
         }
@@ -110,17 +105,7 @@ function formHandlerInit(scope) {
         dom__nome_grafica.value = dom__nome_grafica.value.slice(0, dom__nome_grafica.value.lastIndexOf("#") )
     });
     dom__nome_grafica.addEventListener('blur', function (e) {
-        console.log("NOME BLUR", e.target.value);
         dom__nome_grafica.value = generaIncrementale(dom__nome_grafica.value);
-        if(scopeContainer[scope] && scopeContainer[scope].pezzi){
-            aggiungiCarrello();
-        }
-    });
-
-    dom__note_grafica.addEventListener('change', function (e) {
-        if(scopeContainer[scope] && scopeContainer[scope].pezzi){
-            aggiungiCarrello();
-        }
     });
 
     //Gestione zoom
@@ -380,44 +365,6 @@ function formHandlerInit(scope) {
         }
     }
 
-    async function rimuoviCarrello() {
-        
-        const newProduct = new FormData();
-        newProduct.set("id", scopeContainer[scope].cart );
-        newProduct.set("quantity", 0);
-
-        let cfg = {
-            method: "POST",
-            headers: {
-                Accept: "application/javascript",
-                "X-Requested-With": "XMLHttpRequest"
-            },
-            body: newProduct
-        };
-
-        try {
-            const response = await fetch(`/cart/change.js`, cfg);
-            if (!response.ok) {
-                throw new Error(`Response status: ${response.status}`);
-            }
-            result = await response.json();
-            console.log(result); 
-
-            if(!result || !result.items_removed || !result.items_removed.length) {
-                throw new Error(`Errore durante l'eliminazione dal carrello.`);
-            }
-            
-            alert("Prodotto rimosso con successo");
-
-        } catch (error) {
-            alert("Errore durante l'eliminazione dal carrello.");
-            console.error("Errore carrello: ", error);
-
-            scopeContainer[scope].cart = false;
-            scopeContainer[scope].previousCart = false;
-        }
-    }
-
     async function aggiungiCarrello() {
 
         const shopifyProductForm = document.querySelector('.product-form form');
@@ -433,23 +380,6 @@ function formHandlerInit(scope) {
         }
         newProduct.set("id", product.id);
         newProduct.set("quantity", scopeContainer[scope].pezzi);
-
-        const newCartHashing = JSON.stringify({
-            file: {
-                'lastModified': propertiesObj.grafica?.lastModified,
-                'name': propertiesObj.grafica?.name,
-                'size': propertiesObj.grafica?.size,
-            },
-            properties: propertiesObj,
-            pezzi: scopeContainer[scope].pezzi
-        });
-        
-        if(newCartHashing == scopeContainer[scope].previousCart) {
-            console.log("Evito aggiornamento di carrello immutato");
-            return;
-        }
-
-        scopeContainer[scope].previousCart = newCartHashing;
 
         let action = "add";
         if(scopeContainer[scope].cart) {
@@ -469,6 +399,8 @@ function formHandlerInit(scope) {
         // thisGfxForm.set("sections", "cart-notification-product,cart-notification-button,cart-icon-bubble");
         // thisGfxForm.set("sections_url", "/products/dtf-custom-product");
 
+        let result = false;
+
         try {
             const response = await fetch(`/cart/${action}.js`, cfg);
             if (!response.ok) {
@@ -478,10 +410,14 @@ function formHandlerInit(scope) {
 
             if (result.key) { //first add: { key }
                 scopeContainer[scope].cart = result.key;
+                result = true;
+                //alert("Le grafiche sono state aggiunte al carrello");
             } else if(result.items && result.items.length) { //next changes: [ {key} ]
                 const foundItemInCart = result.items.find(x=> x.properties.microid == `${product.id}##${scope}` );
                 if(foundItemInCart) {
                     scopeContainer[scope].cart = foundItemInCart.key;
+                    result = true;
+                    //alert("Il carrello è stato aggiornato");
                 } else {
                     throw new Error(`Cart didn't provide a Key`);
                 }
@@ -496,7 +432,8 @@ function formHandlerInit(scope) {
             console.error("Errore carrello: ", error);
 
             scopeContainer[scope].cart = false;
-            scopeContainer[scope].previousCart = false;
+        } finally {
+            return result;
         }
     }
 
@@ -529,9 +466,6 @@ function formHandlerInit(scope) {
             }
             if (singolaGrafica.calcola_nesting) {
                 singolaGrafica.calcola_nesting(false);
-            }
-            if (singolaGrafica.aggiungiCarrello) {
-                singolaGrafica.aggiungiCarrello();
             }
         }
 
