@@ -211,7 +211,7 @@ table .right_cell {
 	margin-right: auto;
 }
 
-#sezione_statica #newGfx {}
+/* #sezione_statica #newGfx {} */
 
 #sezione_statica #finalAccept {
 	background: rgb(100, 230, 255) !important;
