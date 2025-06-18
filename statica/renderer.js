@@ -42,10 +42,6 @@ async function main() {
     document.body.classList.remove("no-scroll");
     document.getElementById("spinner-loader-generale").classList.add("hidden");
     
-    document.querySelector("#popup-page-wrapper .popup-inner-wrapper button").addEventListener("click", function(e){
-        document.body.classList.remove("no-scroll");
-        document.getElementById("popup-page-wrapper").classList.add("hidden");
-    });
     message("Attenzione!", "Al fine di garantirti la miglior esperienza utente possibile ti consigliamo di utilizzare il configuratore da PC o MAC.");
     
     document.getElementById("finalAccept").addEventListener("click", aggiungiTuttoAlCarrello);
@@ -64,9 +60,11 @@ async function aggiungiTuttoAlCarrello() {
             let result = await singolaGrafica.aggiungiCarrello();
 
             if(!result) {
-                alert("Si è verificato un errore durante l'aggiunta al carrello");
-                //message("Errore", "Impossibile aggiungere le grafiche al carrello");
-                window.location.replace("/cart/clear");
+                // alert("Si è verificato un errore durante l'aggiunta al carrello");
+                message("Errore", "Impossibile aggiungere le grafiche al carrello");
+                setTimeout(function() {
+                    window.location.replace("/cart/clear");
+                }, 5000);
                 break;
             }
         }
@@ -110,9 +108,18 @@ function message(title = "Si è verificato un errore imprevisto.", content = "")
     console.error("internal error logger", title, content);
 
     document.body.classList.add("no-scroll");
-    document.getElementById("popup-page-wrapper").classList.remove("hidden");
     const popupWidth = (title.length*1.25 < 40) ? 40 : (title.length*1.25);
-    document.querySelector("#popup-page-wrapper .popup-inner-wrapper").style.width = `${popupWidth}rem`;
-    document.querySelector("#popup-page-wrapper .popup-inner-title").innerHTML = title;
-    document.querySelector("#popup-page-wrapper .popup-inner-content").innerHTML = content;
+
+    document.getElementById("popupsContainer").insertAdjacentHTML("afterbegin", 
+        `<div id="popup-page-wrapper" onclick="document.body.classList.remove('no-scroll'); this.remove(); ">
+            <div class="popup-inner-wrapper" style="width: ${popupWidth}rem;">
+                <div class="popup-inner-title">${title}</div>
+                <div class="popup-inner-content">${content}</div>
+                <div class="popup-inner-button">
+                    <button>Chiudi</button>
+                </div>
+            </div>
+        </div>`
+    );
+
 }
