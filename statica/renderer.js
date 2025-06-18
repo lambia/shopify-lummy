@@ -7,8 +7,6 @@ const dtfProductFormId = "product-form-template--19062074048780__main";
 // const dtfProductVariantId = 45067988533516;
 // const dtfProductId = 8577508802828;
 
-const welcomeMsg = "Al fine di garantirti la miglior esperienza utente possibile ti consigliamo l'utilizzo del configuratore da PC o MAC.";
-
 //gli ID vengono usati come indici dell'array, il valore sono i metri della grafica
 const scopeContainer = [];
 const summaryContainer = {
@@ -38,13 +36,17 @@ async function main() {
     document.querySelector(shopify_dom__addToCart).disabled = true;
     document.querySelector(shopify_dom__addToCart).style.display = "none";
     document.querySelector(shopify_dom__addToCart).remove();
-
     
     newGfx(partial);
-    
-    alert(welcomeMsg);
+
     document.body.classList.remove("no-scroll");
     document.getElementById("spinner-loader-generale").classList.add("hidden");
+    
+    document.querySelector("#popup-page-wrapper .popup-inner-wrapper button").addEventListener("click", function(e){
+        document.body.classList.remove("no-scroll");
+        document.getElementById("popup-page-wrapper").classList.add("hidden");
+    });
+    message("Attenzione!", "Al fine di garantirti la miglior esperienza utente possibile ti consigliamo di utilizzare il configuratore da PC o MAC.");
     
     document.getElementById("finalAccept").addEventListener("click", aggiungiTuttoAlCarrello);
     document.getElementById(newGfxBtn).addEventListener("click", function (e) {
@@ -63,6 +65,7 @@ async function aggiungiTuttoAlCarrello() {
 
             if(!result) {
                 alert("Si è verificato un errore durante l'aggiunta al carrello");
+                //message("Errore", "Impossibile aggiungere le grafiche al carrello");
                 window.location.replace("/cart/clear");
                 break;
             }
@@ -72,28 +75,6 @@ async function aggiungiTuttoAlCarrello() {
     //uso replace invece di href per evitare che tornino indietro
     window.location.replace("/cart");
 }
-
-// function valida() {
-//     let validazione = true;
-//     let pezziTotali = 0;
-//     for (let i = 0; i < scopeContainer.length; i++) {
-//         const grafica = scopeContainer[i];
-//         console.log("grafica", grafica);
-
-//         if (grafica == undefined) {
-//             continue; //Skippa grafica rimossa o indice [0]
-//         }
-//         if (!grafica || !grafica.valid || !grafica.pezzi > 0 || !grafica.metri >= 1) {
-//             validazione = false; //qualcosa non va
-//             break;
-//         } else {
-//             pezziTotali += grafica.pezzi;
-//         }
-
-//     }
-//     console.log("Pezzi finali: ", pezziTotali);
-//     // document.querySelector(shopify_dom__quantity).value = pezziTotali;
-// }
 
 function newGfx(partial = "Errore") {
     const newGfx = `<div class="gfxWrapper" id="gfxWrapper-${gfxCounter}" data-gfx-id="${gfxCounter}">${partial}<div>`;
@@ -124,6 +105,14 @@ async function getPartial() {
     return result;
 }
 
-function init() {
-    console.log("Inizializzato");
+function message(title = "Si è verificato un errore imprevisto.", content = "") {
+    
+    console.error("internal error logger", title, content);
+
+    document.body.classList.add("no-scroll");
+    document.getElementById("popup-page-wrapper").classList.remove("hidden");
+    const popupWidth = (title.length*1.25 < 40) ? 40 : (title.length*1.25);
+    document.querySelector("#popup-page-wrapper .popup-inner-wrapper").style.width = `${popupWidth}rem`;
+    document.querySelector("#popup-page-wrapper .popup-inner-title").innerHTML = title;
+    document.querySelector("#popup-page-wrapper .popup-inner-content").innerHTML = content;
 }

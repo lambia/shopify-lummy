@@ -73,11 +73,11 @@ function formHandlerInit(scope) {
         if (this.files[0] && this.files[0].size && this.files[0].size <= 20 * 1024 * 1024) {
             readFile(this.files[0]);
         } else if (this.files[0] && this.files[0].size) {
+            message("Attenzione", "Il file non verrà caricato perchè supera le dimensioni massime consentite.<br>Si prega di rispettare le indicazioni fornite.");
             reset(true);
-            alert("Il file supera le dimensioni massime consentite");
         } else {
+            message("Errore", "Si è verificato un errore durante l'elaborazione del file.<br>Assicurarsi che il file sia corretto e riprovare.");
             reset(true);
-            alert("Errore nell'elaborazione del file");
         }
     }, false);
 
@@ -164,7 +164,7 @@ function formHandlerInit(scope) {
         const shopifyProductForm = document.querySelector('.product-form form');
 
         if (!scope || !shopifyProductForm) {
-            alert("Si è verificato un errore");
+            message("Errore irreversibile", "Si è verificato un errore durante l'avvio del configuratore.<br>Si prega di ricaricare la pagina e riprovare.");
             return;
         }
 
@@ -279,7 +279,7 @@ function formHandlerInit(scope) {
 
         //Controlla se l'immagine è più grande del rullo
         if (quanti_su_riga_affiancati < 1 && quanti_su_riga_ruotati < 1) {
-            alert("Attenzione!\n\nIl file caricato copre un'area di stampa maggiore della superficie disponibile.\n\nAssicurati che il file sia corretto (300dpi) o contattaci in caso di necessità particolari.");
+            message("Attenzione!", "Il file caricato copre un'area di stampa maggiore della superficie disponibile.<br>Assicurati che il file sia corretto (300dpi) o contattaci in caso di necessità particolari.");
             return reset(true);
         }
 
@@ -312,7 +312,7 @@ function formHandlerInit(scope) {
 
         } else { //Se non stampabile
             metri = 0;
-            alert("Si è verificato un errore. Il file non risulta stampabile.");
+            message("Errore", "Il file non risulta stampabile.");
             return reset(true);
         }
 
@@ -420,13 +420,13 @@ function formHandlerInit(scope) {
             if (result.key) { //first add: { key }
                 scopeContainer[scope].cart = result.key;
                 result = true;
-                //alert("Le grafiche sono state aggiunte al carrello");
+                //message("Le grafiche sono state aggiunte al carrello");
             } else if (result.items && result.items.length) { //next changes: [ {key} ]
                 const foundItemInCart = result.items.find(x => x.properties.microid == `${product.id}##${scope}`);
                 if (foundItemInCart) {
                     scopeContainer[scope].cart = foundItemInCart.key;
                     result = true;
-                    //alert("Il carrello è stato aggiornato");
+                    //message("Il carrello è stato aggiornato");
                 } else {
                     throw new Error(`Cart didn't provide a Key`);
                 }
@@ -434,10 +434,10 @@ function formHandlerInit(scope) {
                 throw new Error(`Cart didn't provide a Key`);
             }
 
-            //alert("Messaggio di conferma");
+            //message("Messaggio di conferma");
 
         } catch (error) {
-            alert("Si è verificato un errore. Impossibile aggiungere al carrello.");
+            message("Errore irreversibile", "Si è verificato un errore durante l'aggiunta di una grafica al carrello.<br>Si prega di ricaricare la pagina e riprovare.");
             console.error("Errore carrello: ", error);
 
             scopeContainer[scope].cart = false;
