@@ -42,17 +42,17 @@ function formHandlerInit(scope) {
     //Imposto gli event listener che avviano il tutto    
     dom__closeBtn.addEventListener("click", async function (e) {
         //recupero gli elementi non nulli
-        
-        if(scopeContainer[scope]) {
+
+        if (scopeContainer[scope]) {
             delete scopeContainer[scope];
         }
 
         wrapper.remove();
-        
+
         let grafiche = scopeContainer.filter(item => item);
-        if(!grafiche.length) {
+        if (!grafiche.length) {
             //aggiungi wrapper in dom
-            window.newGfx( window.partial );
+            window.newGfx(window.partial);
         }
 
         /*
@@ -93,7 +93,7 @@ function formHandlerInit(scope) {
 
     dom__quantita.addEventListener('change', function (e) {
         quantita = e.target.value;
-        if (quantita<1 || quantita == "" || isNaN(quantita)) {
+        if (quantita < 1 || quantita == "" || isNaN(quantita)) {
             dom__quantita.value = 1;
             quantita = 1;
         }
@@ -102,7 +102,7 @@ function formHandlerInit(scope) {
     });
 
     dom__nome_grafica.addEventListener('focus', function (e) {
-        dom__nome_grafica.value = dom__nome_grafica.value.slice(0, dom__nome_grafica.value.lastIndexOf("#") )
+        dom__nome_grafica.value = dom__nome_grafica.value.slice(0, dom__nome_grafica.value.lastIndexOf("#"))
     });
     dom__nome_grafica.addEventListener('blur', function (e) {
         dom__nome_grafica.value = generaIncrementale(dom__nome_grafica.value);
@@ -162,8 +162,8 @@ function formHandlerInit(scope) {
     function reset(initialLoad = false) {
         console.log('Lummy.configuratore: Resetto il form');
         const shopifyProductForm = document.querySelector('.product-form form');
-        
-        if(!scope || !shopifyProductForm) {
+
+        if (!scope || !shopifyProductForm) {
             alert("Si è verificato un errore");
             return;
         }
@@ -204,11 +204,10 @@ function formHandlerInit(scope) {
     //Funzione per leggere file caricato e inserirlo in DOM
     async function readFile(file) {
         //Debuggo
-        console.log(`${file.name} is ${file.type}`);
+        //console.log(`${file.name} is ${file.type}`);
 
         //prendo i dati
         const newArrayBuffer = await file.arrayBuffer();
-        console.log('newArrayBuffer', newArrayBuffer);
 
         //creo uno zip
         const zip = new JSZip();
@@ -253,10 +252,7 @@ function formHandlerInit(scope) {
         //calcolo in mm (30 invece di 300)
         width_mm = Math.round((width * 2.54) / 30);
         height_mm = Math.round((height * 2.54) / 30);
-        console.log('width_mm', width_mm);
-        console.log('height_mm', height_mm);
-        console.log('dimensioni', `${width_mm} x ${height_mm} mm`);
-        console.log('dimensioni dom', dom__dimensioni);
+        console.log('dimensioni immagine', `${width_mm} x ${height_mm} mm`);
         //imposto UI
         dom__dimensioni.value = `${width_mm} x ${height_mm} mm`;
 
@@ -300,10 +296,24 @@ function formHandlerInit(scope) {
         }
 
         //Calcolo finale
-        if (!altezza_ruotati || altezza_affiancati < altezza_ruotati) {
-            metri = altezza_affiancati / 1000;
-        } else {
-            metri = altezza_ruotati / 1000;
+        if (altezza_affiancati && altezza_ruotati) { //Se stampabile in due direzioni
+            if (altezza_affiancati < altezza_ruotati) { //prendi quella che ingombra meno
+                metri = altezza_affiancati / 1000;
+            } else {
+                metri = altezza_ruotati / 1000;
+            }
+
+        } else if (altezza_affiancati || altezza_ruotati) { //Se stampabile in una sola direzione
+            if (altezza_affiancati) {
+                metri = altezza_affiancati / 1000;
+            } else if (altezza_ruotati) {
+                metri = altezza_ruotati / 1000;
+            }
+
+        } else { //Se non stampabile
+            metri = 0;
+            alert("Si è verificato un errore. Il file non risulta stampabile.");
+            return reset(true);
         }
 
         //Aggiungo 0.1 metri fisso
@@ -354,10 +364,7 @@ function formHandlerInit(scope) {
         dom__costo_al_pezzo.value = costoPezzo + ' €';
 
         //Debugger
-        console.log('Preventivo aggiornato');
-        console.log('Metri necessari: ', metri);
-        console.log('Costo: ', costo);
-        console.log('Pezzi per shopify: ', pezzi);
+        console.log(`Ricalcolo: [${metri} m] [${costo} €] [${pezzi} pz]`);
 
         if (chiamataInterna) {
             dom__quantita.disabled = false;
@@ -376,7 +383,7 @@ function formHandlerInit(scope) {
         const newProduct = new FormData();
         for (const prop of properties) {
             //ToDo: sarebbe preferibile rimuoverlo PRIMA dal form invece di iffarlo qui
-            if(prop[0]!="grafica") {
+            if (prop[0] != "grafica") {
                 newProduct.set(`properties[${prop[0]}]`, prop[1]);
             }
         }
@@ -384,7 +391,7 @@ function formHandlerInit(scope) {
         newProduct.set("quantity", scopeContainer[scope].pezzi);
 
         let action = "add";
-        if(scopeContainer[scope].cart) {
+        if (scopeContainer[scope].cart) {
             action = "change";
             newProduct.set("id", scopeContainer[scope].cart);
         }
@@ -414,9 +421,9 @@ function formHandlerInit(scope) {
                 scopeContainer[scope].cart = result.key;
                 result = true;
                 //alert("Le grafiche sono state aggiunte al carrello");
-            } else if(result.items && result.items.length) { //next changes: [ {key} ]
-                const foundItemInCart = result.items.find(x=> x.properties.microid == `${product.id}##${scope}` );
-                if(foundItemInCart) {
+            } else if (result.items && result.items.length) { //next changes: [ {key} ]
+                const foundItemInCart = result.items.find(x => x.properties.microid == `${product.id}##${scope}`);
+                if (foundItemInCart) {
                     scopeContainer[scope].cart = foundItemInCart.key;
                     result = true;
                     //alert("Il carrello è stato aggiornato");
@@ -426,7 +433,7 @@ function formHandlerInit(scope) {
             } else {
                 throw new Error(`Cart didn't provide a Key`);
             }
-            
+
             //alert("Messaggio di conferma");
 
         } catch (error) {
