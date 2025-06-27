@@ -259,6 +259,7 @@ table .right_cell {
 	}
 
 	div#conf_preview_wrapper,
+	.gfxWrapper form,
 	#formTable {
 		width: 100%;
 	}
@@ -300,6 +301,7 @@ table .right_cell {
 	max-width: 90vw;
 	padding: 1rem;
 	border-radius: 10px;
+	text-align: center;
 }
 
 /*font accapo*/

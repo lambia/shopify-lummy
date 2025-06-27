@@ -61,6 +61,19 @@
   {%- endif -%}
 
   {% assign variant_images = product.images | where: 'attached_to_variant?', true | map: 'src' %}
+
+
+  <div id="spinner-loader-generale">
+    <div class="loading__spinner">
+      <svg aria-hidden="true" focusable="false" class="spinner" viewBox="0 0 66 66" xmlns="http://www.w3.org/2000/svg">
+        <circle class="path" fill="none" stroke-width="6" cx="33" cy="33" r="30"></circle>
+      </svg>
+    </div>
+  </div>
+
+  <div id="popupsContainer"></div>
+
+
   <div class="page-width">
     <div class="product product--{{ section.settings.media_size }} product--{{ section.settings.media_position }} product--{{ section.settings.gallery_layout }} product--mobile-{{ section.settings.mobile_thumbnails }} grid grid--1-col {% if product.media.size > 0 %}grid--2-col-tablet{% else %}product--no-media{% endif %}">
       <div class="grid__item product__media-wrapper{% if section.settings.media_position == 'right' %} medium-hide large-up-hide{% endif %}">
@@ -240,16 +253,6 @@
             <button id="newGfx" class="button button--full-width button--secondary">Aggiungi nuova grafica</button>
             <button id="finalAccept" class="button button--full-width button--secondary">Conferma e vai al carrello</button>
             <a href="/cart/clear" id="finalRefuse" class="button button--full-width button--secondary">Annulla grafiche</a>
-
-            <div id="spinner-loader-generale">
-              <div class="loading__spinner">
-                <svg aria-hidden="true" focusable="false" class="spinner" viewBox="0 0 66 66" xmlns="http://www.w3.org/2000/svg">
-                  <circle class="path" fill="none" stroke-width="6" cx="33" cy="33" r="30"></circle>
-                </svg>
-              </div>
-            </div>
-
-            <div id="popupsContainer"></div>
 
           </div>
               
