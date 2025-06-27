@@ -69,7 +69,17 @@ function formHandlerInit(scope) {
     });
 
     dom__file.addEventListener('change', function () {
-        reset();
+
+        dom__preview.setAttribute('src', placeholder_img);
+        dom__dimensioni.value = '';
+        dom__metri_necessari.value = '';
+        dom__costo_al_metro.value = prices[0].price + ' €/m'
+        dom__totale_preventivo.value = '';
+        dom__costo_al_pezzo.value = '';
+        width_mm = 0;
+        height_mm = 0;
+
+        //reset();
         if (this.files[0] && this.files[0].size && this.files[0].size <= 20 * 1024 * 1024) {
             readFile(this.files[0]);
         } else if (this.files[0] && this.files[0].size) {
@@ -185,15 +195,11 @@ function formHandlerInit(scope) {
         width_mm = 0;
         height_mm = 0;
 
-        //Resetto il file originale, compresso e header
-        dom__file_hq.value = '';
-        let newFileContainer = new DataTransfer();
-        dom__file_hq.files = newFileContainer.files;
-
         //Il file caricato viene resettato solo al load iniziale
         if (initialLoad) {
-            dom__file.value = '';
-            dom__file.files = newFileContainer.files;
+            dom__file_hq.value = '';
+            let newFileContainer = new DataTransfer();
+            dom__file_hq.files = newFileContainer.files;
         }
 
         getMetriTotaliScope();
