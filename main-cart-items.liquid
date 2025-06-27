@@ -131,7 +131,15 @@
 
                       {% comment %} Titolo per prodotto custom {% endcomment %}
                       {%- if item.product.id == prodottoSenzaQuantity -%}
+                        {%- if item.properties.sfrido == "true" -%}
+                        <a href="{{ item.url }}" class="cart-item__name h4 break">Sfrido (10cm)</a>
+                        {%- elsif item.properties.minimoordine == "true" -%}
+                        <a href="{{ item.url }}" class="cart-item__name h4 break">Minimo d'ordine (1m)</a>
+                        {%- else -%}
                         <a href="{{ item.url }}" class="cart-item__name h4 break">{{ item.product.title | escape }}</a>
+                      {%- endif -%}
+
+                        
                       {% comment %} Titolo per prodotti standard {% endcomment %}
                       {%- else -%}
                         <a href="{{ item.url }}" class="cart-item__name h4 break">{{ item.product.title | escape }}</a>
@@ -173,6 +181,18 @@
 
                           {% comment %} Proprietà per prodotto custom {% endcomment %}
                           {% if item.product.id==prodottoSenzaQuantity -%}
+
+                            {% if item.properties.sfrido == "true" -%}
+                            <div class="product-option">
+                              <span>Lo sfrido di 10cm viene aggiunto per ogni configurazione</span>
+                            </div>
+                            {%- endif -%}
+                            {% if item.properties.minimoordine == "true" -%}
+                            <div class="product-option">
+                              <span>Il tuo ordine non raggiungeva il metro lineare sviluppato</span>
+                            </div>
+                            {%- endif -%}
+
                             {% if item.properties.nome != blank -%}
                             <div class="product-option">
                               <dt>Nome grafica:</dt>
@@ -292,18 +312,25 @@
                             {{ 'products.product.quantity.label' | t }}
                           </label>
                           {% comment %} Quantità per prodotto custom {% endcomment %}
+
                           {% if item.product.id == prodottoSenzaQuantity %}
-                            <div class="quantity-popover-container">
-                              <quantity-input class="quantity cart-quantity">
-                                <input
-                                  class="quantity__input"
-                                  type="number"
-                                  value="{{ item.properties.quantita }}"
-                                  readonly
-                                  disabled
-                                >
-                              </quantity-input>
-                            </div>
+                          
+                            {% if item.properties.sfrido == "true" %}
+                            {% elsif item.properties.minimoordine == "true" %}
+                            {% else %}
+                              <div class="quantity-popover-container">
+                                <quantity-input class="quantity cart-quantity">
+                                  <input
+                                    class="quantity__input"
+                                    type="number"
+                                    value="{{ item.properties.quantita }}"
+                                    readonly
+                                    disabled
+                                  >
+                                </quantity-input>
+                              </div>
+                            {% endif %}
+
                           {% comment %} Quantità per prodotti standard {% endcomment %}
                           {% else %}
                             <div class="quantity-popover-container{% if has_qty_rules or has_vol_pricing %} quantity-popover-container--hover{% endif %}">

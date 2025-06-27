@@ -316,12 +316,6 @@ function formHandlerInit(scope) {
             return reset(true);
         }
 
-        //Aggiungo 0.1 metri fisso
-        metri += 0.1;
-
-        //Minimo ordinabile: 1 metro
-        metri = (metri < 1) ? 1 : metri;
-
         //Aggiungo ai metri fuori scope
         if (scopeContainer[scope] && scopeContainer[scope].calcola_nesting) {
             scopeContainer[scope].metri = metri;
@@ -502,9 +496,12 @@ function formHandlerInit(scope) {
 
         }
 
+        const disclaimerMinimoOrdine = summaryContainer.metri < 1 ? "Attenzione: non raggiungendo il minimo d'ordine di un metro, questa configurazione avrà un costo fisso di 15€" : "";
+
         document.getElementById("riepilogoOrdine").innerHTML = `
         <h3>Riepilogo Totale (${summaryContainer.grafiche} ${summaryContainer.grafiche == 1 ? "grafica" : "grafiche"})</h3>
-        <p>${summaryContainer.metri.toFixed(2)} metri x ${summaryContainer.costoAlMetro.toFixed(2)} €/metro = ${summaryContainer.costo.toFixed(2)} €</p>`;
+        <p>${summaryContainer.metri.toFixed(2)} metri x ${summaryContainer.costoAlMetro.toFixed(2)} €/metro = ${summaryContainer.costo.toFixed(2)} €</p>
+        <span class='warningMetri'>${disclaimerMinimoOrdine}</span>`;
     }
 
     function getMetriTotaliScope() {

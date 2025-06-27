@@ -247,6 +247,11 @@ table .right_cell {
 	margin: 0.5rem;
 }
 
+#riepilogoOrdine .warningMetri {
+	font-size: 1rem;
+	color: crimson;
+}
+
 /* media query min -> sm:576px md:768px lg:992px xl:1200px xx:1400px */
 @media screen and (max-width: 768px) {
 	div#conf_preview_columns {
