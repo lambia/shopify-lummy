@@ -22,7 +22,7 @@ function formHandlerInit(scope) {
     const placeholder_img =
         'https://upload.wikimedia.org/wikipedia/commons/thumb/3/3f/Placeholder_view_vector.svg/619px-Placeholder_view_vector.svg.png';
     const larghezza_rullo = 570;
-    const offset = 0; //al momento considerato solo a destra e sotto
+    const offset = 5; //al momento considerato solo a destra e sotto
     const price_increments = 0.3;
     const prices = [
         { lessThan: 3.00, price: 15.00 },
