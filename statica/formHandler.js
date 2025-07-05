@@ -265,7 +265,7 @@ function formHandlerInit(scope) {
         //Preparo la creazione dell'image
         let newImg = new Image();
         newImg.onload = function () {
-            useImgSize(newImg.height, newImg.width);
+            useImgSize(newImg.width, newImg.height);
         };
         //Carico l'image
         newImg.src = imgSrc;
@@ -310,27 +310,31 @@ function formHandlerInit(scope) {
         //Calcolo Affiancati
         if (quanti_su_riga_affiancati >= 1) {
             let quante_righe = Math.ceil(numero_copie / quanti_su_riga_affiancati); //ceil per calcolare la riga intera anche se poco usata (es. 11/2)
-            altezza_affiancati = altezza_grafica * quante_righe;
+            altezza_affiancati = (altezza_grafica + offset) * quante_righe;
         }
 
         //Calcolo Ruotati 90°
         if (quanti_su_riga_ruotati >= 1) {
             let quante_righe = Math.ceil(numero_copie / quanti_su_riga_ruotati); //ceil per calcolare la riga intera anche se poco usata (es. 11/2)
-            altezza_ruotati = larghezza_grafica * quante_righe;
+            altezza_ruotati = (larghezza_grafica + offset) * quante_righe;
         }
 
         //Calcolo finale
         if (altezza_affiancati && altezza_ruotati) { //Se stampabile in due direzioni
             if (altezza_affiancati < altezza_ruotati) { //prendi quella che ingombra meno
+                console.log("Stampabile in due versi. Scelgo [AFFIANCATI]");
                 metri = altezza_affiancati / 1000;
             } else {
+                console.log("Stampabile in due versi. Scelgo [RUOTATI]");
                 metri = altezza_ruotati / 1000;
             }
 
         } else if (altezza_affiancati || altezza_ruotati) { //Se stampabile in una sola direzione
             if (altezza_affiancati) {
+                console.log("Stampabile SOLO in modalità [AFFIANCATI]");
                 metri = altezza_affiancati / 1000;
             } else if (altezza_ruotati) {
+                console.log("Stampabile SOLO in modalità [RUOTATI]");
                 metri = altezza_ruotati / 1000;
             }
 
