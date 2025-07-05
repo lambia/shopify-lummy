@@ -79,7 +79,24 @@ function formHandlerInit(scope) {
         width_mm = 0;
         height_mm = 0;
 
-        //reset();
+        // if(!this.files[0]) {
+        //     message("Errore irreversibile", "Si è verificato un errore durante l'elaborazione del file.<br>Assicurarsi che il file sia corretto e riprovare.");
+        //     return reset(true);
+        // } else if(!this.files[0].size || !this.files[0].type) {
+        //     message("Errore irreversibile", "Il browser non è supportato.<br>Assicurati di utilizzare un PC o MAC e non uno smartphone.");
+        //     return reset(true);
+        // } else if(this.files[0].size > 20 * 1024 * 1024) {
+        //     //ToDo: dovrebbe essere 20-0.1 oppure 25-0.1 (v. altri dati payload)
+        //     message("Attenzione", "Il file non verrà caricato perchè supera le dimensioni massime consentite.<br>Si prega di rispettare le indicazioni fornite.");
+        //     return reset(true);
+        // } else if(this.files[0].type != "image/png") {
+        //     message("Errore", "Selezionare un file in formato PNG e riprovare.");
+        //     return reset(false);
+        // } else {
+        //     return readFile(this.files[0]);
+        // }
+        
+        // //reset();
         if (this.files[0] && this.files[0].size && this.files[0].size <= 20 * 1024 * 1024) {
             readFile(this.files[0]);
         } else if (this.files[0] && this.files[0].size) {
@@ -89,6 +106,7 @@ function formHandlerInit(scope) {
             message("Errore", "Si è verificato un errore durante l'elaborazione del file.<br>Assicurarsi che il file sia corretto e riprovare.");
             reset(true);
         }
+
     }, false);
 
     // dom__quantita.addEventListener('input', function (e) {
