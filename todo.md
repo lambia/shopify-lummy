@@ -1,22 +1,10 @@
-- configuratore: checkbox consenso che disattiva l'aggiunta a carrello
-- bug: 0.3 increments
-
-- on initial load (render main, get cart, inject forms?)
-- validazione di base?
-- snellire tutto, soprattutto renderer (v. fetch totale)
-- rifare?
+- differenziare gli scaglioni prezzi in base al prodotto
+- aggiungere i link a questi prodotti nel menu o da qualche parte (jimmy)
+- pushare anche mail-template.liquid
+- aggiornare il template delle mail perchè sicuro si è spaccato
+- seguire tutto il flow per verificare in quali altri posti non funziona l'anteprima della grafica (es. pagina ordini, mail ecc...)
 
 
-vedere se riesco a inviare una sola immagine: zippone da estrarre per anteprima oppure anteprima non comprimibile
-duplicare tutto per prodotto diverso (v. id)
-dopo aggiunta carrello far mostrare popup? (thisGfxForm.set)
-
-Logica pulsante disabled: controlla tutti i form
-Quando aggiungi una grafica ancora vuota, scrivi già oggetto per invalidare
-shopify_dom__quantity e shopify_dom__form
-
-Sistemare Disclaimer-Checkbox (non deve abilitare il pulsante se non era già abilitato)
-Dal carrello no cambio quantità, solo svuota
 Disclaimer per aggiunta carrello immutabile
 
 
