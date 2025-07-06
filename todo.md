@@ -1,5 +1,6 @@
 - aggiornare tabella prezzi dinamicamente
 - aggiungere i link a questi prodotti nel menu o da qualche parte (jimmy)
+
 - pushare anche mail-template.liquid
 - aggiornare il template delle mail perchè sicuro si è spaccato
 - seguire tutto il flow per verificare in quali altri posti non funziona l'anteprima della grafica (es. pagina ordini, mail ecc...)

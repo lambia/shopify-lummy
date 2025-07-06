@@ -1,4 +1,4 @@
-function formHandlerInit(scope, productID) {
+function formHandlerInit(scope, productID, prices) {
 
     let wrapper = document.getElementById(`gfxWrapper-${scope}`);
 
@@ -30,28 +30,6 @@ function formHandlerInit(scope, productID) {
     const larghezza_rullo = 570;
     const offset = 5; //al momento considerato solo a destra e sotto
     const price_increments = 0.3;
-
-    const generalPrices = {
-        45067988533516: [ //standard 8577508802828
-            { lessThan: 3.00, price: 15.00 },
-            { lessThan: 10.00, price: 13.90 },
-            // { lessThan: 25.00, price: 12.90 },
-            { lessThan: Infinity, price: 12.90 }, //chiedi quotazione
-        ],
-        54392099995916: [ //uv 11634085363980
-            // { lessThan: 100.00, price: 29.00 },
-            { lessThan: Infinity, price: 29.00 }, //chiedi quotazione
-        ],
-        54392097079564: [ //fluo 11634082447628
-            { lessThan: 10.00, price: 15.50 },
-            { lessThan: 25.00, price: 14.90 },
-            { lessThan: 50.00, price: 14.50 },
-            // { lessThan: 100.00, price: 13.50 },
-            { lessThan: Infinity, price: 13.50 }, //chiedi quotazione
-        ]
-    };
-
-    const prices = generalPrices[productID];
 
     //Globali
     let width_mm = 0;
@@ -487,16 +465,20 @@ function formHandlerInit(scope, productID) {
 
     function ricalcolaCostoMetro() {
 
-        let costo_metro = Math.max(...prices.filter(x => summaryContainer.metri < x.lessThan).map(x => x.price));
+        let scaglione = prices.filter(x => summaryContainer.metri > x.moreThan);
+        let costo_metro = Math.min(...scaglione.map(x=>x.price));
+
+        const costoMin = Math.min(...prices.map(x => x.price));
+        const costoMax = Math.max(...prices.map(x => x.price));
 
         //Se il prezzo è fuori range, fai fallback sul prezzo massimo
-        if (costo_metro > Math.max(...prices.map(x => x.price)) || costo_metro < Math.min(...prices.map(x => x.price))) {
-            costo_metro = Math.max(...prices.map(x => x.price));
+        if (costo_metro > costoMax || costo_metro < costoMin ) {
+            costo_metro = costoMax;
         }
 
         summaryContainer.costoAlMetro = costo_metro;
 
-        const priceIndex = prices.findIndex(x => x.price == costo_metro);
+        const priceIndex = prices.findLastIndex(x=> summaryContainer.metri > x.moreThan);
         const oldHighlighted = document.querySelector(`#priceTable tr.highlightedRow`);
         const newHighlighted = document.querySelector(`#priceTable tr[data-value="${priceIndex}"]`);
 

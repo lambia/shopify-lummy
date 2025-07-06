@@ -20,7 +20,25 @@ const texts = {
     errorLoading: "Si è verificato un errore irreversibile"
 };
 
-let productID = false;
+const generalPrices = {
+    45067988533516: [ //standard 8577508802828
+        { label: "tra 0 e 3 metri", moreThan: -Infinity, price: 15.00 },
+        { label: "tra 3 e 10 metri", moreThan: 3.00, price: 13.90 },
+        { label: "tra 10 e 25 metri", moreThan: 10.00, price: 12.90 },
+        { label: "oltre i 25 metri", customPrice: true, moreThan: 25.00, price: 12.90 },
+    ],
+    54392099995916: [ //uv 11634085363980
+        { label: "tra 0 e 100 metri", moreThan: -Infinity, price: 29.00 }
+    ],
+    54392097079564: [ //fluo 11634082447628
+        { label: "tra 0 e 10 metri", moreThan: -Infinity, price: 15.50 },
+        { label: "tra 10 e 25 metri", moreThan: 10.00, price: 14.90 },
+        { label: "tra 25 e 50 metri", moreThan: 25.00, price: 14.50 },
+        { label: "tra 50 e 100 metri", moreThan: 50.00, price: 13.50 },
+        { label: "oltre i 100 metri", customPrice: true, moreThan: 100.00, price: 13.50 },
+    ]
+};
+
 
 document.body.classList.add("no-scroll");
 document.getElementById(appWrapper).innerHTML = texts.loading;
@@ -36,8 +54,7 @@ async function main() {
     document.querySelector(shopify_dom__addToCart).style.display = "none";
     document.querySelector(shopify_dom__addToCart).remove();
 
-    productID = getProductID();
-
+    const productID = getProductID();
     newGfx(partial, productID);
 
     document.body.classList.remove("no-scroll");
@@ -160,11 +177,33 @@ async function aggiungiSfridoAlCarrello(metri, pezzi) {
     }
 }
 
-function newGfx(partial = "Errore") {
+function newGfx(partial = "Errore", productID) {
     const newGfx = `<div class="gfxWrapper" id="gfxWrapper-${gfxCounter}" data-gfx-id="${gfxCounter}">${partial}<div>`;
     document.getElementById(appWrapper).insertAdjacentHTML('beforeend', newGfx)
-    formHandlerInit(gfxCounter, productID); //external function!!
+    writePricesTable(generalPrices[productID]);
+    formHandlerInit(gfxCounter, productID, generalPrices[productID]); //external function!!
     gfxCounter++;
+}
+
+function writePricesTable(prices) {
+    let pricesTable = ``;
+    const customPrice = `Richiedi una <a href="/pages/contact">quotazione</a>`;
+
+    for (let i = 0; i < prices.length; i++) {
+        const price = prices[i];
+
+        pricesTable += i==0 ? `<tr data-value="${i}" class="highlightedRow">` : `<tr data-value="${i}">`;
+        pricesTable += `<td class="left_cell">${price.label}</td>`;
+        pricesTable += price.customPrice ? `<td class="right_cell">${customPrice}</td>` : `<td class="right_cell">${price.price} €/m</td>`;
+        pricesTable += `</tr>`;
+    }
+
+    document.querySelector("#priceTable tbody").innerHTML = pricesTable;
+
+    //Mostra tabella solo se è presente più di un prezzo
+    if(prices.length > 1) {
+        document.querySelector("#priceTable").classList.remove("hidden");
+    }
 }
 
 async function getPartial() {
