@@ -1,4 +1,4 @@
-function formHandlerInit(scope) {
+function formHandlerInit(scope, productID) {
 
     let wrapper = document.getElementById(`gfxWrapper-${scope}`);
 
@@ -18,18 +18,40 @@ function formHandlerInit(scope) {
     const dom__costo_al_metro = wrapper.querySelector('#costo_al_metro');
     const dom__closeBtn = wrapper.querySelector(".graficCloseBtn");
 
+    // const customProductsIDs = {
+    //     8577508802828: "base",
+    //     11634085363980: "uv",
+    //     11634082447628: "fluo",
+    // };
+
     //Costanti
     const placeholder_img =
         'https://upload.wikimedia.org/wikipedia/commons/thumb/3/3f/Placeholder_view_vector.svg/619px-Placeholder_view_vector.svg.png';
     const larghezza_rullo = 570;
     const offset = 5; //al momento considerato solo a destra e sotto
     const price_increments = 0.3;
-    const prices = [
-        { lessThan: 3.00, price: 15.00 },
-        { lessThan: 10.00, price: 13.90 },
-        { lessThan: 25.00, price: 12.90 },
-        { lessThan: Infinity, price: 12.90 }, //chiedi quotazione
-    ];
+
+    const generalPrices = {
+        45067988533516: [ //standard 8577508802828
+            { lessThan: 3.00, price: 15.00 },
+            { lessThan: 10.00, price: 13.90 },
+            // { lessThan: 25.00, price: 12.90 },
+            { lessThan: Infinity, price: 12.90 }, //chiedi quotazione
+        ],
+        54392099995916: [ //uv 11634085363980
+            // { lessThan: 100.00, price: 29.00 },
+            { lessThan: Infinity, price: 29.00 }, //chiedi quotazione
+        ],
+        54392097079564: [ //fluo 11634082447628
+            { lessThan: 10.00, price: 15.50 },
+            { lessThan: 25.00, price: 14.90 },
+            { lessThan: 50.00, price: 14.50 },
+            // { lessThan: 100.00, price: 13.50 },
+            { lessThan: Infinity, price: 13.50 }, //chiedi quotazione
+        ]
+    };
+
+    const prices = generalPrices[productID];
 
     //Globali
     let width_mm = 0;
@@ -95,7 +117,7 @@ function formHandlerInit(scope) {
         // } else {
         //     return readFile(this.files[0]);
         // }
-        
+
         // //reset();
         if (this.files[0] && this.files[0].size && this.files[0].size <= 20 * 1024 * 1024) {
             readFile(this.files[0]);
@@ -189,15 +211,13 @@ function formHandlerInit(scope) {
 
     function reset(initialLoad = false) {
         console.log('Lummy.configuratore: Resetto il form');
-        const shopifyProductForm = document.querySelector('.product-form form');
 
-        if (!scope || !shopifyProductForm) {
+        if (!scope || !productID) {
             message("Errore irreversibile", "Si è verificato un errore durante l'avvio del configuratore.<br>Si prega di ricaricare la pagina e riprovare.");
             return;
         }
 
-        const product = Object.fromEntries(new FormData(shopifyProductForm));
-        dom__microid.value = `${product.id}##${scope}`;
+        dom__microid.value = `${productID}##${scope}`;
 
         dom__preview.setAttribute('src', placeholder_img);
         dom__dimensioni.value = '';
@@ -396,9 +416,6 @@ function formHandlerInit(scope) {
 
     async function aggiungiCarrello() {
 
-        const shopifyProductForm = document.querySelector('.product-form form');
-        const product = Object.fromEntries(new FormData(shopifyProductForm));
-
         const propertiesForm = wrapper.querySelector("form");
         const properties = new FormData(propertiesForm);
 
@@ -409,7 +426,7 @@ function formHandlerInit(scope) {
                 newProduct.set(`properties[${prop[0]}]`, prop[1]);
             }
         }
-        newProduct.set("id", product.id);
+        newProduct.set("id", productID);
         newProduct.set("quantity", scopeContainer[scope].pezzi);
 
         let action = "add";
@@ -444,7 +461,7 @@ function formHandlerInit(scope) {
                 result = true;
                 //message("Le grafiche sono state aggiunte al carrello");
             } else if (result.items && result.items.length) { //next changes: [ {key} ]
-                const foundItemInCart = result.items.find(x => x.properties.microid == `${product.id}##${scope}`);
+                const foundItemInCart = result.items.find(x => x.properties.microid == `${productID}##${scope}`);
                 if (foundItemInCart) {
                     scopeContainer[scope].cart = foundItemInCart.key;
                     result = true;

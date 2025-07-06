@@ -20,6 +20,7 @@ const texts = {
     errorLoading: "Si è verificato un errore irreversibile"
 };
 
+let productID = false;
 
 document.body.classList.add("no-scroll");
 document.getElementById(appWrapper).innerHTML = texts.loading;
@@ -35,7 +36,9 @@ async function main() {
     document.querySelector(shopify_dom__addToCart).style.display = "none";
     document.querySelector(shopify_dom__addToCart).remove();
 
-    newGfx(partial);
+    productID = getProductID();
+
+    newGfx(partial, productID);
 
     document.body.classList.remove("no-scroll");
     document.getElementById("spinner-loader-generale").classList.add("hidden");
@@ -44,8 +47,21 @@ async function main() {
 
     document.getElementById("finalAccept").addEventListener("click", aggiungiTuttoAlCarrello);
     document.getElementById(newGfxBtn).addEventListener("click", function (e) {
-        newGfx(partial);
+        newGfx(partial, productID);
     });
+}
+
+function getProductID() {
+    let productID = false;
+    try {
+        const shopifyProductForm = document.querySelector('.product-form form');
+        const product = Object.fromEntries(new FormData(shopifyProductForm));
+        productID = product.id;
+    } catch (error) {
+        console.error("Errore irreversibile: impossibile trovare un product ID valido");
+    } finally {
+        return productID;
+    }
 }
 
 async function aggiungiTuttoAlCarrello() {
@@ -106,12 +122,9 @@ async function aggiungiTuttoAlCarrello() {
 
 async function aggiungiSfridoAlCarrello(metri, pezzi) {
 
-    const shopifyProductForm = document.querySelector('.product-form form');
-    const product = Object.fromEntries(new FormData(shopifyProductForm));
-
     const newProduct = new FormData();
     newProduct.set(metri=="0.10" ? "properties[sfrido]" : "properties[minimoordine]", true);
-    newProduct.set("id", product.id);
+    newProduct.set("id", productID);
     newProduct.set("properties[metri necessari]", metri);
     newProduct.set("quantity", pezzi);
 
@@ -150,7 +163,7 @@ async function aggiungiSfridoAlCarrello(metri, pezzi) {
 function newGfx(partial = "Errore") {
     const newGfx = `<div class="gfxWrapper" id="gfxWrapper-${gfxCounter}" data-gfx-id="${gfxCounter}">${partial}<div>`;
     document.getElementById(appWrapper).insertAdjacentHTML('beforeend', newGfx)
-    formHandlerInit(gfxCounter); //external function!!
+    formHandlerInit(gfxCounter, productID); //external function!!
     gfxCounter++;
 }
 
