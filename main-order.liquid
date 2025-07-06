@@ -1,5 +1,5 @@
 {{ 'customer.css' | asset_url | stylesheet_tag }}
-{%- assign prodottoSenzaQuantity = 8577508802828 -%}
+{% assign customDTF_IDs = "8577508802828---11634085363980---11634082447628" %}
 
 {%- style -%}
   .section-{{ section.id }}-padding {
@@ -73,7 +73,7 @@
                     <div class="properties">
 
 						{% comment %} Proprietà articolo custom {% endcomment %}
-						{%- if line_item.product.id == prodottoSenzaQuantity -%}
+						{%- if customDTF_IDs contains line_item.product.id -%}
 							{%- if line_item.properties["nome"] != blank -%}
 								<div><span>Nome grafica: {{ line_item.properties["nome"] | escape }}</span></div>
 							{%- endif -%}
@@ -180,7 +180,7 @@
               >
 				
 				{% comment %} prezzounitario articolo custom {% endcomment %}
-				{%- if line_item.product.id == prodottoSenzaQuantity -%}
+				{%- if customDTF_IDs contains line_item.product.id -%}
 					{%- assign totale = line_item.properties["costo"]  | times: 1.00 -%}
 					{%- assign quantita = line_item.properties["quantita"] | times: 1.00 -%}
 					&euro;{{ totale | divided_by: quantita | round: 2 }}
@@ -242,7 +242,7 @@
                 data-label="{{ 'customer.order.quantity' | t }}"
               >
 				{% comment %} quantità articolo custom {% endcomment %}
-				{%- if line_item.product.id == prodottoSenzaQuantity -%}
+				{%- if customDTF_IDs contains line_item.product.id -%}
 					{{ line_item.properties["quantita"] }}
 				{% comment %} quantità articoli standard {% endcomment %}
                 {%- else -%}
@@ -256,7 +256,7 @@
                 data-label="{{ 'customer.order.total' | t }}"
               >
 				{% comment %} prezzototale articolo custom {% endcomment %}
-				{%- if line_item.product.id == prodottoSenzaQuantity -%}
+				{%- if customDTF_IDs contains line_item.product.id -%}
 					{{ line_item.properties["costo"] }}
 				{% comment %} prezzototale articoli standard {% endcomment %}
                 {%- elsif line_item.original_line_price != line_item.final_line_price -%}

@@ -1,4 +1,5 @@
-{%- assign prodottoSenzaQuantity = 8577508802828 -%}
+{% assign customDTF_IDs = "8577508802828,11634085363980,11634082447628" | split: ',' %}
+
 {% comment %} Lummy Custom quantity {% endcomment %}
 {% comment %} Prodotto custom:8577508802828 Prodotto test mail:8511906152716 {% endcomment %}
 
@@ -227,7 +228,7 @@
                                 <table>
                                   <td>
                                     {% comment %} Immagine prodotto custom {% endcomment %}
-                                    {% if line.product.id == prodottoSenzaQuantity and line.properties.grafica != blank  %}
+                                    {% if customDTF_IDs contains line.product.id and line.properties.grafica != blank  %}
                                           <img
                                             src="{{ line.properties.grafica }}"
                                             align="left"
@@ -236,7 +237,7 @@
                                             class="order-list__product-image"
                                           >
                                     {% comment %} Immagine prodotto custom mancante {% endcomment %}
-                                    {% elsif line.product.id == prodottoSenzaQuantity and line.properties.grafica == blank  %}
+                                    {% elsif customDTF_IDs contains line.product.id and line.properties.grafica == blank  %}
                                           <img
                                             src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/3f/Placeholder_view_vector.svg/619px-Placeholder_view_vector.svg.png"
                                             align="left"
@@ -271,7 +272,7 @@
                                     {% endif %}
 
                                     {% comment %} Lummy Custom quantity {% endcomment %}
-                                    {% if line.product.id == prodottoSenzaQuantity %}
+                                    {% if customDTF_IDs contains line.product.id %}
                                       <span class="order-list__item-title">{{ line_title }}</span><br>
                                       {% comment %} Else Default {% endcomment %}
                                     {% else %}
@@ -291,7 +292,7 @@
                                     {% endfor %}
 
                                     {% comment %} Properties prodotto custom {% endcomment %}
-                                    {% if line.product.id == prodottoSenzaQuantity %}
+                                    {% if customDTF_IDs contains line.product.id %}
                                       <div class="order-list__item-property"><dt>Nome grafica:</dt><dd>{{ line.properties.nome }}</dd></div>
                                       <div class="order-list__item-property"><dt>Dimensioni:</dt><dd>{{ line.properties.dimensioni }}</dd></div>
                                       <div class="order-list__item-property"><dt>Metri lineari:</dt><dd>{{ line.properties["metri necessari"] }}</dd></div>
@@ -355,7 +356,7 @@
                                   <td class="order-list__price-cell">
 
                                     {% comment %} Costo per prezzo custom {% endcomment %}
-                                    {% if line.product.id == prodottoSenzaQuantity %}
+                                    {% if customDTF_IDs contains line.product.id %}
                                       <p class="order-list__item-price">{{ line.properties.costo }}</p>
                                     {% else %}
                                       

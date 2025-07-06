@@ -1,9 +1,9 @@
-{%- assign prodottoSenzaQuantity = 8577508802828 -%}
+{% assign customDTF_IDs = "8577508802828---11634085363980---11634082447628" %}
 
 {%- if cart != empty -%}
   {%- for item in cart.items -%}
     <div id="cart-notification-product-{{ item.key }}" class="cart-item">
-      {%- if product.id==prodottoSenzaQuantity and item.properties.grafica != blank -%}
+      {%- if customDTF_IDs contains product.id and item.properties.grafica != blank -%}
         <div class="cart-notification-product__image global-media-settings">
           <img
             src="{{ item.properties.grafica }}"
@@ -13,7 +13,7 @@
             loading="lazy"
           >
         </div>
-      {%- elsif product.id==prodottoSenzaQuantity and item.properties.grafica == blank -%}
+      {%- elsif customDTF_IDs contains product.id and item.properties.grafica == blank -%}
         <div class="cart-notification-product__image global-media-settings">
           <img
             src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/3f/Placeholder_view_vector.svg/619px-Placeholder_view_vector.svg.png"
@@ -51,7 +51,7 @@
           {%- for property in item.properties -%}
             {%- assign property_first_char = property.first | slice: 0 -%}
             {%- if property.last != blank and property_first_char != '_' -%}
-                {%- if product.id==prodottoSenzaQuantity -%}
+                {%- if customDTF_IDs contains product.id -%}
                     {%- unless property.first == 'nome' or property.first == 'quantita' -%}
                         {%- continue -%}
                     {%- endunless -%}

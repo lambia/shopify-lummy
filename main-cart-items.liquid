@@ -1,4 +1,4 @@
-{%- assign prodottoSenzaQuantity = 8577508802828 -%}
+{% assign customDTF_IDs = "8577508802828---11634085363980---11634082447628" %}
 
 {{ 'component-cart.css' | asset_url | stylesheet_tag }}
 {{ 'component-cart-items.css' | asset_url | stylesheet_tag }}
@@ -91,7 +91,7 @@
                   <tr class="cart-item" id="CartItem-{{ item.index | plus: 1 }}">
                     <td class="cart-item__media">
                       {% comment %} Anteprima per prodotto custom {% endcomment %}
-                      {% if item.product.id == prodottoSenzaQuantity %}
+                      {% if customDTF_IDs contains item.product.id %}
                         {% comment %} Leave empty space due to a:empty CSS display: none rule {% endcomment %}
                         <div class="cart-item__image-container gradient global-media-settings">
                         
@@ -130,15 +130,14 @@
                       {%- endif -%}
 
                       {% comment %} Titolo per prodotto custom {% endcomment %}
-                      {%- if item.product.id == prodottoSenzaQuantity -%}
+                      {%- if customDTF_IDs contains item.product.id -%}
                         {%- if item.properties.sfrido == "true" -%}
-                        <a href="{{ item.url }}" class="cart-item__name h4 break">Sfrido (10cm)</a>
+                          <a href="{{ item.url }}" class="cart-item__name h4 break">Sfrido (10cm)</a>
                         {%- elsif item.properties.minimoordine == "true" -%}
-                        <a href="{{ item.url }}" class="cart-item__name h4 break">Minimo d'ordine (1m)</a>
+                          <a href="{{ item.url }}" class="cart-item__name h4 break">Minimo d'ordine (1m)</a>
                         {%- else -%}
-                        <a href="{{ item.url }}" class="cart-item__name h4 break">{{ item.product.title | escape }}</a>
-                      {%- endif -%}
-
+                          <a href="{{ item.url }}" class="cart-item__name h4 break">{{ item.product.title | escape }}</a>
+                        {%- endif -%}
                         
                       {% comment %} Titolo per prodotti standard {% endcomment %}
                       {%- else -%}
@@ -146,7 +145,7 @@
                       {%- endif -%}
 
                       {% comment %} Prezzo per prodotti standard {% endcomment %}
-                      {%- if item.product.id != prodottoSenzaQuantity -%}
+                      {%- unless customDTF_IDs contains item.product.id -%}
                         {%- if item.original_price != item.final_price -%}
                             <div class="cart-item__discounted-prices">
                             <span class="visually-hidden">
@@ -163,7 +162,7 @@
                             </strong>
                             </div>
                         {%- endif -%}
-                      {%- endif -%}
+                      {%- endunless -%}
 
                       {%- if item.product.has_only_default_variant == false
                         or item.properties.size != 0
@@ -180,7 +179,7 @@
                           {%- endif -%}
 
                           {% comment %} Proprietà per prodotto custom {% endcomment %}
-                          {% if item.product.id==prodottoSenzaQuantity -%}
+                          {% if customDTF_IDs contains item.product.id -%}
 
                             {% if item.properties.sfrido == "true" -%}
                             <div class="product-option">
@@ -313,7 +312,7 @@
                           </label>
                           {% comment %} Quantità per prodotto custom {% endcomment %}
 
-                          {% if item.product.id == prodottoSenzaQuantity %}
+                          {% if customDTF_IDs contains item.product.id %}
                           
                             {% if item.properties.sfrido == "true" %}
                             {% elsif item.properties.minimoordine == "true" %}
@@ -385,7 +384,7 @@
                               </quantity-input>
                             </div>
                           {%- endif -%}
-                          {% if item.product.id != prodottoSenzaQuantity %}
+                          {% unless customDTF_IDs contains item.product.id %}
                           <cart-remove-button
                             id="Remove-{{ item.index | plus: 1 }}"
                             data-index="{{ item.index | plus: 1 }}"
@@ -398,7 +397,7 @@
                               {% render 'icon-remove' %}
                             </a>
                           </cart-remove-button>
-                          {%- endif -%}
+                          {%- endunless -%}
                         </div>
                         {%- if has_qty_rules or has_vol_pricing -%}
                           <button
