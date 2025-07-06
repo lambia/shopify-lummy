@@ -4,8 +4,6 @@ const shopify_dom__addToCart = '.product-form__buttons button';
 const shopify_dom__quantity = '.quantity__input';
 const shopify_dom__form = '.product-form form';
 const dtfProductFormId = "product-form-template--19062074048780__main";
-// const dtfProductVariantId = 45067988533516;
-// const dtfProductId = 8577508802828;
 
 //gli ID vengono usati come indici dell'array, il valore sono i metri della grafica
 const scopeContainer = [];
@@ -116,7 +114,6 @@ async function aggiungiSfridoAlCarrello(metri, pezzi) {
     newProduct.set("id", product.id);
     newProduct.set("properties[metri necessari]", metri);
     newProduct.set("quantity", pezzi);
-    debugger;
 
     let result = false;
 
@@ -133,7 +130,6 @@ async function aggiungiSfridoAlCarrello(metri, pezzi) {
             throw new Error(`Response status: ${response.status}`);
         }
         result = await response.json();
-        debugger;
 
         if (result.key) {
             result = true;
@@ -142,7 +138,6 @@ async function aggiungiSfridoAlCarrello(metri, pezzi) {
     } catch (error) {
         console.error("Errore carrello: ", error);
         message("Errore irreversibile", "Impossibile calcolare lo sfrido durante l'aggiunta al carrello.<br>Si prega di riprovare.");
-        debugger;
         setTimeout(function () {
             window.location.replace("/cart/clear");
         }, 5000);

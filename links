@@ -5,7 +5,9 @@ Liquid del prodotto DTF
 https://admin.shopify.com/store/90f6b1-2/themes/144914514188?key=sections%2Fmain-product-custom.liquid
 
 Pagina prodotto DTF
-https://90f6b1-2.myshopify.com/products/dtf-custom-product
+https://sottopressa.it/products/dtf-custom-product
+https://sottopressa.it/products/dtf-uv-personalizzato
+https://sottopressa.it/products/dtf-fluo-personalizzato
 
 WeLoco
 https://weloco.it/it/calcola-il-preventivo-di-stampa-dtf
@@ -18,3 +20,8 @@ https://admin.shopify.com/store/90f6b1-2/themes/144914514188?key=assets%2Fproduc
 
 JSON del prodotto:
 https://90f6b1-2.myshopify.com/products/dtf-custom-product.js
+
+ID PRODOTTI:
+dtf:    8577508802828 (variante: 45067988533516)
+uv:     11634085363980
+fluo:   11634082447628
