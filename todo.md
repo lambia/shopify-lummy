@@ -1,4 +1,3 @@
-- differenziare gli scaglioni prezzi in base al prodotto
 - aggiornare tabella prezzi dinamicamente
 - aggiungere i link a questi prodotti nel menu o da qualche parte (jimmy)
 - pushare anche mail-template.liquid
