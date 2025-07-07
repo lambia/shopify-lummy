@@ -20,6 +20,8 @@ const texts = {
     errorLoading: "Si è verificato un errore irreversibile"
 };
 
+let productID = null;
+
 const generalPrices = {
     45067988533516: [ //standard 8577508802828
         { label: "tra 0 e 3 metri", moreThan: -Infinity, price: 15.00 },
@@ -54,8 +56,8 @@ async function main() {
     document.querySelector(shopify_dom__addToCart).style.display = "none";
     document.querySelector(shopify_dom__addToCart).remove();
 
-    const productID = getProductID();
-    newGfx(partial, productID);
+    getProductID();
+    newGfx(partial);
 
     document.body.classList.remove("no-scroll");
     document.getElementById("spinner-loader-generale").classList.add("hidden");
@@ -64,20 +66,20 @@ async function main() {
 
     document.getElementById("finalAccept").addEventListener("click", aggiungiTuttoAlCarrello);
     document.getElementById(newGfxBtn).addEventListener("click", function (e) {
-        newGfx(partial, productID);
+        newGfx(partial);
     });
 }
 
 function getProductID() {
-    let productID = false;
+    result = null;
     try {
         const shopifyProductForm = document.querySelector('.product-form form');
         const product = Object.fromEntries(new FormData(shopifyProductForm));
-        productID = product.id;
+        result = product.id;
     } catch (error) {
         console.error("Errore irreversibile: impossibile trovare un product ID valido");
     } finally {
-        return productID;
+        productID = result;
     }
 }
 
@@ -177,7 +179,7 @@ async function aggiungiSfridoAlCarrello(metri, pezzi) {
     }
 }
 
-function newGfx(partial = "Errore", productID) {
+function newGfx(partial = "Errore") {
     const newGfx = `<div class="gfxWrapper" id="gfxWrapper-${gfxCounter}" data-gfx-id="${gfxCounter}">${partial}<div>`;
     document.getElementById(appWrapper).insertAdjacentHTML('beforeend', newGfx)
     writePricesTable(generalPrices[productID]);
