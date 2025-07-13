@@ -24,10 +24,11 @@ let productID = null;
 
 const generalPrices = {
     45067988533516: [ //standard 8577508802828
-        { label: "tra 0 e 3 metri", moreThan: -Infinity, price: 15.00 },
-        { label: "tra 3 e 10 metri", moreThan: 3.00, price: 13.90 },
+        { label: "tra 0 e 10 metri", moreThan: -Infinity, price: 13.50 },
         { label: "tra 10 e 25 metri", moreThan: 10.00, price: 12.90 },
-        { label: "oltre i 25 metri", customPrice: true, moreThan: 25.00, price: 12.90 },
+        { label: "tra 25 e 50 metri", moreThan: 25.00, price: 12.50 },
+        { label: "tra 50 e 100 metri", moreThan: 50.00, price: 11.50 },
+        { label: "oltre i 100 metri", customPrice: true, moreThan: 100.00, price: 11.50 },
     ],
     54392099995916: [ //uv 11634085363980
         { label: "tra 0 e 100 metri", moreThan: -Infinity, price: 29.00 }
@@ -61,6 +62,7 @@ async function main() {
 
     document.body.classList.remove("no-scroll");
     document.getElementById("spinner-loader-generale").classList.add("hidden");
+    document.getElementById("spinner-loader-message").classList.add("hidden");
 
     message("Attenzione!", "Al fine di garantirti la miglior esperienza utente possibile ti consigliamo di utilizzare il configuratore da PC o MAC.");
 
@@ -90,7 +92,9 @@ async function aggiungiTuttoAlCarrello() {
         return;
     }
 
+    document.body.classList.add("no-scroll");
     document.getElementById("spinner-loader-generale").classList.remove("hidden");
+    document.getElementById("spinner-loader-message").classList.remove("hidden");
 
     for (const singolaGrafica of scopeContainer) {
         if (!singolaGrafica) {
@@ -113,8 +117,12 @@ async function aggiungiTuttoAlCarrello() {
     //se minore, calcola differenza
     console.log("Metri aggiunti carrello: ", summaryContainer.metri);
 
-    const sfrido = 0.10;
-    let metriMancanti = (summaryContainer.metri < 1) ? (1 - summaryContainer.metri) : sfrido;
+    if(summaryContainer.metri >= 1) {
+        window.location.replace("/cart");
+        return;
+    }
+
+    let metriMancanti = 1 - summaryContainer.metri;
     metriMancanti = metriMancanti.toFixed(2);
 
     const price_increments = 0.30;
@@ -142,7 +150,7 @@ async function aggiungiTuttoAlCarrello() {
 async function aggiungiSfridoAlCarrello(metri, pezzi) {
 
     const newProduct = new FormData();
-    newProduct.set(metri=="0.10" ? "properties[sfrido]" : "properties[minimoordine]", true);
+    newProduct.set("properties[minimoordine]", true);
     newProduct.set("id", productID);
     newProduct.set("properties[metri necessari]", metri);
     newProduct.set("quantity", pezzi);
@@ -169,7 +177,7 @@ async function aggiungiSfridoAlCarrello(metri, pezzi) {
 
     } catch (error) {
         console.error("Errore carrello: ", error);
-        message("Errore irreversibile", "Impossibile calcolare lo sfrido durante l'aggiunta al carrello.<br>Si prega di riprovare.");
+        message("Errore irreversibile", "Impossibile calcolare il minimo d'ordine durante l'aggiunta al carrello.<br>Si prega di riprovare.");
         setTimeout(function () {
             window.location.replace("/cart/clear");
         }, 5000);

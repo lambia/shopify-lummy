@@ -301,7 +301,7 @@ function formHandlerInit(scope, productID, prices) {
 
         //Controlla se l'immagine è più grande del rullo
         if (quanti_su_riga_affiancati < 1 && quanti_su_riga_ruotati < 1) {
-            message("Attenzione!", "Il file caricato copre un'area di stampa maggiore della superficie disponibile.<br>Assicurati che il file sia corretto (300dpi) o contattaci in caso di necessità particolari.");
+            message("Attenzione!", "Attenzione il file caricato supera i 57cm di larghezza: ridimensiona il file e riprova.<br>Assicurati che il file sia corretto (PNG a 300dpi) o contattaci per assistenza.");
             return reset(true);
         }
 
