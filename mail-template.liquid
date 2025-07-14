@@ -297,9 +297,7 @@
                                       <div class="order-list__item-property"><dt>Dimensioni:</dt><dd>{{ line.properties.dimensioni }}</dd></div>
                                       <div class="order-list__item-property"><dt>Metri lineari:</dt><dd>{{ line.properties["metri necessari"] }}</dd></div>
                                       <div class="order-list__item-property"><dt>Quantita:</dt><dd>{{ line.properties.quantita }}</dd></div>
-                                      <div class="order-list__item-property">
-                                        Allegato: <a href="{{ line.properties.grafica }}">Anteprima</a> / <a href="{{ line.properties.grafica_hq }}">Stampa</a>
-                                      </div>
+                                      <div class="order-list__item-property"><dt>Grafica allegata:</dt><dd><a href="{{ line.properties.grafica_hq }}">Scarica</a></dd></div>
                                       <div class="order-list__item-property"><dt>Note:</dt><dd>{{ line.properties.note }}</dd></div>
                                     {% comment %} Properties prodotti standard con gift card VEDI BENE!! {% endcomment %}
                                     {% elsif line.gift_card and line.properties.__shopify_send_gift_card_to_recipient %}
