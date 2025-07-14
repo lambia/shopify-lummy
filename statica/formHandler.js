@@ -367,8 +367,8 @@ function formHandlerInit(scope, productID, prices) {
         //Arrotondamento manuale, STRINGA DA QUI
         costo = (metri * summaryContainer.costoAlMetro).toFixed(2);
         metri = metri.toFixed(2);
-        costoPezzo = (costo / numero_copie).toFixed(2);
-
+        costoPezzo = (costo / numero_copie).toFixed(2); //andrebbe dopo ricalcolo increments
+        
         //Calcolo la quantità di shopify necessaria
         pezzi = Math.round(costo / price_increments);
 
