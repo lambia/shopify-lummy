@@ -1,4 +1,4 @@
-{% assign customDTF_IDs = "8577508802828,11634085363980,11634082447628" | split: ',' %}
+{% assign customDTF_IDs = "8577508802828---11634085363980---11634082447628" %}
 
 {% comment %} Lummy Custom quantity {% endcomment %}
 {% comment %} Prodotto custom:8577508802828 Prodotto test mail:8511906152716 {% endcomment %}
@@ -258,7 +258,11 @@
                                   </td>
                                   <td class="order-list__product-description-cell">
                                     {% if line.product.title %}
-                                      {% assign line_title = line.product.title %}
+                                      {% if line.properties.minimoordine != "true" %}
+                                        {% assign line_title = line.product.title %}
+                                      {% else %}
+                                        {% assign line_title = "Minimo d'ordine (1m)" %}
+                                      {% endif %}
                                     {% else %}
                                       {% assign line_title = line.title %}
                                     {% endif %}
@@ -293,12 +297,18 @@
 
                                     {% comment %} Properties prodotto custom {% endcomment %}
                                     {% if customDTF_IDs contains line.product.id %}
+                                      {% if line.properties.minimoordine != "true" %}
                                       <div class="order-list__item-property"><dt>Nome grafica:</dt><dd>{{ line.properties.nome }}</dd></div>
                                       <div class="order-list__item-property"><dt>Dimensioni:</dt><dd>{{ line.properties.dimensioni }}</dd></div>
+                                      {% endif %}
+
                                       <div class="order-list__item-property"><dt>Metri lineari:</dt><dd>{{ line.properties["metri necessari"] }}</dd></div>
+
+                                      {% if line.properties.minimoordine != "true" %}
                                       <div class="order-list__item-property"><dt>Quantita:</dt><dd>{{ line.properties.quantita }}</dd></div>
-                                      <div class="order-list__item-property"><dt>Grafica allegata:</dt><dd><a href="{{ line.properties.grafica_hq }}">Scarica</a></dd></div>
+                                      <div class="order-list__item-property"><dt>Grafica allegata:</dt><dd><a href="{{ line.properties.grafica_hq }}" style="text-decoration:none;color:#1990c6">scarica</a></dd></div>
                                       <div class="order-list__item-property"><dt>Note:</dt><dd>{{ line.properties.note }}</dd></div>
+                                      {% endif %}
                                     {% comment %} Properties prodotti standard con gift card VEDI BENE!! {% endcomment %}
                                     {% elsif line.gift_card and line.properties.__shopify_send_gift_card_to_recipient %}
                                       {% for property in line.properties %}
@@ -354,9 +364,6 @@
                                   <td class="order-list__price-cell">
 
                                     {% comment %} Costo per prezzo custom {% endcomment %}
-                                    {% if customDTF_IDs contains line.product.id %}
-                                      <p class="order-list__item-price">{{ line.properties.costo }}</p>
-                                    {% else %}
                                       
                                         {% comment %} Costo prezzi standard {% endcomment %}
                                         {% if line.original_line_price != line.final_line_price %}
@@ -372,7 +379,6 @@
                                           {% endif %}
                                         </p>
                                     
-                                    {% endif %}
                                   </td>
                                 </table>
                               </td>
