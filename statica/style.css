@@ -92,8 +92,7 @@ img#conf_preview {
 }
 
 .highlightedRow {
-	background-color: rgb(65, 200, 200);
-	color: white !important;
+	background-color: #f5a33e;
 }
 
 #priceTable,
