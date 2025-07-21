@@ -123,9 +123,9 @@ async function aggiungiTuttoAlCarrello() {
     }
 
     let metriMancanti = 1 - summaryContainer.metri;
-    metriMancanti = metriMancanti.toFixed(2);
+    metriMancanti = metriMancanti.toFixed(3);
 
-    const price_increments = 0.30;
+    const price_increments = 0.01;
     let costo = (metriMancanti * summaryContainer.costoAlMetro).toFixed(2);
     pezzi = Math.round(costo / price_increments);
 

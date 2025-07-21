@@ -29,7 +29,7 @@ function formHandlerInit(scope, productID, prices) {
         'https://upload.wikimedia.org/wikipedia/commons/thumb/3/3f/Placeholder_view_vector.svg/619px-Placeholder_view_vector.svg.png';
     const larghezza_rullo = 570;
     const offset = 5; //al momento considerato solo a destra e sotto
-    const price_increments = 0.3;
+    const price_increments = 0.01;
 
     //Globali
     let width_mm = 0;
@@ -49,11 +49,11 @@ function formHandlerInit(scope, productID, prices) {
 
         wrapper.remove();
 
-        let grafiche = scopeContainer.filter(item => item);
-        if (!grafiche.length) {
-            //aggiungi wrapper in dom
-            window.newGfx(window.partial);
-        }
+        // let grafiche = scopeContainer.filter(item => item.costo && item.metri && item.pezzi);
+        // if (!grafiche.length) {
+        //     //aggiungi wrapper in dom
+        //     window.newGfx(window.partial);
+        // }
 
         /*
         let grafiche = scopeContainer.filter(item => item);
@@ -371,14 +371,14 @@ function formHandlerInit(scope, productID, prices) {
 
         //Arrotondamento manuale, STRINGA DA QUI
         costo = (metri * summaryContainer.costoAlMetro).toFixed(2);
-        metri = metri.toFixed(2);
+        metri = metri.toFixed(3);
         costoPezzo = (costo / numero_copie).toFixed(2); //andrebbe dopo ricalcolo increments
 
         //Calcolo la quantità di shopify necessaria
         pezzi = Math.round(costo / price_increments);
 
         //Ricalcola il costo considerando gli increments da 0.30
-        costo = (price_increments * pezzi).toFixed(2);
+        //costo = (price_increments * pezzi).toFixed(2);
 
         scopeContainer[scope].pezzi = pezzi;
         scopeContainer[scope].costo = costo;
@@ -389,7 +389,7 @@ function formHandlerInit(scope, productID, prices) {
         dom__costo_al_pezzo.value = costoPezzo + ' €';
 
         //Debugger
-        console.log(`Ricalcolo: [${metri} m] [${costo} €] [${pezzi} pz]`);
+        console.log(`Nesting aggiornato: [${metri} m] [${costo} €] [${pezzi} pz]`);
 
         if (chiamataInterna) {
             dom__quantita.disabled = false;
@@ -532,7 +532,7 @@ function formHandlerInit(scope, productID, prices) {
 
         document.getElementById("riepilogoOrdine").innerHTML = `
         <h3>Riepilogo Totale (${summaryContainer.grafiche} ${summaryContainer.grafiche == 1 ? "grafica" : "grafiche"})</h3>
-        <p>${summaryContainer.metri.toFixed(2)} metri x ${summaryContainer.costoAlMetro.toFixed(2)} €/metro = ${summaryContainer.costo.toFixed(2)} €</p>
+        <p>${summaryContainer.metri.toFixed(3)} metri x ${summaryContainer.costoAlMetro.toFixed(2)} €/metro = ${summaryContainer.costo.toFixed(2)} €</p>
         <span class='warningMetri'>${disclaimerMinimoOrdine}</span>`;
     }
 
