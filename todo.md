@@ -1,14 +1,3 @@
-- mail utente: aggiungere anteprima
-- mail sottopre: resta uguale
-- ordine utente: aggiungere anteprima
-- ordine sottopre: anteprima se possibile, se no così
-
-- spinner loader oltre a icona dicitura: 
-
-
-___________________________________________
-
-
 - aggiungere i link a questi prodotti nel menu o da qualche parte (jimmy)
 
 - pushare anche mail-template.liquid

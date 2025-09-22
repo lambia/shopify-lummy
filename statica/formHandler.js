@@ -29,7 +29,7 @@ function formHandlerInit(scope, productID, prices) {
         'https://upload.wikimedia.org/wikipedia/commons/thumb/3/3f/Placeholder_view_vector.svg/619px-Placeholder_view_vector.svg.png';
     const larghezza_rullo = 570;
     const offset = 5; //al momento considerato solo a destra e sotto
-    const price_increments = 0.01;
+    const price_increments = 0.3;
 
     //Globali
     let width_mm = 0;
@@ -49,11 +49,11 @@ function formHandlerInit(scope, productID, prices) {
 
         wrapper.remove();
 
-        // let grafiche = scopeContainer.filter(item => item.costo && item.metri && item.pezzi);
-        // if (!grafiche.length) {
-        //     //aggiungi wrapper in dom
-        //     window.newGfx(window.partial);
-        // }
+        let grafiche = scopeContainer.filter(item => item);
+        if (!grafiche.length) {
+            //aggiungi wrapper in dom
+            window.newGfx(window.partial);
+        }
 
         /*
         let grafiche = scopeContainer.filter(item => item);
@@ -72,26 +72,39 @@ function formHandlerInit(scope, productID, prices) {
 
         dom__preview.setAttribute('src', placeholder_img);
         dom__dimensioni.value = '';
-        dom__metri_necessari.value = ''; //DEBUG
-        dom__costo_al_metro.value = prices[0].price + ' €/m'; //DEBUG
-        dom__totale_preventivo.value = ''; //DEBUG
-        dom__costo_al_pezzo.value = ''; //DEBUG
-        if(scopeContainer[scope]) {
-            scopeContainer[scope].metri = 0;
-            scopeContainer[scope].pezzi = 0;
-            scopeContainer[scope].costo = "0.00";
-        }
+        dom__metri_necessari.value = '';
+        dom__costo_al_metro.value = prices[0].price + ' €/m'
+        dom__totale_preventivo.value = '';
+        dom__costo_al_pezzo.value = '';
         width_mm = 0;
         height_mm = 0;
 
+        // if(!this.files[0]) {
+        //     message("Errore irreversibile", "Si è verificato un errore durante l'elaborazione del file.<br>Assicurarsi che il file sia corretto e riprovare.");
+        //     return reset(true);
+        // } else if(!this.files[0].size || !this.files[0].type) {
+        //     message("Errore irreversibile", "Il browser non è supportato.<br>Assicurati di utilizzare un PC o MAC e non uno smartphone.");
+        //     return reset(true);
+        // } else if(this.files[0].size > 20 * 1024 * 1024) {
+        //     //ToDo: dovrebbe essere 20-0.1 oppure 25-0.1 (v. altri dati payload)
+        //     message("Attenzione", "Il file non verrà caricato perchè supera le dimensioni massime consentite.<br>Si prega di rispettare le indicazioni fornite.");
+        //     return reset(true);
+        // } else if(this.files[0].type != "image/png") {
+        //     message("Errore", "Selezionare un file in formato PNG e riprovare.");
+        //     return reset(false);
+        // } else {
+        //     return readFile(this.files[0]);
+        // }
+
+        // //reset();
         if (this.files[0] && this.files[0].size && this.files[0].size <= 20 * 1024 * 1024) {
             readFile(this.files[0]);
         } else if (this.files[0] && this.files[0].size) {
             message("Attenzione", "Il file non verrà caricato perchè supera le dimensioni massime consentite.<br>Si prega di rispettare le indicazioni fornite.");
-            return recreate();
+            reset(true);
         } else {
             message("Errore", "Si è verificato un errore durante l'elaborazione del file.<br>Assicurarsi che il file sia corretto e riprovare.");
-            return recreate();
+            reset(true);
         }
 
     }, false);
@@ -174,15 +187,6 @@ function formHandlerInit(scope, productID, prices) {
         return risultato;
     }
 
-    function recreate() {
-        if (scopeContainer[scope]) {
-            delete scopeContainer[scope];
-            wrapper.remove();
-            window.newGfx(window.partial);
-        }
-        return;
-    }
-
     function reset(initialLoad = false) {
         console.log('Lummy.configuratore: Resetto il form');
 
@@ -195,11 +199,11 @@ function formHandlerInit(scope, productID, prices) {
 
         dom__preview.setAttribute('src', placeholder_img);
         dom__dimensioni.value = '';
-        dom__metri_necessari.value = ''; //DEBUG
-        dom__totale_preventivo.value = '';  //DEBUG?
-        dom__costo_al_pezzo.value = ''; //DEBUG
+        dom__metri_necessari.value = '';
+        dom__totale_preventivo.value = '';
+        dom__costo_al_pezzo.value = '';
         dom__nome_grafica.value = generaIncrementale();
-        dom__costo_al_metro.value = prices[0].price + ' €/m'; //DEBUG
+        dom__costo_al_metro.value = prices[0].price + ' €/m'
         quantita = 1;
         dom__quantita.value = 1;
         dom__quantita.disabled = true;
@@ -209,10 +213,8 @@ function formHandlerInit(scope, productID, prices) {
 
         //Il file caricato viene resettato solo al load iniziale
         if (initialLoad) {
-            dom__file.value = '';
             dom__file_hq.value = '';
             let newFileContainer = new DataTransfer();
-            dom__file.files = newFileContainer.files;
             dom__file_hq.files = newFileContainer.files;
         }
 
@@ -297,17 +299,10 @@ function formHandlerInit(scope, productID, prices) {
         const quanti_su_riga_affiancati = Math.floor(larghezza_rullo / (larghezza_grafica + offset));
         const quanti_su_riga_ruotati = Math.floor(larghezza_rullo / (altezza_grafica + offset));
 
-        if (!width_mm || !height_mm) {
-            return recreate();
-        }
-
         //Controlla se l'immagine è più grande del rullo
         if (quanti_su_riga_affiancati < 1 && quanti_su_riga_ruotati < 1) {
-            message("Attenzione!", "Attenzione il file caricato supera i 57cm di larghezza: ridimensiona il file e riprova.<br>Assicurati che il file sia corretto (PNG a 300dpi) o contattaci per assistenza.");
-
-            if (scopeContainer[scope]) {
-                return recreate();
-            }
+            message("Attenzione!", "Il file caricato copre un'area di stampa maggiore della superficie disponibile.<br>Assicurati che il file sia corretto (300dpi) o contattaci in caso di necessità particolari.");
+            return reset(true);
         }
 
         //Calcolo Affiancati
@@ -344,7 +339,7 @@ function formHandlerInit(scope, productID, prices) {
         } else { //Se non stampabile
             metri = 0;
             message("Errore", "Il file non risulta stampabile.");
-            return recreate();
+            return reset(true);
         }
 
         //Aggiungo ai metri fuori scope
@@ -371,14 +366,14 @@ function formHandlerInit(scope, productID, prices) {
 
         //Arrotondamento manuale, STRINGA DA QUI
         costo = (metri * summaryContainer.costoAlMetro).toFixed(2);
-        metri = metri.toFixed(3);
-        costoPezzo = (costo / numero_copie).toFixed(2); //andrebbe dopo ricalcolo increments
+        metri = metri.toFixed(2);
+        costoPezzo = (costo / numero_copie).toFixed(2);
 
         //Calcolo la quantità di shopify necessaria
         pezzi = Math.round(costo / price_increments);
 
         //Ricalcola il costo considerando gli increments da 0.30
-        //costo = (price_increments * pezzi).toFixed(2);
+        costo = (price_increments * pezzi).toFixed(2);
 
         scopeContainer[scope].pezzi = pezzi;
         scopeContainer[scope].costo = costo;
@@ -389,7 +384,7 @@ function formHandlerInit(scope, productID, prices) {
         dom__costo_al_pezzo.value = costoPezzo + ' €';
 
         //Debugger
-        console.log(`Nesting aggiornato: [${metri} m] [${costo} €] [${pezzi} pz]`);
+        console.log(`Ricalcolo: [${metri} m] [${costo} €] [${pezzi} pz]`);
 
         if (chiamataInterna) {
             dom__quantita.disabled = false;
@@ -459,7 +454,7 @@ function formHandlerInit(scope, productID, prices) {
             //message("Messaggio di conferma");
 
         } catch (error) {
-            message("Errore irreversibile", "Si è verificato un errore durante l'aggiunta di una grafica al carrello.<br>Si prega di verificare il contenuto del carrello, ricaricare questa pagina e riprovare.");
+            message("Errore irreversibile", "Si è verificato un errore durante l'aggiunta di una grafica al carrello.<br>Si prega di ricaricare la pagina e riprovare.");
             console.error("Errore carrello: ", error);
 
             scopeContainer[scope].cart = false;
@@ -471,19 +466,19 @@ function formHandlerInit(scope, productID, prices) {
     function ricalcolaCostoMetro() {
 
         let scaglione = prices.filter(x => summaryContainer.metri > x.moreThan);
-        let costo_metro = Math.min(...scaglione.map(x => x.price));
+        let costo_metro = Math.min(...scaglione.map(x=>x.price));
 
         const costoMin = Math.min(...prices.map(x => x.price));
         const costoMax = Math.max(...prices.map(x => x.price));
 
         //Se il prezzo è fuori range, fai fallback sul prezzo massimo
-        if (costo_metro > costoMax || costo_metro < costoMin) {
+        if (costo_metro > costoMax || costo_metro < costoMin ) {
             costo_metro = costoMax;
         }
 
         summaryContainer.costoAlMetro = costo_metro;
 
-        const priceIndex = prices.findLastIndex(x => summaryContainer.metri > x.moreThan);
+        const priceIndex = prices.findLastIndex(x=> summaryContainer.metri > x.moreThan);
         const oldHighlighted = document.querySelector(`#priceTable tr.highlightedRow`);
         const newHighlighted = document.querySelector(`#priceTable tr[data-value="${priceIndex}"]`);
 
@@ -532,7 +527,7 @@ function formHandlerInit(scope, productID, prices) {
 
         document.getElementById("riepilogoOrdine").innerHTML = `
         <h3>Riepilogo Totale (${summaryContainer.grafiche} ${summaryContainer.grafiche == 1 ? "grafica" : "grafiche"})</h3>
-        <p>${summaryContainer.metri.toFixed(3)} metri x ${summaryContainer.costoAlMetro.toFixed(2)} €/metro = ${summaryContainer.costo.toFixed(2)} €</p>
+        <p>${summaryContainer.metri.toFixed(2)} metri x ${summaryContainer.costoAlMetro.toFixed(2)} €/metro = ${summaryContainer.costo.toFixed(2)} €</p>
         <span class='warningMetri'>${disclaimerMinimoOrdine}</span>`;
     }
 
