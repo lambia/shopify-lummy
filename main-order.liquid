@@ -70,23 +70,47 @@
 
                   {%- assign property_size = line_item.properties | size -%}
                   {%- unless line_item.selling_plan_allocation == null and property_size == 0 -%}
-                    <div class="properties">
+          <div class="properties" style="display: flex;">
+          
+              <div class="image-megawrapper">
+                      {% comment %} Anteprima per prodotto custom {% endcomment %}
+                      {% if customDTF_IDs contains item.product.id %}
+                        <div class="cart-item__image-container gradient global-media-settings">
+                          <script type="module">
+                            await getThumbnailFromZip("{{ item.properties["grafica_hq"] | escape }}", {{ item.index | plus: 1 }});
+                          </script>
+                          <img
+                            src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/3f/Placeholder_view_vector.svg/619px-Placeholder_view_vector.svg.png"
+                            class="cart-item__image"
+                            loading="lazy"
+                            width="150"
+                            height="auto"
+                          >
+                        </div>
+                      {% comment %} Anteprima per prodotti standard {% endcomment %}
+                      {% elsif item.image  %}
+                        <div class="cart-item__image-container gradient global-media-settings">
+                        <a href="{{ item.url }}" class="cart-item__link" aria-hidden="true" tabindex="-1"> </a>
+                          <img
+                            src="{{ item.image | image_url: width: 300 }}"
+                            class="cart-item__image"
+                            alt="{{ item.image.alt | escape }}"
+                            loading="lazy"
+                            width="150"
+                            height="{{ 150 | divided_by: item.image.aspect_ratio | ceil }}"
+                          >
+                        </div>
+                      {% endif %}
+              </div>
+
+              <div class="properties-list-text">TEST!!</div>
 
 						{% comment %} Proprietà articolo custom {% endcomment %}
 						{%- if customDTF_IDs contains line_item.product.id -%}
 							{%- if line_item.properties["nome"] != blank -%}
 								<div><span>Nome grafica: {{ line_item.properties["nome"] | escape }}</span></div>
 							{%- endif -%}
-							{%- if line_item.properties["grafica"] != blank -%}
-								<div>
-									<span>
-										Allegato caricato:
-										<a href="{{ line_item.properties["grafica"] | escape }}" target="_blank">standard</a>
-										&sol;
-										<a href="{{ line_item.properties["grafica_hq"] | escape }}" target="_blank">alta qualità</a>
-									</span>
-								</div>
-							{%- endif -%}
+
 							{%- if line_item.properties["dimensioni"] != blank -%}
 								<div><span>Dimensioni (L x A): {{ line_item.properties["dimensioni"] | escape }}</span></div>
 							{%- endif -%}
