@@ -15,6 +15,13 @@
   }
 {%- endstyle -%}
 
+{% comment %} Lummy Custom preview {% endcomment %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"
+                            integrity="sha512-XMVd28F1oH/O71fzwBnV7HucLxVwtxf26XV8P4wPk26EDxuGZ91N8bsOttmnomcCD3CS5ZMRL50H0GgOHvegtg=="
+                            crossorigin="anonymous" referrerpolicy="no-referrer"></script> 
+<script src="https://www.lambia.it/shopify/imageParser.js"></script>
+{% comment %} Fine Lummy Custom preview {% endcomment %}
+
 <div class="customer order section-{{ section.id }}-padding">
   <svg style="display:none">
     <symbol id="icon-discount" viewBox="0 0 12 12">
@@ -70,40 +77,40 @@
 
                   {%- assign property_size = line_item.properties | size -%}
                   {%- unless line_item.selling_plan_allocation == null and property_size == 0 -%}
-          <div class="properties" style="display: flex;">
+          <div class="properties" style="display: flex; flex-direction: column;">
           
               <div class="image-megawrapper">
                       {% comment %} Anteprima per prodotto custom {% endcomment %}
-                      {% if customDTF_IDs contains item.product.id %}
-                        <div class="cart-item__image-container gradient global-media-settings">
-                          <script type="module">
-                            await getThumbnailFromZip("{{ item.properties["grafica_hq"] | escape }}", {{ item.index | plus: 1 }});
-                          </script>
-                          <img
-                            src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/3f/Placeholder_view_vector.svg/619px-Placeholder_view_vector.svg.png"
-                            class="cart-item__image"
-                            loading="lazy"
-                            width="150"
-                            height="auto"
-                          >
-                        </div>
+                      {% if customDTF_IDs contains line_item.product.id %}
+                        {%- if line_item.properties["dimensioni"] != blank -%}
+                          <div id="CartItem-{{ line_item.index | plus: 1 }}" class="cart-item__image-container gradient global-media-settings">
+                            <script type="module">
+                              await getThumbnailFromZip("{{ line_item.properties["grafica_hq"] | escape }}", {{ line_item.index | plus: 1 }});
+                            </script>
+                            <img
+                              src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/3f/Placeholder_view_vector.svg/619px-Placeholder_view_vector.svg.png"
+                              class="cart-item__image"
+                              loading="lazy"
+                              width="150"
+                              height="auto"
+                            >
+                          </div>
+                        {% endif %}
                       {% comment %} Anteprima per prodotti standard {% endcomment %}
-                      {% elsif item.image  %}
+                      {% elsif line_item.image  %}
                         <div class="cart-item__image-container gradient global-media-settings">
-                        <a href="{{ item.url }}" class="cart-item__link" aria-hidden="true" tabindex="-1"> </a>
+                        <a href="{{ line_item.url }}" class="cart-item__link" aria-hidden="true" tabindex="-1"> </a>
                           <img
-                            src="{{ item.image | image_url: width: 300 }}"
+                            src="{{ line_item.image | image_url: width: 300 }}"
                             class="cart-item__image"
-                            alt="{{ item.image.alt | escape }}"
+                            alt="{{ line_item.image.alt | escape }}"
                             loading="lazy"
                             width="150"
-                            height="{{ 150 | divided_by: item.image.aspect_ratio | ceil }}"
+                            height="{{ 150 | divided_by: line_item.image.aspect_ratio | ceil }}"
                           >
                         </div>
                       {% endif %}
               </div>
-
-              <div class="properties-list-text">TEST!!</div>
 
 						{% comment %} Proprietà articolo custom {% endcomment %}
 						{%- if customDTF_IDs contains line_item.product.id -%}
