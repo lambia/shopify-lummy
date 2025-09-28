@@ -18,6 +18,12 @@ function formHandlerInit(scope, productID, prices) {
     const dom__costo_al_metro = wrapper.querySelector('#costo_al_metro');
     const dom__closeBtn = wrapper.querySelector(".graficCloseBtn");
 
+    const productPrefix = {
+        45067988533516: "DTF",
+        54392099995916: "DTFUV",
+        54392097079564: "DTFFLUO",
+    }
+
     // const customProductsIDs = {
     //     8577508802828: "base",
     //     11634085363980: "uv",
@@ -29,7 +35,7 @@ function formHandlerInit(scope, productID, prices) {
         'https://upload.wikimedia.org/wikipedia/commons/thumb/3/3f/Placeholder_view_vector.svg/619px-Placeholder_view_vector.svg.png';
     const larghezza_rullo = 570;
     const offset = 5; //al momento considerato solo a destra e sotto
-    const price_increments = 0.3;
+    const price_increments = 0.01;
 
     //Globali
     let width_mm = 0;
@@ -129,12 +135,14 @@ function formHandlerInit(scope, productID, prices) {
         calcola_nesting();
     });
 
+    /*
     dom__nome_grafica.addEventListener('focus', function (e) {
         dom__nome_grafica.value = dom__nome_grafica.value.slice(0, dom__nome_grafica.value.lastIndexOf("#"))
     });
     dom__nome_grafica.addEventListener('blur', function (e) {
         dom__nome_grafica.value = generaIncrementale(dom__nome_grafica.value);
     });
+    */
 
     //Gestione zoom
     let isZoomed = false;
@@ -175,8 +183,8 @@ function formHandlerInit(scope, productID, prices) {
     });
 
     function generaIncrementale(testo = "") {
-        let risultato = testo;
-        risultato += "#";
+        let risultato = "";
+        // risultato += "#";
 
         if (scope < 10) {
             risultato += "0";
@@ -228,24 +236,8 @@ function formHandlerInit(scope, productID, prices) {
         //Debuggo
         //console.log(`${file.name} is ${file.type}`);
 
-        //prendo i dati
-        const newArrayBuffer = await file.arrayBuffer();
-
-        //creo uno zip
-        const zip = new JSZip();
-        zip.file(file.name, newArrayBuffer, { binary: true });
-
-        //ToDO gestire: catch (se si rompe) + async (se uno va avanti mentre carica)
-        zip.generateAsync({ type: 'blob' }).then(function (content) {
-            //Prendo il nuovo blob converto in file
-            const newFile = new File([content], `${file.name}.zip`, { type: 'application/zip' });
-            console.log(`Zip generated: ${newFile.name} is ${newFile.type}`);
-
-            //Sposto il file binario nel secondo input
-            let newFileContainer = new DataTransfer();
-            newFileContainer.items.add(newFile);
-            dom__file_hq.files = newFileContainer.files;
-        });
+        //Creo l'anteprima in pagina
+        //Lo zip è posticipato in aggiungiCarrello()
 
         //Preparo lettura file
         const reader = new FileReader();
@@ -394,40 +386,73 @@ function formHandlerInit(scope, productID, prices) {
 
     async function aggiungiCarrello() {
 
-        const propertiesForm = wrapper.querySelector("form");
-        const properties = new FormData(propertiesForm);
-
-        const newProduct = new FormData();
-        for (const prop of properties) {
-            //ToDo: sarebbe preferibile rimuoverlo PRIMA dal form invece di iffarlo qui
-            if (prop[0] != "grafica") {
-                newProduct.set(`properties[${prop[0]}]`, prop[1]);
-            }
-        }
-        newProduct.set("id", productID);
-        newProduct.set("quantity", scopeContainer[scope].pezzi);
-
-        let action = "add";
-        if (scopeContainer[scope].cart) {
-            action = "change";
-            newProduct.set("id", scopeContainer[scope].cart);
-        }
-
-        let cfg = {
-            method: "POST",
-            headers: {
-                Accept: "application/javascript",
-                "X-Requested-With": "XMLHttpRequest"
-            },
-            body: newProduct
-        };
-
-        // thisGfxForm.set("sections", "cart-notification-product,cart-notification-button,cart-icon-bubble");
-        // thisGfxForm.set("sections_url", "/products/dtf-custom-product");
-
-        let result = false;
-
         try {
+            const propertiesForm = wrapper.querySelector("form");
+
+            /****************** INIZIO ZIP ****************** */
+            //prendo i dati
+            if (!dom__file || !dom__file.files || !dom__file.files[0]) {
+                throw new Error(`Missing file`);
+            };
+            const file = dom__file.files[0];
+            const newArrayBuffer = await file.arrayBuffer();
+
+            //creo uno zip
+            const zip = new JSZip();
+            const incremental = generaIncrementale(scope);
+            const type = productPrefix[productID];
+            const fileNameNoExt = file.name.replace(/\.(jpg|jpeg|png)$/i, '');
+
+            const nomeFile = `${incremental}-${type}-${fileNameNoExt}-${quantita}pz`; //002-DTFUV-NOMEFILE-200pz
+            zip.file(nomeFile, newArrayBuffer, { binary: true });
+
+            //ToDO gestire: catch (se si rompe) + async (se uno va avanti mentre carica)
+            const zipFile = await zip.generateAsync({ type: 'blob' }); //qui <------ .then
+            console.log("zipFile", zipFile);
+            
+            //Prendo il nuovo blob converto in file
+            const newFile = new File([zipFile], `${file.name}.zip`, { type: 'application/zip' });
+            console.log(`Zip generated: ${newFile.name} is ${newFile.type}`);
+
+            //Sposto il file binario nel secondo input
+            let newFileContainer = new DataTransfer();
+            newFileContainer.items.add(newFile);
+            dom__file_hq.files = newFileContainer.files;
+            /****************** FINE ZIP ****************** */
+
+
+            const properties = new FormData(propertiesForm);
+
+            const newProduct = new FormData();
+            for (const prop of properties) {
+                //ToDo: sarebbe preferibile rimuoverlo PRIMA dal form invece di iffarlo qui
+                if (prop[0] != "grafica") {
+                    newProduct.set(`properties[${prop[0]}]`, prop[1]);
+                }
+            }
+            newProduct.set("id", productID);
+            newProduct.set("quantity", scopeContainer[scope].pezzi);
+
+            let action = "add";
+            if (scopeContainer[scope].cart) {
+                action = "change";
+                newProduct.set("id", scopeContainer[scope].cart);
+            }
+
+            let cfg = {
+                method: "POST",
+                headers: {
+                    Accept: "application/javascript",
+                    "X-Requested-With": "XMLHttpRequest"
+                },
+                body: newProduct
+            };
+
+            // thisGfxForm.set("sections", "cart-notification-product,cart-notification-button,cart-icon-bubble");
+            // thisGfxForm.set("sections_url", "/products/dtf-custom-product");
+
+            let result = false;
+
             const response = await fetch(`/cart/${action}.js`, cfg);
             if (!response.ok) {
                 throw new Error(`Response status: ${response.status}`);
@@ -466,19 +491,19 @@ function formHandlerInit(scope, productID, prices) {
     function ricalcolaCostoMetro() {
 
         let scaglione = prices.filter(x => summaryContainer.metri > x.moreThan);
-        let costo_metro = Math.min(...scaglione.map(x=>x.price));
+        let costo_metro = Math.min(...scaglione.map(x => x.price));
 
         const costoMin = Math.min(...prices.map(x => x.price));
         const costoMax = Math.max(...prices.map(x => x.price));
 
         //Se il prezzo è fuori range, fai fallback sul prezzo massimo
-        if (costo_metro > costoMax || costo_metro < costoMin ) {
+        if (costo_metro > costoMax || costo_metro < costoMin) {
             costo_metro = costoMax;
         }
 
         summaryContainer.costoAlMetro = costo_metro;
 
-        const priceIndex = prices.findLastIndex(x=> summaryContainer.metri > x.moreThan);
+        const priceIndex = prices.findLastIndex(x => summaryContainer.metri > x.moreThan);
         const oldHighlighted = document.querySelector(`#priceTable tr.highlightedRow`);
         const newHighlighted = document.querySelector(`#priceTable tr[data-value="${priceIndex}"]`);
 
