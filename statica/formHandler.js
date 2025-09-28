@@ -386,6 +386,8 @@ function formHandlerInit(scope, productID, prices) {
 
     async function aggiungiCarrello() {
 
+        let result = false;
+
         try {
             const propertiesForm = wrapper.querySelector("form");
 
@@ -450,8 +452,6 @@ function formHandlerInit(scope, productID, prices) {
 
             // thisGfxForm.set("sections", "cart-notification-product,cart-notification-button,cart-icon-bubble");
             // thisGfxForm.set("sections_url", "/products/dtf-custom-product");
-
-            let result = false;
 
             const response = await fetch(`/cart/${action}.js`, cfg);
             if (!response.ok) {
