@@ -241,7 +241,7 @@ function message(title = "Si è verificato un errore imprevisto.", content = "")
                 <div class="popup-inner-title">${title}</div>
                 <div class="popup-inner-content">${content}</div>
                 <div class="popup-inner-button">
-                    <button>Chiudi</button>
+                    <button autofocus>Chiudi</button>
                 </div>
             </div>
         </div>`
