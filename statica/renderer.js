@@ -20,6 +20,8 @@ const texts = {
     errorLoading: "Si è verificato un errore irreversibile"
 };
 
+let productID = null;
+
 const generalPrices = {
     45067988533516: [ //standard 8577508802828
         { label: "tra 0 e 3 metri", moreThan: -Infinity, price: 15.00 },
@@ -54,7 +56,7 @@ async function main() {
     document.querySelector(shopify_dom__addToCart).style.display = "none";
     document.querySelector(shopify_dom__addToCart).remove();
 
-    const productID = getProductID();
+    productID = getProductID();
     newGfx(partial, productID);
 
     document.body.classList.remove("no-scroll");
