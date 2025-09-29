@@ -92,8 +92,7 @@ img#conf_preview {
 }
 
 .highlightedRow {
-	background-color: rgb(100, 230, 255);
-	color: black;
+	background-color: #f5a33e;
 }
 
 #priceTable,
@@ -216,10 +215,12 @@ table .right_cell {
 	margin-bottom: 1.75rem;
 	margin-left: auto;
 	margin-right: auto;
+	background: #f1c907 !important;
 }
 
 #sezione_statica #finalAccept {
-	background: rgb(100, 230, 255) !important;
+	background: #009070 !important;
+	color: white !important;
 }
 
 #sezione_statica #finalRefuse {
@@ -282,6 +283,7 @@ table .right_cell {
 	z-index: 999;
 	justify-content: center;
 	align-items: center;
+	flex-direction: column;
 }
 
 #spinner-loader-generale {
@@ -293,6 +295,7 @@ table .right_cell {
 }
 
 #spinner-loader-generale .loading__spinner {
+	position: unset;
 	transform: scale(2);
 	z-index: 999;
 }

@@ -55,11 +55,11 @@ function formHandlerInit(scope, productID, prices) {
 
         wrapper.remove();
 
-        let grafiche = scopeContainer.filter(item => item);
-        if (!grafiche.length) {
-            //aggiungi wrapper in dom
-            window.newGfx(window.partial);
-        }
+        // let grafiche = scopeContainer.filter(item => item.costo && item.metri && item.pezzi);
+        // if (!grafiche.length) {
+        //     //aggiungi wrapper in dom
+        //     window.newGfx(window.partial);
+        // }
 
         /*
         let grafiche = scopeContainer.filter(item => item);
@@ -78,39 +78,26 @@ function formHandlerInit(scope, productID, prices) {
 
         dom__preview.setAttribute('src', placeholder_img);
         dom__dimensioni.value = '';
-        dom__metri_necessari.value = '';
-        dom__costo_al_metro.value = prices[0].price + ' €/m'
-        dom__totale_preventivo.value = '';
-        dom__costo_al_pezzo.value = '';
+        dom__metri_necessari.value = ''; //DEBUG
+        dom__costo_al_metro.value = prices[0].price + ' €/m'; //DEBUG
+        dom__totale_preventivo.value = ''; //DEBUG
+        dom__costo_al_pezzo.value = ''; //DEBUG
+        if(scopeContainer[scope]) {
+            scopeContainer[scope].metri = 0;
+            scopeContainer[scope].pezzi = 0;
+            scopeContainer[scope].costo = "0.00";
+        }
         width_mm = 0;
         height_mm = 0;
 
-        // if(!this.files[0]) {
-        //     message("Errore irreversibile", "Si è verificato un errore durante l'elaborazione del file.<br>Assicurarsi che il file sia corretto e riprovare.");
-        //     return reset(true);
-        // } else if(!this.files[0].size || !this.files[0].type) {
-        //     message("Errore irreversibile", "Il browser non è supportato.<br>Assicurati di utilizzare un PC o MAC e non uno smartphone.");
-        //     return reset(true);
-        // } else if(this.files[0].size > 20 * 1024 * 1024) {
-        //     //ToDo: dovrebbe essere 20-0.1 oppure 25-0.1 (v. altri dati payload)
-        //     message("Attenzione", "Il file non verrà caricato perchè supera le dimensioni massime consentite.<br>Si prega di rispettare le indicazioni fornite.");
-        //     return reset(true);
-        // } else if(this.files[0].type != "image/png") {
-        //     message("Errore", "Selezionare un file in formato PNG e riprovare.");
-        //     return reset(false);
-        // } else {
-        //     return readFile(this.files[0]);
-        // }
-
-        // //reset();
         if (this.files[0] && this.files[0].size && this.files[0].size <= 20 * 1024 * 1024) {
             readFile(this.files[0]);
         } else if (this.files[0] && this.files[0].size) {
             message("Attenzione", "Il file non verrà caricato perchè supera le dimensioni massime consentite.<br>Si prega di rispettare le indicazioni fornite.");
-            reset(true);
+            return recreate();
         } else {
             message("Errore", "Si è verificato un errore durante l'elaborazione del file.<br>Assicurarsi che il file sia corretto e riprovare.");
-            reset(true);
+            return recreate();
         }
 
     }, false);
@@ -195,6 +182,15 @@ function formHandlerInit(scope, productID, prices) {
         return risultato;
     }
 
+    function recreate() {
+        if (scopeContainer[scope]) {
+            delete scopeContainer[scope];
+            wrapper.remove();
+            window.newGfx(window.partial);
+        }
+        return;
+    }
+
     function reset(initialLoad = false) {
         console.log('Lummy.configuratore: Resetto il form');
 
@@ -207,11 +203,11 @@ function formHandlerInit(scope, productID, prices) {
 
         dom__preview.setAttribute('src', placeholder_img);
         dom__dimensioni.value = '';
-        dom__metri_necessari.value = '';
-        dom__totale_preventivo.value = '';
-        dom__costo_al_pezzo.value = '';
+        dom__metri_necessari.value = ''; //DEBUG
+        dom__totale_preventivo.value = '';  //DEBUG?
+        dom__costo_al_pezzo.value = ''; //DEBUG
         dom__nome_grafica.value = generaIncrementale();
-        dom__costo_al_metro.value = prices[0].price + ' €/m'
+        dom__costo_al_metro.value = prices[0].price + ' €/m'; //DEBUG
         quantita = 1;
         dom__quantita.value = 1;
         dom__quantita.disabled = true;
@@ -221,8 +217,10 @@ function formHandlerInit(scope, productID, prices) {
 
         //Il file caricato viene resettato solo al load iniziale
         if (initialLoad) {
+            dom__file.value = '';
             dom__file_hq.value = '';
             let newFileContainer = new DataTransfer();
+            dom__file.files = newFileContainer.files;
             dom__file_hq.files = newFileContainer.files;
         }
 
@@ -236,8 +234,24 @@ function formHandlerInit(scope, productID, prices) {
         //Debuggo
         //console.log(`${file.name} is ${file.type}`);
 
-        //Creo l'anteprima in pagina
-        //Lo zip è posticipato in aggiungiCarrello()
+        //prendo i dati
+        const newArrayBuffer = await file.arrayBuffer();
+
+        //creo uno zip
+        const zip = new JSZip();
+        zip.file(file.name, newArrayBuffer, { binary: true });
+
+        //ToDO gestire: catch (se si rompe) + async (se uno va avanti mentre carica)
+        zip.generateAsync({ type: 'blob' }).then(function (content) {
+            //Prendo il nuovo blob converto in file
+            const newFile = new File([content], `${file.name}.zip`, { type: 'application/zip' });
+            console.log(`Zip generated: ${newFile.name} is ${newFile.type}`);
+
+            //Sposto il file binario nel secondo input
+            let newFileContainer = new DataTransfer();
+            newFileContainer.items.add(newFile);
+            dom__file_hq.files = newFileContainer.files;
+        });
 
         //Preparo lettura file
         const reader = new FileReader();
@@ -291,10 +305,17 @@ function formHandlerInit(scope, productID, prices) {
         const quanti_su_riga_affiancati = Math.floor(larghezza_rullo / (larghezza_grafica + offset));
         const quanti_su_riga_ruotati = Math.floor(larghezza_rullo / (altezza_grafica + offset));
 
+        if (!width_mm || !height_mm) {
+            return recreate();
+        }
+
         //Controlla se l'immagine è più grande del rullo
         if (quanti_su_riga_affiancati < 1 && quanti_su_riga_ruotati < 1) {
-            message("Attenzione!", "Il file caricato copre un'area di stampa maggiore della superficie disponibile.<br>Assicurati che il file sia corretto (300dpi) o contattaci in caso di necessità particolari.");
-            return reset(true);
+            message("Attenzione!", "Attenzione il file caricato supera i 57cm di larghezza: ridimensiona il file e riprova.<br>Assicurati che il file sia corretto (PNG a 300dpi) o contattaci per assistenza.");
+
+            if (scopeContainer[scope]) {
+                return recreate();
+            }
         }
 
         //Calcolo Affiancati
@@ -331,7 +352,7 @@ function formHandlerInit(scope, productID, prices) {
         } else { //Se non stampabile
             metri = 0;
             message("Errore", "Il file non risulta stampabile.");
-            return reset(true);
+            return recreate();
         }
 
         //Aggiungo ai metri fuori scope
@@ -358,14 +379,14 @@ function formHandlerInit(scope, productID, prices) {
 
         //Arrotondamento manuale, STRINGA DA QUI
         costo = (metri * summaryContainer.costoAlMetro).toFixed(2);
-        metri = metri.toFixed(2);
-        costoPezzo = (costo / numero_copie).toFixed(2);
+        metri = metri.toFixed(3);
+        costoPezzo = (costo / numero_copie).toFixed(2); //andrebbe dopo ricalcolo increments
 
         //Calcolo la quantità di shopify necessaria
         pezzi = Math.round(costo / price_increments);
 
         //Ricalcola il costo considerando gli increments da 0.30
-        costo = (price_increments * pezzi).toFixed(2);
+        //costo = (price_increments * pezzi).toFixed(2);
 
         scopeContainer[scope].pezzi = pezzi;
         scopeContainer[scope].costo = costo;
@@ -376,7 +397,7 @@ function formHandlerInit(scope, productID, prices) {
         dom__costo_al_pezzo.value = costoPezzo + ' €';
 
         //Debugger
-        console.log(`Ricalcolo: [${metri} m] [${costo} €] [${pezzi} pz]`);
+        console.log(`Nesting aggiornato: [${metri} m] [${costo} €] [${pezzi} pz]`);
 
         if (chiamataInterna) {
             dom__quantita.disabled = false;
@@ -389,7 +410,7 @@ function formHandlerInit(scope, productID, prices) {
         let result = false;
 
         try {
-            const propertiesForm = wrapper.querySelector("form");
+        const propertiesForm = wrapper.querySelector("form");
 
             /****************** INIZIO ZIP ****************** */
             //prendo i dati
@@ -423,35 +444,35 @@ function formHandlerInit(scope, productID, prices) {
             /****************** FINE ZIP ****************** */
 
 
-            const properties = new FormData(propertiesForm);
+        const properties = new FormData(propertiesForm);
 
-            const newProduct = new FormData();
-            for (const prop of properties) {
-                //ToDo: sarebbe preferibile rimuoverlo PRIMA dal form invece di iffarlo qui
-                if (prop[0] != "grafica") {
-                    newProduct.set(`properties[${prop[0]}]`, prop[1]);
-                }
+        const newProduct = new FormData();
+        for (const prop of properties) {
+            //ToDo: sarebbe preferibile rimuoverlo PRIMA dal form invece di iffarlo qui
+            if (prop[0] != "grafica") {
+                newProduct.set(`properties[${prop[0]}]`, prop[1]);
             }
-            newProduct.set("id", productID);
-            newProduct.set("quantity", scopeContainer[scope].pezzi);
+        }
+        newProduct.set("id", productID);
+        newProduct.set("quantity", scopeContainer[scope].pezzi);
 
-            let action = "add";
-            if (scopeContainer[scope].cart) {
-                action = "change";
-                newProduct.set("id", scopeContainer[scope].cart);
-            }
+        let action = "add";
+        if (scopeContainer[scope].cart) {
+            action = "change";
+            newProduct.set("id", scopeContainer[scope].cart);
+        }
 
-            let cfg = {
-                method: "POST",
-                headers: {
-                    Accept: "application/javascript",
-                    "X-Requested-With": "XMLHttpRequest"
-                },
-                body: newProduct
-            };
+        let cfg = {
+            method: "POST",
+            headers: {
+                Accept: "application/javascript",
+                "X-Requested-With": "XMLHttpRequest"
+            },
+            body: newProduct
+        };
 
-            // thisGfxForm.set("sections", "cart-notification-product,cart-notification-button,cart-icon-bubble");
-            // thisGfxForm.set("sections_url", "/products/dtf-custom-product");
+        // thisGfxForm.set("sections", "cart-notification-product,cart-notification-button,cart-icon-bubble");
+        // thisGfxForm.set("sections_url", "/products/dtf-custom-product");
 
             const response = await fetch(`/cart/${action}.js`, cfg);
             if (!response.ok) {
@@ -479,7 +500,7 @@ function formHandlerInit(scope, productID, prices) {
             //message("Messaggio di conferma");
 
         } catch (error) {
-            message("Errore irreversibile", "Si è verificato un errore durante l'aggiunta di una grafica al carrello.<br>Si prega di ricaricare la pagina e riprovare.");
+            message("Errore irreversibile", "Si è verificato un errore durante l'aggiunta di una grafica al carrello.<br>Si prega di verificare il contenuto del carrello, ricaricare questa pagina e riprovare.");
             console.error("Errore carrello: ", error);
 
             scopeContainer[scope].cart = false;
@@ -552,7 +573,7 @@ function formHandlerInit(scope, productID, prices) {
 
         document.getElementById("riepilogoOrdine").innerHTML = `
         <h3>Riepilogo Totale (${summaryContainer.grafiche} ${summaryContainer.grafiche == 1 ? "grafica" : "grafiche"})</h3>
-        <p>${summaryContainer.metri.toFixed(2)} metri x ${summaryContainer.costoAlMetro.toFixed(2)} €/metro = ${summaryContainer.costo.toFixed(2)} €</p>
+        <p>${summaryContainer.metri.toFixed(3)} metri x ${summaryContainer.costoAlMetro.toFixed(2)} €/metro = ${summaryContainer.costo.toFixed(2)} €</p>
         <span class='warningMetri'>${disclaimerMinimoOrdine}</span>`;
     }
 

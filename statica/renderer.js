@@ -56,30 +56,31 @@ async function main() {
     document.querySelector(shopify_dom__addToCart).style.display = "none";
     document.querySelector(shopify_dom__addToCart).remove();
 
-    productID = getProductID();
-    newGfx(partial, productID);
+    getProductID();
+    newGfx(partial);
 
     document.body.classList.remove("no-scroll");
     document.getElementById("spinner-loader-generale").classList.add("hidden");
+    document.getElementById("spinner-loader-message").classList.add("hidden");
 
     message("Attenzione!", "Al fine di garantirti la miglior esperienza utente possibile ti consigliamo di utilizzare il configuratore da PC o MAC.");
 
     document.getElementById("finalAccept").addEventListener("click", aggiungiTuttoAlCarrello);
     document.getElementById(newGfxBtn).addEventListener("click", function (e) {
-        newGfx(partial, productID);
+        newGfx(partial);
     });
 }
 
 function getProductID() {
-    let productID = false;
+    result = null;
     try {
         const shopifyProductForm = document.querySelector('.product-form form');
         const product = Object.fromEntries(new FormData(shopifyProductForm));
-        productID = product.id;
+        result = product.id;
     } catch (error) {
         console.error("Errore irreversibile: impossibile trovare un product ID valido");
     } finally {
-        return productID;
+        productID = result;
     }
 }
 
@@ -90,7 +91,9 @@ async function aggiungiTuttoAlCarrello() {
         return;
     }
 
+    document.body.classList.add("no-scroll");
     document.getElementById("spinner-loader-generale").classList.remove("hidden");
+    document.getElementById("spinner-loader-message").classList.remove("hidden");
 
     for (const singolaGrafica of scopeContainer) {
         if (!singolaGrafica) {
@@ -113,9 +116,13 @@ async function aggiungiTuttoAlCarrello() {
     //se minore, calcola differenza
     console.log("Metri aggiunti carrello: ", summaryContainer.metri);
 
-    const sfrido = 0.10;
-    let metriMancanti = (summaryContainer.metri < 1) ? (1 - summaryContainer.metri) : sfrido;
-    metriMancanti = metriMancanti.toFixed(2);
+    if(summaryContainer.metri >= 1) {
+        window.location.replace("/cart");
+        return;
+    }
+
+    let metriMancanti = 1 - summaryContainer.metri;
+    metriMancanti = metriMancanti.toFixed(3);
 
     const price_increments = 0.01;
     let costo = (metriMancanti * summaryContainer.costoAlMetro).toFixed(2);
@@ -142,7 +149,7 @@ async function aggiungiTuttoAlCarrello() {
 async function aggiungiSfridoAlCarrello(metri, pezzi) {
 
     const newProduct = new FormData();
-    newProduct.set(metri=="0.10" ? "properties[sfrido]" : "properties[minimoordine]", true);
+    newProduct.set("properties[minimoordine]", true);
     newProduct.set("id", productID);
     newProduct.set("properties[metri necessari]", metri);
     newProduct.set("quantity", pezzi);
@@ -169,7 +176,7 @@ async function aggiungiSfridoAlCarrello(metri, pezzi) {
 
     } catch (error) {
         console.error("Errore carrello: ", error);
-        message("Errore irreversibile", "Impossibile calcolare lo sfrido durante l'aggiunta al carrello.<br>Si prega di riprovare.");
+        message("Errore irreversibile", "Impossibile calcolare il minimo d'ordine durante l'aggiunta al carrello.<br>Si prega di riprovare.");
         setTimeout(function () {
             window.location.replace("/cart/clear");
         }, 5000);
@@ -179,7 +186,7 @@ async function aggiungiSfridoAlCarrello(metri, pezzi) {
     }
 }
 
-function newGfx(partial = "Errore", productID) {
+function newGfx(partial = "Errore") {
     const newGfx = `<div class="gfxWrapper" id="gfxWrapper-${gfxCounter}" data-gfx-id="${gfxCounter}">${partial}<div>`;
     document.getElementById(appWrapper).insertAdjacentHTML('beforeend', newGfx)
     writePricesTable(generalPrices[productID]);
