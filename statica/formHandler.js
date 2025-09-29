@@ -426,7 +426,7 @@ function formHandlerInit(scope, productID, prices) {
             const type = productPrefix[productID];
             const fileNameNoExt = file.name.replace(/\.(jpg|jpeg|png)$/i, '');
 
-            const nomeFile = `${incremental}-${type}-${fileNameNoExt}-${quantita}pz`; //002-DTFUV-NOMEFILE-200pz
+            const nomeFile = `${incremental}-${type}-${fileNameNoExt}-${quantita}pz.png`; //002-DTFUV-NOMEFILE-200pz
             zip.file(nomeFile, newArrayBuffer, { binary: true });
 
             //ToDO gestire: catch (se si rompe) + async (se uno va avanti mentre carica)
