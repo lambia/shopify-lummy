@@ -24,15 +24,15 @@ let productID = null;
 
 const generalPrices = {
     45067988533516: [ //standard 8577508802828
-        { label: "tra 0 e 10 metri", moreThan: -Infinity, price: 16.47 },
-        { label: "tra 10 e 25 metri", moreThan: 10.00, price: 15.73 },
-        { label: "tra 25 e 50 metri", moreThan: 25.00, price: 15.25 },
-        { label: "tra 50 e 100 metri", moreThan: 50.00, price: 14.03 },
+        { label: "tra 0 e 10 metri", moreThan: -Infinity, priceLabel: "13.50", price: 16.47 },
+        { label: "tra 10 e 25 metri", moreThan: 10.00, priceLabel: "12.90", price: 15.73 },
+        { label: "tra 25 e 50 metri", moreThan: 25.00, priceLabel: "12.50", price: 15.25 },
+        { label: "tra 50 e 100 metri", moreThan: 50.00, priceLabel: "11.50", price: 14.03 },
         { label: "oltre i 100 metri", customPrice: true, moreThan: 50.00, price: 14.03 },
     ],
     54392099995916: [ //uv 11634085363980
-        { label: "tra 0 e 10 metri", moreThan: -Infinity, price: 35.38 },
-        { label: "tra 10 e 25 metri", moreThan: 10.00, price: 33.43 },
+        { label: "tra 0 e 10 metri", moreThan: -Infinity, priceLabel: "29.00", price: 35.38 },
+        { label: "tra 10 e 25 metri", moreThan: 10.00, priceLabel: "27.40", price: 33.43 },
         { label: "oltre i 25 metri", customPrice: true, moreThan: 25.00, price: 33.43 },
     ],
     54392097079564: [ //fluo 11634082447628 -- disattivato
@@ -207,7 +207,7 @@ function writePricesTable(prices) {
         pricesTable += i==0 ? `<tr data-value="${i}" class="highlightedRow">` : `<tr data-value="${i}">`;
         pricesTable += `<td class="left_cell">${price.label}</td>`;
 
-        const priceText = price.customPrice ? customPrice : ((price.price / 1.22) + " €/m + IVA");
+        const priceText = price.customPrice ? customPrice : (price.priceLabel ? `${price.priceLabel} €/m + IVA` : `${price.price} €/m IVATO`);
         pricesTable += `<td class="right_cell">${priceText}</td>`;
         pricesTable += `</tr>`;
     }
