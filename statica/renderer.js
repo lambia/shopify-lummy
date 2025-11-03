@@ -27,11 +27,13 @@ const generalPrices = {
         { label: "tra 0 e 10 metri", moreThan: -Infinity, price: 16.47 },
         { label: "tra 10 e 25 metri", moreThan: 10.00, price: 15.73 },
         { label: "tra 25 e 50 metri", moreThan: 25.00, price: 15.25 },
-        { label: "oltre i 50 metri", customPrice: true, moreThan: 50.00, price: 14.03 },
+        { label: "tra 50 e 100 metri", moreThan: 50.00, price: 14.03 },
+        { label: "oltre i 100 metri", customPrice: true, moreThan: 50.00, price: 14.03 },
     ],
     54392099995916: [ //uv 11634085363980
         { label: "tra 0 e 10 metri", moreThan: -Infinity, price: 35.38 },
-        { label: "oltre i 10 metri", customPrice: true, moreThan: 10.00, price: 33.43 },
+        { label: "tra 10 e 25 metri", moreThan: 10.00, price: 33.43 },
+        { label: "oltre i 25 metri", customPrice: true, moreThan: 25.00, price: 33.43 },
     ],
     54392097079564: [ //fluo 11634082447628 -- disattivato
         { label: "tra 0 e 10 metri", moreThan: -Infinity, price: 15.50 },
@@ -204,7 +206,9 @@ function writePricesTable(prices) {
 
         pricesTable += i==0 ? `<tr data-value="${i}" class="highlightedRow">` : `<tr data-value="${i}">`;
         pricesTable += `<td class="left_cell">${price.label}</td>`;
-        pricesTable += price.customPrice ? `<td class="right_cell">${customPrice}</td>` : `<td class="right_cell">${price.price} €/m</td>`;
+
+        const priceText = price.customPrice ? customPrice : ((price.price / 1.22) + " €/m + IVA");
+        pricesTable += `<td class="right_cell">${priceText}</td>`;
         pricesTable += `</tr>`;
     }
 
