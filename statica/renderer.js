@@ -24,13 +24,14 @@ let productID = null;
 
 const generalPrices = {
     45067988533516: [ //standard 8577508802828
-        { label: "tra 0 e 3 metri", moreThan: -Infinity, price: 15.00 },
-        { label: "tra 3 e 10 metri", moreThan: 3.00, price: 13.90 },
-        { label: "tra 10 e 25 metri", moreThan: 10.00, price: 12.90 },
-        { label: "oltre i 25 metri", customPrice: true, moreThan: 25.00, price: 12.90 },
+        { label: "tra 0 e 10 metri", moreThan: -Infinity, price: 16.47 },
+        { label: "tra 10 e 25 metri", moreThan: 10.00, price: 15.73 },
+        { label: "tra 25 e 50 metri", moreThan: 25.00, price: 15.25 },
+        { label: "oltre i 50 metri", customPrice: true, moreThan: 50.00, price: 14.03 },
     ],
     54392099995916: [ //uv 11634085363980
-        { label: "tra 0 e 100 metri", moreThan: -Infinity, price: 29.00 }
+        { label: "tra 0 e 10 metri", moreThan: -Infinity, price: 35.38 },
+        { label: "oltre i 10 metri", customPrice: true, moreThan: 10.00, price: 33.43 },
     ],
     54392097079564: [ //fluo 11634082447628
         { label: "tra 0 e 10 metri", moreThan: -Infinity, price: 15.50 },
