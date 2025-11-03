@@ -33,7 +33,7 @@ const generalPrices = {
         { label: "tra 0 e 10 metri", moreThan: -Infinity, price: 35.38 },
         { label: "oltre i 10 metri", customPrice: true, moreThan: 10.00, price: 33.43 },
     ],
-    54392097079564: [ //fluo 11634082447628
+    54392097079564: [ //fluo 11634082447628 -- disattivato
         { label: "tra 0 e 10 metri", moreThan: -Infinity, price: 15.50 },
         { label: "tra 10 e 25 metri", moreThan: 10.00, price: 14.90 },
         { label: "tra 25 e 50 metri", moreThan: 25.00, price: 14.50 },
