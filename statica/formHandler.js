@@ -82,7 +82,7 @@ function formHandlerInit(scope, productID, prices) {
         dom__costo_al_metro.value = prices[0].price + ' €/m'; //DEBUG
         dom__totale_preventivo.value = ''; //DEBUG
         dom__costo_al_pezzo.value = ''; //DEBUG
-        if(scopeContainer[scope]) {
+        if (scopeContainer[scope]) {
             scopeContainer[scope].metri = 0;
             scopeContainer[scope].pezzi = 0;
             scopeContainer[scope].costo = "0.00";
@@ -410,7 +410,7 @@ function formHandlerInit(scope, productID, prices) {
         let result = false;
 
         try {
-        const propertiesForm = wrapper.querySelector("form");
+            const propertiesForm = wrapper.querySelector("form");
 
             /****************** INIZIO ZIP ****************** */
             //prendo i dati
@@ -426,13 +426,13 @@ function formHandlerInit(scope, productID, prices) {
             const type = productPrefix[productID];
             const fileNameNoExt = file.name.replace(/\.(jpg|jpeg|png)$/i, '');
 
-            const nomeFile = `${incremental}-${type}-${fileNameNoExt}-${quantita}pz.png`; //002-DTFUV-NOMEFILE-200pz
+            const nomeFile = `${type}-${incremental}-${fileNameNoExt}-${quantita}pz.png`; //002-DTFUV-NOMEFILE-200pz
             zip.file(nomeFile, newArrayBuffer, { binary: true });
 
             //ToDO gestire: catch (se si rompe) + async (se uno va avanti mentre carica)
             const zipFile = await zip.generateAsync({ type: 'blob' }); //qui <------ .then
             console.log("zipFile", zipFile);
-            
+
             //Prendo il nuovo blob converto in file
             const newFile = new File([zipFile], `${file.name}.zip`, { type: 'application/zip' });
             console.log(`Zip generated: ${newFile.name} is ${newFile.type}`);
@@ -444,35 +444,35 @@ function formHandlerInit(scope, productID, prices) {
             /****************** FINE ZIP ****************** */
 
 
-        const properties = new FormData(propertiesForm);
+            const properties = new FormData(propertiesForm);
 
-        const newProduct = new FormData();
-        for (const prop of properties) {
-            //ToDo: sarebbe preferibile rimuoverlo PRIMA dal form invece di iffarlo qui
-            if (prop[0] != "grafica") {
-                newProduct.set(`properties[${prop[0]}]`, prop[1]);
+            const newProduct = new FormData();
+            for (const prop of properties) {
+                //ToDo: sarebbe preferibile rimuoverlo PRIMA dal form invece di iffarlo qui
+                if (prop[0] != "grafica") {
+                    newProduct.set(`properties[${prop[0]}]`, prop[1]);
+                }
             }
-        }
-        newProduct.set("id", productID);
-        newProduct.set("quantity", scopeContainer[scope].pezzi);
+            newProduct.set("id", productID);
+            newProduct.set("quantity", scopeContainer[scope].pezzi);
 
-        let action = "add";
-        if (scopeContainer[scope].cart) {
-            action = "change";
-            newProduct.set("id", scopeContainer[scope].cart);
-        }
+            let action = "add";
+            if (scopeContainer[scope].cart) {
+                action = "change";
+                newProduct.set("id", scopeContainer[scope].cart);
+            }
 
-        let cfg = {
-            method: "POST",
-            headers: {
-                Accept: "application/javascript",
-                "X-Requested-With": "XMLHttpRequest"
-            },
-            body: newProduct
-        };
+            let cfg = {
+                method: "POST",
+                headers: {
+                    Accept: "application/javascript",
+                    "X-Requested-With": "XMLHttpRequest"
+                },
+                body: newProduct
+            };
 
-        // thisGfxForm.set("sections", "cart-notification-product,cart-notification-button,cart-icon-bubble");
-        // thisGfxForm.set("sections_url", "/products/dtf-custom-product");
+            // thisGfxForm.set("sections", "cart-notification-product,cart-notification-button,cart-icon-bubble");
+            // thisGfxForm.set("sections_url", "/products/dtf-custom-product");
 
             const response = await fetch(`/cart/${action}.js`, cfg);
             if (!response.ok) {
